@@ -1,18 +1,19 @@
-import { Grid, Pagination, Stack, Typography } from "@mui/material";
+import { Grid, Pagination, Stack } from "@mui/material";
 import JobCard from "../components/JobCard";
 import JobSearchAndFilter from "../components/JobSearchAndFilter";
+import Subtitle from "../components/Subtitle";
+import Title from "../components/Title";
 
 const JobPage = () => {
   return (
     <Stack>
-      <Typography variant="h5" sx={{ marginY: 2 }}>
-        Danh sách công việc phù hợp
-      </Typography>
+      <Title title="Công Việc Phù Hợp" />
+      <Subtitle title="Danh sách các công việc phù hợp với kỹ năng và sở thích của bạn." />
       <JobSearchAndFilter />
       <div className="flex flex-col items-center">
         <Grid container spacing={2}>
           {Array.from({ length: 20 }).map((_, index) => (
-            <Grid size={3} key={index}>
+            <Grid size={{ lg: 4, md: 6, xs: 12 }} key={index}>
               <JobCard />
             </Grid>
           ))}
