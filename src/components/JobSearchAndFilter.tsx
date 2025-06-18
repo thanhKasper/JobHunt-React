@@ -70,8 +70,8 @@ export default function JobSearchAndFilter() {
     <>
       <Stack
         direction="row"
-        border={1}
-        borderColor={focusStyle ? "primary.main" : "grey.400"}
+        border={1.5}
+        borderColor={focusStyle ? "primary.dark" : "grey.400"}
         bgcolor="common.white"
         borderRadius={10}
         sx={{
@@ -96,7 +96,14 @@ export default function JobSearchAndFilter() {
         //   console.log("Input changed:", value, e);
         // }}
         size="small"
-        sx={{ mb: 2 }}
+        sx={{
+          mb: 4,
+          mt: 1,
+          "& .MuiAutocomplete-tag": {
+            bgcolor: "secondary.light",
+            color: "secondary.contrastText",
+          },
+        }}
         options={top100Films}
         disableCloseOnSelect
         getOptionLabel={(option) => option.title}
