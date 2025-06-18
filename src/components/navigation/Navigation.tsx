@@ -24,14 +24,14 @@ export default function Navigation() {
   };
 
   return (
-    <Box position="sticky" top={0} paddingX={1} paddingTop={1} zIndex={1000}>
+    <Box position="sticky" top={0} zIndex={1000}>
       <AppBar
         position="sticky"
         component="nav"
         sx={{
-          borderRadius: 2,
           top: 0,
-          backgroundColor: "rgba(255, 79, 15, 0.65)",
+          // backgroundColor: "rgba(255, 79, 15, 0.65)",
+          // opacity: 0.8,
           backdropFilter: "blur(8px)",
         }}
       >
@@ -48,14 +48,14 @@ export default function Navigation() {
                 borderRadius: 4,
               }}
             >
-              <Link to="#" className="text-white">
+              <Link to="/" className="text-white">
                 Công Việc Phù Hợp
               </Link>
             </Box>
 
-            <Link to="#">Bộ Lọc Công Việc</Link>
+            <Link to="/job-filters">Bộ Lọc Công Việc</Link>
 
-            <Link to="#">Dự Án</Link>
+            <Link to="#">Dự Án Của Bạn</Link>
           </Stack>
           <div>
             <IconButton
