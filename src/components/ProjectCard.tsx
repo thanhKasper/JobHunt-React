@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  Chip,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Card, CardContent, Chip, Stack, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { Link } from "react-router";
 
@@ -32,13 +26,6 @@ export default function ProjectCard() {
           07/2024 - 10/2024
         </Typography>
 
-        {/* <Typography variant="body1" sx={{ mt: 1 }}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat
-          tempore nostrum iste consequuntur aut expedita. Numquam dicta
-          blanditiis mollitia sapiente nisi eligendi consectetur, ratione sequi,
-          alias molestias qui placeat aliquid?
-        </Typography> */}
-
         <Typography variant="subtitle2" sx={{ mt: 2 }}>
           Vai Trò:
         </Typography>
@@ -57,20 +44,6 @@ export default function ProjectCard() {
           ))}
         </Stack>
       </CardContent>
-
-      {/* <CardActions>
-        <Button
-          size="small"
-          color="primary"
-          component={Link}
-          to="#"
-          // href={project.projectLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Project Source
-        </Button>
-      </CardActions> */}
     </Card>
   );
 }
