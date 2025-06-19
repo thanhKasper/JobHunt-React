@@ -39,12 +39,12 @@ const JobCardDetail = () => {
             src="/static/images/avatar/1.jpg"
             sx={{ width: 24, height: 24 }}
           />
-          <MuiLink component={Link} to="#" sx={{ mb: 1.5 }}>
+          <MuiLink component={Link} to="#">
             Công Ty TNHH MTV ABC
           </MuiLink>
         </div>
 
-        <Stack spacing={1}>
+        <Stack spacing={1} mt={2}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography variant="body1" sx={{ color: "text.secondary" }}>
               Từ khóa tương thích

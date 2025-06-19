@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const JobFilterCard = () => {
   return (
-    <Card sx={{ padding: 2 }}>
+    <Card variant="outlined" sx={{ padding: 4 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="start">
         <Stack flexBasis="70%">
           <MuiLink component={Link} to="jkj1j-1877-33" sx={{ cursor: "pointer" }} variant="h6">

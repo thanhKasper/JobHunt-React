@@ -12,8 +12,8 @@ import { Link } from "react-router";
 export default function JobCard() {
   return (
     <Card
-      elevation={3}
-      sx={{ borderStyle: "solid", borderWitdth: 2, borderColor: "black" }}
+      variant="outlined"
+      sx={{ p: 2 }}
     >
       <CardContent>
         <Stack direction={"row"} spacing={1}>
@@ -27,13 +27,13 @@ export default function JobCard() {
             Bộ lọc của công việc
           </MuiLink>
         </Stack>
-        <Typography variant="h5" component="div">
+        <Typography variant="h6" component="div">
           Tuyển lập trình viên ReactJS
         </Typography>
-        <MuiLink component={Link} to="#" sx={{ mb: 1.5 }}>
+        <MuiLink component={Link} to="#">
           Công Ty TNHH MTV ABC
         </MuiLink>
-        <Stack>
+        <Stack mt={2}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             Ngày mở đơn: 12/03/2025
           </Typography>
