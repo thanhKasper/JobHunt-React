@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
 export default function HorizontalDisplay({
@@ -10,7 +10,9 @@ export default function HorizontalDisplay({
 }) {
   return (
     <>
-      <Grid size={2}>{label}</Grid>
+      <Grid size={2} my="auto">
+        <Typography>{label}</Typography>
+      </Grid>
       <Grid size={10}>{value}</Grid>
     </>
   );

@@ -3,6 +3,7 @@ import React from "react";
 import { useParams } from "react-router";
 import JobFilter from "./components/JobFilter";
 import MatchJobList from "./components/MatchJobList";
+import JobFilterEditPage from "./JobFilterEditPage";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,6 +37,7 @@ function a11yProps(index: number) {
 export default function JobFilterPageDetail() {
   const jobFilterId = useParams().jobFilterId;
   console.log("Chi tiết bộ lọc công việc: " + jobFilterId);
+  const [editMode, setEditMode] = React.useState(false);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -55,7 +57,11 @@ export default function JobFilterPageDetail() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <JobFilter />
+        {editMode ? (
+          <JobFilterEditPage setEditMode={setEditMode} />
+        ) : (
+          <JobFilter setEditMode={setEditMode} />
+        )}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <MatchJobList />

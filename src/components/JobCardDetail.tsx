@@ -1,15 +1,14 @@
 import { ArrowForward } from "@mui/icons-material";
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardActions,
-  CardContent,
   Chip,
-  Stack,
-  Typography,
   Link as MuiLink,
-  Box,
+  Stack,
+  Typography
 } from "@mui/material";
 import { Link } from "react-router";
 

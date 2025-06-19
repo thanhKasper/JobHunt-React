@@ -1,9 +1,21 @@
-import { Chip, Grid, Stack, Typography } from "@mui/material";
-import Title from "../../../components/Title";
-import Subtitle from "../../../components/Subtitle";
+import {
+  Chip,
+  Grid,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import Title from "@components/Title";
+import Subtitle from "@components/Subtitle";
 import HorizontalDisplay from "./HorizontalDisplay";
+import { Edit } from "@mui/icons-material";
 
-export default function JobFilter() {
+export default function JobFilter({
+  setEditMode,
+}: {
+  setEditMode: (mode: boolean) => void;
+}) {
   return (
     <Stack>
       <Title title="Chi Tiết Bộ Lọc Công Việc" />
@@ -12,13 +24,24 @@ export default function JobFilter() {
         <HorizontalDisplay
           label="Tên Bộ Lọc"
           value={
-            <Typography
-              variant="h6"
-              fontWeight="bold"
-              textTransform={"uppercase"}
-            >
-              Lập Trình Viên Frontend
-            </Typography>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                textTransform={"uppercase"}
+              >
+                Lập Trình Viên Frontend
+              </Typography>
+              <Tooltip title="Chỉnh Sửa Bộ Lọc">
+                <IconButton
+                  disabled
+                  size="small"
+                  onClick={() => setEditMode(true)}
+                >
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+            </Stack>
           }
         />
         <HorizontalDisplay
