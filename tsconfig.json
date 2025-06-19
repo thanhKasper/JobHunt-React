@@ -3,5 +3,21 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  // May be this ts.config.json is similar to appSettings.json in ASP.NET Core
+  // if appSettings.Development.json exists, it will override the settings in appSettings.json
+  // So does the tsconfig.app.json
+  
+  // "include": ["src"],
+  // "compilerOptions": {
+  //   "baseUrl": ".",
+  //   "paths": {
+  //     "@/*": ["src/*"],
+  //     "@pages/*": ["src/pages/*"],
+  //     "@components/*": ["src/components/*"],
+  //     "@apis/*": ["src/apis/*"],
+  //     "@assets/*": ["src/assets/*"],
+  //     "@layouts/*": ["src/layouts/*"]
+  //   }
+  // }
 }
