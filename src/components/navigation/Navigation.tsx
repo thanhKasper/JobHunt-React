@@ -55,7 +55,7 @@ export default function Navigation() {
 
             <Link to="/job-filters">Bộ Lọc Công Việc</Link>
 
-            <Link to="#">Dự Án Của Bạn</Link>
+            <Link to="/portfolio">Dự Án Của Bạn</Link>
           </Stack>
           <div>
             <IconButton
