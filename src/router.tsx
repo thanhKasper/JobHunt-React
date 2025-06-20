@@ -23,8 +23,11 @@ let router = createBrowserRouter([
       },
       {
         path: "job-filters",
-        element: <JobFilterPage />,
         children: [
+          {
+            index: true,
+            element: <JobFilterPage />,
+          },
           {
             path: "/job-filters/:jobFilterId",
             element: <JobFilterPageDetail />,

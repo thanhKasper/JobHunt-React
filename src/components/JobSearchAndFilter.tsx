@@ -97,7 +97,6 @@ export default function JobSearchAndFilter() {
         // }}
         size="small"
         sx={{
-          mb: 4,
           mt: 1,
           "& .MuiAutocomplete-tag": {
             bgcolor: "secondary.light",
