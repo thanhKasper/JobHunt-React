@@ -1,5 +1,6 @@
-import { List, ListItem, Pagination, Stack } from "@mui/material";
-import JobCardDetail from "../../../components/JobCardDetail";
+import JobCardDetail from "@/components/cards/JobCardDetail";
+import StyledPagination from "@/components/StyledPagination";
+import { List, ListItem, Paper, Stack } from "@mui/material";
 
 export default function MatchJobList() {
   return (
@@ -11,7 +12,26 @@ export default function MatchJobList() {
           </ListItem>
         ))}
       </List>
-      <Pagination count={10} sx={{ pb: 2 }} />
+      {/* Pagination */}
+      <Stack direction="row" justifyContent="center" mt={4}>
+        <Paper
+          sx={{
+            p: 2,
+            borderRadius: 3,
+            bgcolor: "rgba(255,255,255,0.9)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.2)",
+          }}
+        >
+          <StyledPagination
+            count={10}
+            color="primary"
+            size="large"
+            showFirstButton
+            showLastButton
+          />
+        </Paper>
+      </Stack>
     </Stack>
   );
 }

@@ -1,4 +1,22 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import HeaderCard from "@/components/cards/HeaderCard";
+import StatsCard from "@/components/cards/StatCard";
+import {
+  InfoRounded,
+  ListAltRounded,
+  TuneRounded,
+  WorkRounded
+} from "@mui/icons-material";
+import {
+  Box,
+  CardContent,
+  Chip,
+  Fade,
+  Stack,
+  Tab,
+  Tabs,
+  Typography
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import React from "react";
 import { useParams } from "react-router";
 import JobFilter from "./components/JobFilter";
@@ -11,6 +29,34 @@ interface TabPanelProps {
   value: number;
 }
 
+const StyledTabs = styled(Tabs)(({ theme }) => ({
+  "& .MuiTabs-root": {
+    minHeight: 48,
+  },
+  "& .MuiTabs-indicator": {
+    height: 3,
+    borderRadius: "3px 3px 0 0",
+    background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
+  },
+  "& .MuiTab-root": {
+    textTransform: "none",
+    minWidth: 160,
+    fontWeight: 600,
+    fontSize: "0.95rem",
+    color: theme.palette.text.secondary,
+    transition: "all 0.3s ease",
+    "&:hover": {
+      color: theme.palette.primary.main,
+      transform: "translateY(-1px)",
+    },
+    "&.Mui-selected": {
+      color: theme.palette.primary.main,
+      fontWeight: 700,
+    },
+  },
+}));
+
+
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -22,7 +68,11 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box>{children}</Box>}
+      {value === index && (
+        <Fade in={true} timeout={600}>
+          <Box sx={{ pt: 3 }}>{children}</Box>
+        </Fade>
+      )}
     </div>
   );
 }
@@ -34,28 +84,107 @@ function a11yProps(index: number) {
   };
 }
 
+
 export default function JobFilterPageDetail() {
   const jobFilterId = useParams().jobFilterId;
   console.log("Chi tiết bộ lọc công việc: " + jobFilterId);
   const [editMode, setEditMode] = React.useState(false);
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-    <div className="h-[calc(100vh-48px)]">
+    <Box paddingY={4}>
+      {/* Header Section */}
+      <HeaderCard elevation={6}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box sx={{ zIndex: 1 }}>
+            <Stack direction="row" alignItems="center" spacing={2} mb={1}>
+              <TuneRounded sx={{ fontSize: 32 }} />
+              <Typography variant="h4" fontWeight={700}>
+                Chi Tiết Bộ Lọc
+              </Typography>
+              <Chip
+                label="Đang hoạt động"
+                size="small"
+                sx={{
+                  bgcolor: "rgba(76, 175, 80, 0.2)",
+                  color: "white",
+                  fontWeight: 600,
+                }}
+              />
+            </Stack>
+            <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 600 }}>
+              Xem và chỉnh sửa thông tin chi tiết của bộ lọc công việc. Theo dõi
+              các công việc phù hợp với tiêu chí của bạn.
+            </Typography>
+          </Box>
+        </Stack>
+      </HeaderCard>
+
+      {/* Stats Cards */}
+      <Stack direction="row" spacing={3} mb={3}>
+        <StatsCard sx={{ flex: 1 }}>
+          <CardContent>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <WorkRounded sx={{ color: "primary.main", fontSize: 28 }} />
+              <Box>
+                <Typography variant="h6" fontWeight={600}>
+                  24 Công Việc
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Phù hợp với bộ lọc
+                </Typography>
+              </Box>
+            </Stack>
+          </CardContent>
+        </StatsCard>
+
+        <StatsCard sx={{ flex: 1 }}>
+          <CardContent>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <InfoRounded sx={{ color: "info.main", fontSize: 28 }} />
+              <Box>
+                <Typography variant="h6" fontWeight={600}>
+                  85% Độ Chính Xác
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Tỷ lệ phù hợp
+                </Typography>
+              </Box>
+            </Stack>
+          </CardContent>
+        </StatsCard>
+      </Stack>
+
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
+        <StyledTabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label="job filter tabs"
         >
-          <Tab label="Thông Tin Chi Tiết" {...a11yProps(0)} />
-          <Tab label="Danh Sách Công Việc Phù Hợp" {...a11yProps(1)} />
-        </Tabs>
+          <Tab
+            icon={<InfoRounded sx={{ fontSize: 20 }} />}
+            iconPosition="start"
+            label="Thông Tin Chi Tiết"
+            {...a11yProps(0)}
+          />
+          <Tab
+            icon={<ListAltRounded sx={{ fontSize: 20 }} />}
+            iconPosition="start"
+            label="Danh Sách Công Việc Phù Hợp"
+            {...a11yProps(1)}
+          />
+        </StyledTabs>
       </Box>
+
+      {/* Tab Content */}
       <CustomTabPanel value={value} index={0}>
         {editMode ? (
           <JobFilterEditPage setEditMode={setEditMode} />
@@ -63,9 +192,10 @@ export default function JobFilterPageDetail() {
           <JobFilter setEditMode={setEditMode} />
         )}
       </CustomTabPanel>
+
       <CustomTabPanel value={value} index={1}>
         <MatchJobList />
       </CustomTabPanel>
-    </div>
+    </Box>
   );
 }
