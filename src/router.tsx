@@ -6,6 +6,7 @@ import JobFilterPageDetail from "@pages/JobFilter/JobFilterPageDetail";
 import PortfolioPage from "@pages/Portfolio/PortfolioPage";
 import ProjectDetailPage from "@pages/Portfolio/ProjectDetailPage";
 import ProjectEditPage from "./pages/Portfolio/ProjectEditPage";
+import ProfilePage from "./pages/Profile/ProfilePage";
 
 let router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ let router = createBrowserRouter([
             element: <ProjectEditPage />,
           },
         ],
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
     ],
   },

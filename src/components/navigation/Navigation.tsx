@@ -11,15 +11,21 @@ import {
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Navigation() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigateProfile = () => {
+    navigate("/profile");
     setAnchorEl(null);
   };
 
@@ -87,7 +93,7 @@ export default function Navigation() {
                 },
               }}
             >
-              <MenuItem onClick={handleClose}>Thông Tin Ứng Viên</MenuItem>
+              <MenuItem onClick={navigateProfile}>Thông Tin Ứng Viên</MenuItem>
               <MenuItem onClick={handleClose}>Tài Khoản Của Tôi</MenuItem>
               {/* <MenuItem onClick={handleClose}> */}
               <Box paddingX={1} marginTop={2}>

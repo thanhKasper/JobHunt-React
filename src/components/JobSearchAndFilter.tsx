@@ -70,7 +70,7 @@ export default function JobSearchAndFilter() {
     <>
       <Stack
         direction="row"
-        border={1.5}
+        border={1}
         borderColor={focusStyle ? "primary.dark" : "grey.400"}
         bgcolor="common.white"
         borderRadius={10}
