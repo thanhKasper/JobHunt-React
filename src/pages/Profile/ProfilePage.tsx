@@ -1,31 +1,31 @@
 import educationLevels from "@/apis/BusinessData/EducationLevel";
 import majors from "@/apis/BusinessData/Major";
-import Title from "@/components/Title";
-import {
-  Box,
-  Grid,
-  Paper,
-  TextField,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-  Card,
-  CardContent,
-  Divider,
-  Avatar,
-  IconButton,
-  Chip,
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import EditIcon from "@mui/icons-material/Edit";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import EditIcon from "@mui/icons-material/Edit";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  Divider,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import AwardInput from "./components/AwardInput";
+import HeaderCard from "@/components/cards/HeaderCard";
 
 export default function ProfilePage() {
   return (
@@ -33,28 +33,7 @@ export default function ProfilePage() {
       {/* <Title title="Thông Tin Ứng Viên" /> */}
 
       {/* Header Section with Avatar */}
-      <Card
-        elevation={3}
-        sx={{
-          mt: 4,
-          mb: 4,
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          color: "white",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: -50,
-            right: -50,
-            width: 150,
-            height: 150,
-            backgroundColor: "rgba(255,255,255,0.1)",
-            borderRadius: "50%",
-          }}
-        />
+      <HeaderCard elevation={6}>
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
             <Avatar
@@ -86,7 +65,7 @@ export default function ProfilePage() {
             </IconButton>
           </Box>
         </CardContent>
-      </Card>
+      </HeaderCard>
 
       <Grid container spacing={3}>
         {/* Personal Information Section */}
