@@ -1,7 +1,9 @@
 # JobHunt
+
 A smart toolset for job seekers that helps find suitable jobs, apply with tailored CVs, and research companies before applying.
 
 ## Features
+
 - **Smart Job Filtering**: Automatically filter and recommend jobs based on the job seeker's preferences, skills, and requirements by aggregating data from multiple recruitment channels.
 
 - **Candidate–Job Matching**: Analyze a job seeker's profile and project portfolio to assess compatibility with job listings using intelligent matching algorithms.
@@ -13,13 +15,16 @@ A smart toolset for job seekers that helps find suitable jobs, apply with tailor
 - **Company Insights**: Provide curated resources and background information about the company a job seeker is applying to — including culture, recent news, and reviews — to support interview preparation.
 
 ## How to use it
+
 - Frontend: Folling theses steps
+
 ```bash
 git clone
-cd 
+cd JobHunt-React
 yarn install
 yarn dev
 ```
-- Backend: Please following the link [Github Source to Backend]() for more detail.
+
+- Backend: Please following the link [Github Source to Backend](https://github.com/thanhKasper/JobHunt-Backend) for more detail.
 
 (The project is under development, later sections will be updated after completion).
