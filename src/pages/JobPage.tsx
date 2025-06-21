@@ -84,10 +84,10 @@ const JobPage = () => {
               <TrendingUp sx={{ color: "success.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  24 Mới Hôm Nay
+                  24 Công Việc
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Công việc mới nhất
+                  Đẵ Được Đăng Tuyển Hôm Nay
                 </Typography>
               </Box>
             </Stack>
@@ -103,7 +103,7 @@ const JobPage = () => {
                   98% Phù Hợp
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Độ chính xác
+                  Độ tương thích với công việc
                 </Typography>
               </Box>
             </Stack>
