@@ -2,12 +2,15 @@
 A smart toolset for job seekers that helps find suitable jobs, apply with tailored CVs, and research companies before applying.
 
 ## Features
-- Provide a filter that will base on job seeker requirements to find matching jobs from various recruitment channels.
-- Analyize whether a job seeker is suitable for a job by analyzing through the list of projects
-provided by them and their profiles.
-- Create a CV for job seeker base on provided information.
-- Automatically apply CV.
-- Provide a list of information/sources about the company where a job seeker is about to apply. 
+- **Smart Job Filtering**: Automatically filter and recommend jobs based on the job seeker's preferences, skills, and requirements by aggregating data from multiple recruitment channels.
+
+- **Candidate–Job Matching**: Analyze a job seeker's profile and project portfolio to assess compatibility with job listings using intelligent matching algorithms.
+
+- **CV Generation**: Generate a tailored, professional CV for the job seeker based on their provided information, including education, experience, and projects.
+
+- **One-Click CV Submission**: Automatically submit the generated CV to selected job postings, streamlining the application process.
+
+- **Company Insights**: Provide curated resources and background information about the company a job seeker is applying to — including culture, recent news, and reviews — to support interview preparation.
 
 ## How to use it
 - Frontend: Folling theses steps
@@ -17,4 +20,6 @@ cd
 yarn install
 yarn dev
 ```
-(The project is still under development, later sections will be updated after completion).
+- Backend: Please following the link [Github Source to Backend]() for more detail.
+
+(The project is under development, later sections will be updated after completion).
