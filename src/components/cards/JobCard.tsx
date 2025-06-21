@@ -18,6 +18,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router";
 import InfoCard from "./InfoCard";
+import type JobDTO from "@/apis/DTO/JobDTO";
 
 // Enhanced button
 const DetailButton = styled(Button)(({ theme }) => ({
@@ -34,7 +35,7 @@ const DetailButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export default function JobCard() {
+export default function JobCard({ job }: { job: JobDTO }) {
   return (
     <InfoCard elevation={2}>
       <CardContent sx={{ p: 3 }}>
@@ -51,7 +52,7 @@ export default function JobCard() {
             Bộ Lọc:
           </Typography>
           <MuiLink
-            to="#"
+            to={`job-filter/${job.jobFilterId}`}
             component={Link}
             sx={{
               textDecoration: "none",
@@ -63,7 +64,7 @@ export default function JobCard() {
               },
             }}
           >
-            Bộ lọc của công việc
+            {job.jobFilterName}
           </MuiLink>
         </Stack>
 
@@ -82,7 +83,7 @@ export default function JobCard() {
             transition: "color 0.3s ease",
           }}
         >
-          Tuyển lập trình viên ReactJS
+          {job.jobTitle}
         </Typography>
 
         {/* Company */}
@@ -90,7 +91,7 @@ export default function JobCard() {
           <Business sx={{ fontSize: 18, color: "text.secondary" }} />
           <MuiLink
             component={Link}
-            to="#"
+            to={job.companyLink}
             sx={{
               textDecoration: "none",
               fontWeight: 600,
@@ -103,7 +104,7 @@ export default function JobCard() {
               transition: "color 0.3s ease",
             }}
           >
-            Công Ty TNHH MTV ABC
+            {job.companyName}
           </MuiLink>
         </Stack>
 
@@ -136,7 +137,7 @@ export default function JobCard() {
                   color: "text.primary",
                 }}
               >
-                12/03/2025
+                {job.jobOpenDate}
               </Typography>
               <Chip
                 label="Mới"
@@ -168,7 +169,7 @@ export default function JobCard() {
                   color: "text.primary",
                 }}
               >
-                Hà Nội
+                {job.workingLocation}
               </Typography>
             </Stack>
           </Stack>
@@ -176,7 +177,12 @@ export default function JobCard() {
       </CardContent>
 
       <CardActions sx={{ p: 3, pt: 0 }}>
-        <DetailButton size="small" className="detail-button">
+        <DetailButton
+          LinkComponent={MuiLink}
+          href={job.jobLink}
+          size="small"
+          className="detail-button"
+        >
           Thông Tin Chi Tiết
         </DetailButton>
       </CardActions>
