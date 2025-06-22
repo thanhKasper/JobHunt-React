@@ -1,4 +1,6 @@
+import { headCase } from "@/utils";
 import {
+  Autocomplete,
   Box,
   Chip,
   Stack,
@@ -13,11 +15,13 @@ type TagInputProps = {
 } & Omit<TextFieldProps, "variant"> & {
     value?: string[];
     onTagChange?: (tags: string[]) => void;
+    optionList?: string[];
   };
 
 export default function TagInput({
   value,
   onTagChange,
+  optionList,
   ...props
 }: TagInputProps) {
   const [tags, setTags] = React.useState<string[]>(value || []);
@@ -32,44 +36,40 @@ export default function TagInput({
   // => no re-render on the child component
   // => value won't be updated.
   // Solution: use useEffect in here to update the tags
-  React.useEffect(() => {
-    setTags(value || []);
-  }, [value]);
-
-  const handleEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const currentValue = (e.target as HTMLInputElement).value.trim();
-    if (
-      e.key === "Enter" &&
-      currentValue !== "" &&
-      !tags.map((tag) => tag.toUpperCase()).includes(currentValue.toUpperCase())
-    ) {
-      let updatedTags: string[] = [];
-      setTags((prevTags) => {
-        updatedTags = [
-          ...prevTags,
-          currentValue
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" "),
-        ];
-        return updatedTags;
-      });
-      onTagChange?.(updatedTags);
-      (e.target as HTMLInputElement).value = "";
-    } else if (e.key === "Enter") {
-      (e.target as HTMLInputElement).value = ""; // Clear the input field
-    }
-  };
+  // React.useEffect(() => {
+  //   setTags(value || []);
+  // }, [value]);
   return (
     <Box>
-      <TextField
+      <Autocomplete
         fullWidth
-        {...props}
-        onKeyDown={handleEnter}
-        helperText="Gõ Từ Khóa Cần Lọc Rồi Nhấn Enter"
+        multiple
+        options={optionList ?? []}
+        freeSolo
+        renderValue={() => null}
+        onChange={(_, value) => {
+          console.log("onChange is called");
+          const latestValue = value.pop();
+          if (latestValue === undefined) setTags([]);
+          else {
+            const dupValue = value.findIndex(
+              (tag) => tag.toUpperCase() === latestValue.toUpperCase()
+            );
+
+            const formattedTagList = value.map((tag) => headCase(tag));
+
+            if (dupValue == -1) {
+              formattedTagList.push(headCase(latestValue));
+            }
+            setTags(formattedTagList);
+            onTagChange?.(formattedTagList);
+          }
+        }}
+        value={tags ?? []}
+        renderInput={(params) => <TextField {...props} {...params} />}
       />
       {tags.length != 0 && (
-        <Stack direction="row" gap={1}>
+        <Stack direction="row" gap={1} marginTop={2}>
           {tags.map((tag) => (
             <Chip key={tag} label={tag} onDelete={() => handleDelete(tag)} />
           ))}

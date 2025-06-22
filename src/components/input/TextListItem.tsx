@@ -2,20 +2,20 @@ import { Clear, KeyboardReturn, Save } from "@mui/icons-material";
 import { IconButton, Input, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
 
-const AwardListItem = ({
-  award,
+const TextListItem = ({
+  text,
   pos,
-  updateAwards,
-  removeAward,
+  updateTexts,
+  removeText,
 }: {
   pos: number;
-  award: string;
-  updateAwards: (text: string, pos: number) => void;
-  removeAward: (pos: number) => void;
+  text: string;
+  updateTexts: (text: string, pos: number) => void;
+  removeText: (pos: number) => void;
 }) => {
   const [editMode, setEditMode] = React.useState(false);
-  const [previousText, setPreviousText] = React.useState<string>(award);
-  const [editingText, setEditingText] = React.useState<string>(award);
+  const [previousText, setPreviousText] = React.useState<string>(text);
+  const [editingText, setEditingText] = React.useState<string>(text);
   return (
     <Paper
       onDoubleClick={() => setEditMode(true)}
@@ -49,7 +49,7 @@ const AwardListItem = ({
               color="info"
               size="small"
               onClick={() => {
-                updateAwards(editingText, pos);
+                updateTexts(editingText, pos);
                 setEditMode(false);
               }}
             >
@@ -60,7 +60,7 @@ const AwardListItem = ({
               size="small"
               onClick={() => {
                 setEditingText(previousText);
-                setPreviousText(award);
+                setPreviousText(text);
                 setEditMode(false);
               }}
             >
@@ -74,7 +74,7 @@ const AwardListItem = ({
           <IconButton
             color="error"
             size="small"
-            onClick={() => removeAward(pos)}
+            onClick={() => removeText(pos)}
           >
             <Clear fontSize="medium" />
           </IconButton>
@@ -84,4 +84,4 @@ const AwardListItem = ({
   );
 };
 
-export default AwardListItem;
+export default TextListItem;
