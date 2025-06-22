@@ -24,17 +24,18 @@ import JobCard from "../components/cards/JobCard";
 import JobSearchAndFilter from "../components/JobSearchAndFilter";
 
 const JobPage = () => {
-  console.log("JobPage rendered");
   const dispatch = useAppDispatch();
   const jobState = useAppSelector((state) => state.jobState);
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
 
   useEffect(() => {
-    dispatch(reloadJobPage());
+    return () => {
+      // This effect runs when the component is unmounted
+      // Used to turn the page into default page after filter or search.
+      dispatch(reloadJobPage());
+    };
   }, [dispatch]);
 
-  // reload the job list when the page is loaded
-  console.log(jobState);
   return (
     jobState && (
       <Box paddingY={4}>

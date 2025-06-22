@@ -21,6 +21,22 @@ interface JobState {
   jobs: Array<JobDTO>;
 }
 
+const totalJobs = await JobApi.getTotalJobs();
+const totalPages = Math.ceil(totalJobs / PAGE_SIZE);
+
+const initialState: JobState = {
+  status: "idle",
+  totalPages: totalPages,
+  currentPage: 1, // Start from page 1
+  pageSize: PAGE_SIZE,
+  todayNewJobs: await JobApi.getTodayNewJobs(),
+  totalJobs: totalJobs,
+  todayCompatibilityPercentage: await JobApi.getTodayCompatibilityPercentage(),
+  searchKeyword: "",
+  filterIdList: [],
+  jobs: await JobApi.getFirstTenLatestJobs(),
+};
+
 const getJobsWithSearchAndFilter = createAsyncThunk(
   "job/getJobsWithSearchAndFilter",
   async (arg: {
@@ -69,18 +85,7 @@ const reloadJobPage = createAsyncThunk(
 // get used to it first, and then I will improve the performance later.
 const jobSlice = createSlice({
   name: "job",
-  initialState: {
-    status: "idle",
-    totalPages: 0,
-    currentPage: 1, // Start from page 1
-    pageSize: PAGE_SIZE,
-    todayNewJobs: 0,
-    totalJobs: 0,
-    todayCompatibilityPercentage: 0,
-    searchKeyword: "",
-    filterIdList: [],
-    jobs: [],
-  } as JobState,
+  initialState: initialState,
   reducers: {
     updateSearchKeyword: (state, action: PayloadAction<string>) => {
       state.searchKeyword = action.payload;
