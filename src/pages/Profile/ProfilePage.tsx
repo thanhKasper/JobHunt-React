@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import AwardInput from "./components/AwardInput";
+import LongTextInput from "@/components/input/LongTextInput";
 import HeaderCard from "@/components/cards/HeaderCard";
 
 export default function ProfilePage() {
@@ -277,7 +277,12 @@ export default function ProfilePage() {
               </Box>
               <Divider sx={{ mb: 3 }} />
 
-              <AwardInput />
+              <LongTextInput
+                label=""
+                onListChange={() => {}}
+                textList={[]}
+                placeholder=""
+              />
             </CardContent>
           </Card>
         </Grid>
