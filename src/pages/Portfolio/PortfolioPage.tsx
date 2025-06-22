@@ -91,6 +91,8 @@ export default function PortfolioPage() {
         </Box>
         <StyledButton
           // onClick={() => setOpen(true)}
+          LinkComponent={"a"}
+          href="/portfolio/new"
           variant="contained"
           startIcon={<Add />}
           sx={{

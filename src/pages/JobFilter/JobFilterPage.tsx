@@ -1,5 +1,6 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   Add,
   AutoAwesome,
@@ -9,7 +10,6 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
-  Button,
   CardContent,
   Chip,
   Fade,
@@ -18,53 +18,18 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import React from "react";
-import { useParams } from "react-router";
 import JobFilterCard from "../../components/cards/JobFilterCard";
 import CreateJobFilterPage from "./CreateJobFilterPage";
-
-const StyledButton = styled(Button)(() => ({
-  borderRadius: 25,
-  padding: "12px 24px",
-  fontWeight: 600,
-  textTransform: "none",
-  boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  position: "relative",
-  overflow: "hidden",
-
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
-  },
-
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: "-100%",
-    width: "100%",
-    height: "100%",
-    background:
-      "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-    transition: "left 0.6s ease",
-  },
-
-  "&:hover::before": {
-    left: "100%",
-  },
-}));
+import AddButton from "./components/AddButton";
+import { filterJobFilters } from "@/store/jobFilterSlice";
 
 export default function JobFilterPage() {
-  const filterId = useParams().jobFilterId;
   const [open, setOpen] = React.useState(false);
-  const [filterCount] = React.useState(5);
-  const [activeFilters] = React.useState(3);
-
-  console.log(
-    "this page has been rendered with filterId: " + (filterId ?? "null")
-  );
+  const [filterType, setFilterType] = React.useState("Tất cả");
+  const dispatch = useAppDispatch();
+  const jobFilterState = useAppSelector((state) => state.jobFilterState);
+  const totalJobs = useAppSelector((state) => state.jobState.totalJobs);
 
   return (
     <Box paddingY={4}>
@@ -82,7 +47,7 @@ export default function JobFilterPage() {
                 Bộ Lọc Công Việc
               </Typography>
               <Chip
-                label={`${filterCount} bộ lọc`}
+                label={`${jobFilterState.filterTotal} bộ lọc`}
                 size="small"
                 sx={{
                   bgcolor: "rgba(255,255,255,0.2)",
@@ -104,7 +69,7 @@ export default function JobFilterPage() {
             spacing={2}
             sx={{ zIndex: 1 }}
           >
-            <StyledButton
+            <AddButton
               onClick={() => setOpen(true)}
               variant="contained"
               startIcon={<Add />}
@@ -117,7 +82,7 @@ export default function JobFilterPage() {
               }}
             >
               Thêm Bộ Lọc
-            </StyledButton>
+            </AddButton>
           </Stack>
         </Stack>
       </HeaderCard>
@@ -130,7 +95,7 @@ export default function JobFilterPage() {
               <SearchRounded sx={{ color: "primary.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  {activeFilters} Bộ Lọc Đang Hoạt Động
+                  {jobFilterState.activeFilterTotal} Bộ Lọc Đang Hoạt Động
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Tìm kiếm công việc phù hợp
@@ -146,7 +111,7 @@ export default function JobFilterPage() {
               <AutoAwesome sx={{ color: "warning.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  24 Kết Quả
+                  {totalJobs} Kết Quả
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Công việc phù hợp
@@ -180,8 +145,12 @@ export default function JobFilterPage() {
                   key={filter}
                   label={filter}
                   size="small"
-                  variant={filter === "Tất cả" ? "filled" : "outlined"}
-                  color={filter === "Tất cả" ? "primary" : "default"}
+                  onClick={() => {
+                    setFilterType(filter);
+                    dispatch(filterJobFilters(filter));
+                  }}
+                  variant={filter === filterType ? "filled" : "outlined"}
+                  color={filter === filterType ? "primary" : "default"}
                   sx={{
                     borderRadius: 2,
                     fontWeight: 500,
@@ -200,34 +169,33 @@ export default function JobFilterPage() {
       </Paper>
 
       {/* Filter Cards Grid */}
-      <Fade in={true} timeout={800}>
-        <Grid container spacing={3}>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-              <Box
-                sx={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
-                  "@keyframes fadeInUp": {
-                    "0%": {
-                      opacity: 0,
-                      transform: "translateY(30px)",
+      {jobFilterState.filterTotal > 0 ? (
+        <Fade in={true} timeout={800}>
+          <Grid container spacing={3}>
+            {jobFilterState.filteredJobFilters.map((jobFilter, index) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+                <Box
+                  sx={{
+                    animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
+                    "@keyframes fadeInUp": {
+                      "0%": {
+                        opacity: 0,
+                        transform: "translateY(30px)",
+                      },
+                      "100%": {
+                        opacity: 1,
+                        transform: "translateY(0)",
+                      },
                     },
-                    "100%": {
-                      opacity: 1,
-                      transform: "translateY(0)",
-                    },
-                  },
-                }}
-              >
-                <JobFilterCard />
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Fade>
-
-      {/* Empty State (if no filters) */}
-      {filterCount === 0 && (
+                  }}
+                >
+                  <JobFilterCard jobFilter={jobFilter} />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Fade>
+      ) : (
         <Paper
           sx={{
             p: 6,
@@ -247,17 +215,16 @@ export default function JobFilterPage() {
           <Typography variant="body2" color="text.secondary" mb={3}>
             Tạo bộ lọc đầu tiên để bắt đầu tìm kiếm công việc phù hợp
           </Typography>
-          <StyledButton
+          <AddButton
             variant="contained"
             startIcon={<Add />}
             onClick={() => setOpen(true)}
           >
             Tạo Bộ Lọc Đầu Tiên
-          </StyledButton>
+          </AddButton>
         </Paper>
       )}
 
-      {/* <Outlet /> */}
       <CreateJobFilterPage open={open} toggleDrawer={setOpen} />
     </Box>
   );
