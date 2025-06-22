@@ -7,6 +7,7 @@ import ProjectDetailPage from "@pages/Portfolio/ProjectDetailPage";
 import { createBrowserRouter } from "react-router";
 import ProjectEditPage from "./pages/Portfolio/ProjectEditPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import ProjectNewPage from "./pages/Portfolio/ProjectNewPage";
 
 let router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ let router = createBrowserRouter([
             path: ":projectId/edit",
             element: <ProjectEditPage />,
           },
+          {
+            path: "new",
+            element: <ProjectNewPage/>,
+          }
         ],
       },
       {
