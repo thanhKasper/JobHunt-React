@@ -1,11 +1,8 @@
+import { BaseApi } from "./BaseApi";
 import type JobDetailDTO from "./DTO/JobDetailDTO";
 import type JobDTO from "./DTO/JobDTO";
 
-export default class JopApi {
-  readonly baseUrl: string;
-  constructor() {
-    this.baseUrl = process.env.BACKEND_URL || "http://localhost:3000";
-  }
+export default class JopApi extends BaseApi {
 
   static async getTotalJobs(): Promise<number> {
     return 160; // Mocked value, replace with actual API call

@@ -1,0 +1,1 @@
+export type FetchingState = "idle" | "loading" | "succeeded" | "failed";

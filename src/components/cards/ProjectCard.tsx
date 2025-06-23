@@ -1,3 +1,4 @@
+import type ProjectDTO from "@/apis/DTO/ProjectDTO";
 import { Code, DateRange, Person, Visibility } from "@mui/icons-material";
 import {
   Box,
@@ -10,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import dayjs from "dayjs";
 import { Link } from "react-router";
 import InfoCard from "./InfoCard";
 
@@ -28,7 +30,7 @@ const ViewButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export default function ProjectCard() {
+export default function ProjectCard({ project }: { project: ProjectDTO }) {
   return (
     <InfoCard elevation={2}>
       <CardContent sx={{ p: 3 }}>
@@ -52,7 +54,7 @@ export default function ProjectCard() {
             },
           }}
         >
-          Untitled Project
+          {project.projectName}
         </Typography>
 
         {/* Project Duration */}
@@ -74,10 +76,13 @@ export default function ProjectCard() {
               color: "text.primary",
             }}
           >
-            07/2024 - 10/2024
+            {`${dayjs(project.startDate).format("MM/YYYY")}`} -{" "}
+            {project.endDate
+              ? dayjs(project.endDate).format("MM/YYYY")
+              : "Hiện tại"}
           </Typography>
           <Chip
-            label="Hoàn thành"
+            label={project.endDate ? "Hoàn thành" : "Đang thực hiện"}
             size="small"
             color="success"
             sx={{
@@ -113,8 +118,12 @@ export default function ProjectCard() {
               Vai Trò:
             </Typography>
           </Stack>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            {["Frontend Developer", "Scrum Master"].map((role, idx) => (
+          <Stack
+            direction="row"
+            gap={1}
+            sx={{ overflowX: "scroll", scrollbarWidth: "none" }}
+          >
+            {project.roles.map((role, idx) => (
               <Chip
                 key={idx}
                 label={role}
@@ -123,6 +132,7 @@ export default function ProjectCard() {
                 sx={{
                   fontWeight: 500,
                   borderRadius: 2,
+                  userSelect: "none",
                 }}
               />
             ))}
@@ -151,8 +161,12 @@ export default function ProjectCard() {
               Công Nghệ Sử Dụng / Kỹ Năng:
             </Typography>
           </Stack>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            {["React", "TypeScript", "Node.js"].map((tech, idx) => (
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ overflowX: "scroll", scrollbarWidth: "none" }}
+          >
+            {project.techOrSkills.map((tech, idx) => (
               <Chip
                 key={idx}
                 label={tech}
@@ -170,6 +184,8 @@ export default function ProjectCard() {
 
       <CardActions sx={{ p: 3, pt: 0 }}>
         <ViewButton
+          LinkComponent={"a"}
+          href={`portfolio/${project.projectId}`}
           size="small"
           className="view-button"
           startIcon={<Visibility />}

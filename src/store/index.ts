@@ -3,6 +3,7 @@ import jobReducer from "./jobSlice";
 import jobFilterReducer from "./jobFilterSlice";
 import jobFilterCreationReducer from "./jobFilterCreateSlice";
 import jobFilterDetailReducer from "./jobFilterDetailSlice";
+import projectReducer from "./projectSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     jobFilterState: jobFilterReducer,
     jobFilterCreationState: jobFilterCreationReducer,
     jobFilterDetailState: jobFilterDetailReducer,
+    projectState: projectReducer,
   },
 });
 

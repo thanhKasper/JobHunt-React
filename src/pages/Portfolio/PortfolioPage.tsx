@@ -1,6 +1,7 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import ProjectCard from "@/components/cards/ProjectCard";
 import StatsCard from "@/components/cards/StatCard";
+import { useAppSelector } from "@/store/hooks";
 import {
   Add,
   CalendarTodayRounded,
@@ -20,7 +21,6 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 
 const StyledButton = styled(Button)(() => ({
   borderRadius: 25,
@@ -55,8 +55,7 @@ const StyledButton = styled(Button)(() => ({
 }));
 
 export default function PortfolioPage() {
-  const [totalProjects] = useState(6);
-
+  const projectState = useAppSelector((state) => state.projectState);
   return (
     <Box paddingY={4}>
       {/* Header Section */}
@@ -75,7 +74,7 @@ export default function PortfolioPage() {
               Danh Sách Các Dự Án
             </Typography>
             <Chip
-              label={`${totalProjects} dự án`}
+              label={`${projectState.totalProjects} dự án`}
               size="small"
               sx={{
                 bgcolor: "rgba(255,255,255,0.2)",
@@ -115,7 +114,7 @@ export default function PortfolioPage() {
               <CodeRounded sx={{ color: "primary.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  {totalProjects} Dự Án
+                  {projectState.totalCompletedProjects} Dự Án
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Đã hoàn thành
@@ -131,10 +130,10 @@ export default function PortfolioPage() {
               <CalendarTodayRounded sx={{ color: "info.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  12 Tháng
+                  {projectState.toolsCount} Công Nghệ
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Số thời gian thực hiện
+                  Số công nghệ đã sử dụng
                 </Typography>
               </Box>
             </Stack>
@@ -147,10 +146,10 @@ export default function PortfolioPage() {
               <CategoryRounded sx={{ color: "success.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  5 Vai Trò
+                  {projectState.rolesCount} Vai Trò
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Đã Từng Tham Qua
+                  Đã Từng Tham Gia
                 </Typography>
               </Box>
             </Stack>
@@ -174,15 +173,8 @@ export default function PortfolioPage() {
           <Typography variant="body2" color="text.secondary" fontWeight={500}>
             Công nghệ chính:
           </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            {[
-              "React",
-              "Node.js",
-              "Python",
-              "JavaScript",
-              "MongoDB",
-              "PostgreSQL",
-            ].map((tech) => (
+          <Stack direction="row" spacing={1}>
+            {projectState.mainTechnologies.map((tech) => (
               <Chip
                 key={tech}
                 label={tech}
@@ -206,8 +198,8 @@ export default function PortfolioPage() {
       {/* Projects Grid */}
       <Fade in={true} timeout={800}>
         <Grid container spacing={3}>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+          {projectState.projects.map((project, index) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.projectId}>
               <Box
                 sx={{
                   animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
@@ -223,7 +215,7 @@ export default function PortfolioPage() {
                   },
                 }}
               >
-                <ProjectCard />
+                <ProjectCard project={project} />
               </Box>
             </Grid>
           ))}

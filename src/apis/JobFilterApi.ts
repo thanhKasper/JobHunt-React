@@ -1,7 +1,9 @@
+import { BaseApi } from "./BaseApi";
 import type JobFilterCreationDTO from "./DTO/JobFilterCreationDTO";
 import type JobFilterDTO from "./DTO/JobFilterDTO";
 
-export default class JobFilterApi {
+export default class JobFilterApi extends BaseApi {
+  
   public static async deleteJobFilter(jobFilterId: string): Promise<string> {
     try {
       // Simulate API call to delete job filter

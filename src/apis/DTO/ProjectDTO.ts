@@ -5,7 +5,7 @@ export default interface ProjectDTO {
   projectOwner: string;
   roles: string[];
   startDate: string;
-  endDate: string;
+  endDate?: string;
   techOrSkills: string[];
   projectLink: string;
   features: string[];
