@@ -1,3 +1,4 @@
+import type JobFilterCreationDTO from "@/apis/DTO/JobFilterCreationDTO";
 import React from "react";
 
 interface JobFilterForm {
@@ -9,6 +10,7 @@ interface JobFilterForm {
   technicalKnowledge: string[];
   softSkills: string[];
   tools: string[];
+  languages: string[];
 }
 
 export default function useCreateJobFilter() {
@@ -21,10 +23,11 @@ export default function useCreateJobFilter() {
     technicalKnowledge: [],
     softSkills: [],
     tools: [],
+    languages: [],
   });
 
   return {
-    jobFilterForm,
+    ...jobFilterForm,
     updateFilterTitle: (title: string) => {
       setJobFilterForm((prev) => ({ ...prev, filterTitle: title }));
     },
@@ -48,6 +51,22 @@ export default function useCreateJobFilter() {
     },
     updateTools: (tools: string[]) => {
       setJobFilterForm((prev) => ({ ...prev, tools }));
+    },
+    updateLangeuages: (languages: string[]) => {
+      setJobFilterForm((prev) => ({ ...prev, languages }));
+    },
+    toJobFilterDTO: (): JobFilterCreationDTO => {
+      return {
+        jobFilterName: jobFilterForm.filterTitle,
+        filterOccupation: jobFilterForm.ocupation,
+        desireWorkingLocation: jobFilterForm.workingLocation,
+        expectedExp: jobFilterForm.experience,
+        jobLevel: jobFilterForm.jobLevel,
+        technicalKnowledge: jobFilterForm.technicalKnowledge,
+        softSkills: jobFilterForm.softSkills,
+        tools: jobFilterForm.tools,
+        languages: jobFilterForm.languages,
+      };
     },
   };
 }

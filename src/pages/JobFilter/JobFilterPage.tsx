@@ -1,6 +1,7 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { filterJobFilters } from "@/store/jobFilterSlice";
 import {
   Add,
   AutoAwesome,
@@ -20,12 +21,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import JobFilterCard from "../../components/cards/JobFilterCard";
-import CreateJobFilterPage from "./CreateJobFilterPage";
 import AddButton from "./components/AddButton";
-import { filterJobFilters } from "@/store/jobFilterSlice";
 
 export default function JobFilterPage() {
-  const [open, setOpen] = React.useState(false);
   const [filterType, setFilterType] = React.useState("Tất cả");
   const dispatch = useAppDispatch();
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
@@ -70,7 +68,8 @@ export default function JobFilterPage() {
             sx={{ zIndex: 1 }}
           >
             <AddButton
-              onClick={() => setOpen(true)}
+              LinkComponent={"a"}
+              href="/job-filters/new"
               variant="contained"
               startIcon={<Add />}
               sx={{
@@ -218,14 +217,15 @@ export default function JobFilterPage() {
           <AddButton
             variant="contained"
             startIcon={<Add />}
-            onClick={() => setOpen(true)}
+            LinkComponent={"a"}
+            href="/job-filters/new"
           >
             Tạo Bộ Lọc Đầu Tiên
           </AddButton>
         </Paper>
       )}
 
-      <CreateJobFilterPage open={open} toggleDrawer={setOpen} />
+      {/* <CreateJobFilterPage open={open} toggleDrawer={setOpen} /> */}
     </Box>
   );
 }

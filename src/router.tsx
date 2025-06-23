@@ -8,6 +8,7 @@ import { createBrowserRouter } from "react-router";
 import ProjectEditPage from "./pages/Portfolio/ProjectEditPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProjectNewPage from "./pages/Portfolio/ProjectNewPage";
+import CreateJobFilterPage from "./pages/JobFilter/CreateJobFilterPage";
 
 let router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ let router = createBrowserRouter([
             path: "/job-filters/:jobFilterId",
             element: <JobFilterPageDetail />,
           },
+          {
+            path: "new",
+            element: <CreateJobFilterPage />,
+          },
         ],
       },
       {
@@ -52,8 +57,8 @@ let router = createBrowserRouter([
           },
           {
             path: "new",
-            element: <ProjectNewPage/>,
-          }
+            element: <ProjectNewPage />,
+          },
         ],
       },
       {

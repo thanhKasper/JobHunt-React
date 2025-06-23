@@ -5,8 +5,8 @@ export default interface JobFilterDTO {
   jobFilterName: string;
   isActive: boolean;
   isStarred: boolean;
+  averageCompatibility: number;
   filterOccupation: string;
-  matchingPercentage: number;
   desireWorkingLocation: string;
   jobLevel: string;
   exp: number;

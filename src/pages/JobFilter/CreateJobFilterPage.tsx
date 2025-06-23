@@ -1,9 +1,29 @@
+import HeaderCard from "@/components/cards/HeaderCard";
+import TagInput from "@/components/input/TagInput";
+import jobLevelList from "@apis/BusinessData/JobLevel";
+import occupationList from "@apis/BusinessData/OccupationList";
 import {
+  AccessTime,
+  Build,
+  Close,
+  Code,
+  FilterList,
+  Language,
+  LocationOn,
+  Psychology,
+  School,
+  Send,
+  StarBorder,
+  Work,
+} from "@mui/icons-material";
+import {
+  Box,
   Button,
-  Container,
-  Drawer,
+  Card,
+  CardContent,
   FormControl,
   Grid,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -11,155 +31,360 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import TagInput from "@components/input/TagInput";
-import { Close, SendOutlined } from "@mui/icons-material";
+import { ListFilterPlus } from "lucide-react";
 import useCreateJobFilter from "./CreateJobFilterPage.Hook";
-import occupationList from "@apis/BusinessData/OccupationList";
-import jobLevelList from "@apis/BusinessData/JobLevel";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { createNewJobFilter } from "@/store/jobFilterCreateSlice";
 
-export default function CreateJobFilterPage({
-  open,
-  toggleDrawer,
-}: {
-  open: boolean;
-  toggleDrawer: (isOpen: boolean) => void;
-}) {
-  const jobFilterForm = useCreateJobFilter();
+export default function CreateJobFilterPage() {
+  const jobFilterCreationForm = useCreateJobFilter();
+  const dispatch = useAppDispatch();
+  const jobFilterCreationResult = useAppSelector(
+    (state) => state.jobFilterCreationState
+  );
+
+  console.log("Job Filter Creation Result:", jobFilterCreationResult);
 
   return (
-    <Drawer
-      anchor="bottom"
-      open={open}
-      sx={{
-        "& .MuiPaper-root": {
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-        },
-      }}
-      onClose={() => toggleDrawer(false)}
-    >
-      <Container sx={{ paddingY: 4 }}>
-        <Typography variant="h5" textAlign={"center"}>
-          Tạo Bộ Lọc Công Việc
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          marginBottom={4}
-          textAlign={"center"}
-          color="grey.600"
-        >
-          Lọc Công Việc Dựa Trên Những Gì Bạn Mong Muốn
-        </Typography>
-        <Stack spacing={2}>
-          <TextField
-            fullWidth
-            label="Tên Bộ Lọc"
-            variant="outlined"
-            value={jobFilterForm.jobFilterForm.filterTitle}
-            onChange={(e) => jobFilterForm.updateFilterTitle(e.target.value)}
-          />
-          <Grid container spacing={2}>
-            <Grid size={3}>
-              <FormControl fullWidth>
-                <InputLabel id="occupation">Ngành Nghề</InputLabel>
-                <Select
-                  labelId="occupation"
-                  id="demo-simple-select"
-                  label="Ngành Nghề"
-                  fullWidth
-                  value={jobFilterForm.jobFilterForm.ocupation}
-                  onChange={(e) =>
-                    jobFilterForm.updateOccupation(e.target.value as string)
-                  }
-                >
-                  {occupationList.map((occupation) => (
-                    <MenuItem key={occupation.key} value={occupation.key}>
-                      {occupation.value}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid size={3}>
-              <FormControl fullWidth>
-                <InputLabel id="job-level">Cấp Độ Chuyên Môn</InputLabel>
-                <Select
-                  labelId="job-level"
-                  label="Cấp Độ Chuyên Môn"
-                  fullWidth
-                  value={jobFilterForm.jobFilterForm.jobLevel}
-                  onChange={(e) =>
-                    jobFilterForm.updateJobLevel(e.target.value as string)
-                  }
-                >
-                  {jobLevelList.map((jobLevel) => (
-                    <MenuItem key={jobLevel.key} value={jobLevel.key}>
-                      {jobLevel.value}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid size={3}>
-              <TextField
-                label="Kinh Nghiệm Làm Việc"
-                type="number"
-                variant="outlined"
-                value={jobFilterForm.jobFilterForm.experience}
-                onChange={(e) =>
-                  jobFilterForm.updateExperience(Number(e.target.value))
-                }
-                fullWidth
-              />
-            </Grid>
-            <Grid size={3}>
-              <TextField
-                fullWidth
-                label="Thành Phố Làm Việc Mong Muốn"
-                variant="outlined"
-                value={jobFilterForm.jobFilterForm.workingLocation}
-                onChange={(e) =>
-                  jobFilterForm.updateWorkingLocation(e.target.value as string)
-                }
-              />
-            </Grid>
-          </Grid>
-          <TagInput
-            onTagChange={(tags) => jobFilterForm.updateTechnicalKnowledge(tags)}
-            label="Kiến Thức Chuyên Môn"
-          />
-          <TagInput
-            onTagChange={(tags) => jobFilterForm.updateSoftSkills(tags)}
-            label="Kỹ Năng Mềm"
-          />
-          <TagInput
-            onTagChange={(tags) => jobFilterForm.updateTools(tags)}
-            label="Công Cụ Thành Thạo"
-          />
-        </Stack>
+    <Box paddingY={4}>
+      {/* Sticky Header */}
+      <HeaderCard elevation={6}>
         <Stack
           direction="row"
-          spacing={2}
-          justifyContent="flex-end"
+          alignItems="center"
+          justifyContent="space-between"
         >
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => toggleDrawer(false)}
-            endIcon={<Close />}
-          >
-            Từ Chối
-          </Button>
-          <Button
-            onClick={() => console.log(jobFilterForm.jobFilterForm)}
-            variant="contained"
-            color="info"
-            endIcon={<SendOutlined />}
-          >
-            Gửi
-          </Button>
+          <Box>
+            {/* <FilterList sx={{ fontSize: 28 }} /> */}
+            <Box display="flex" gap={2} alignItems={"center"} mb={1}>
+              <ListFilterPlus size={32} />
+              <Typography variant="h4" fontWeight={700}>
+                Tạo Bộ Lọc Công Việc
+              </Typography>
+            </Box>
+            <Typography variant="body1" sx={{ opacity: 0.9 }}>
+              Lọc công việc dựa trên những gì bạn mong muốn
+            </Typography>
+          </Box>
         </Stack>
-      </Container>
-    </Drawer>
+      </HeaderCard>
+
+      <Stack spacing={3} paddingY={4}>
+        <Card>
+          <CardContent sx={{ p: 4 }}>
+            {/* Filter Title */}
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <StarBorder color="primary" />
+              Thông Tin Cơ Bản
+            </Typography>
+            <TextField
+              fullWidth
+              label="Tên Bộ Lọc"
+              variant="outlined"
+              value={jobFilterCreationForm.filterTitle}
+              onChange={(e) =>
+                jobFilterCreationForm.updateFilterTitle(e.target.value)
+              }
+              placeholder="Ví dụ: Công việc IT tại TP.HCM"
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FilterList color="secondary" />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Main Fields Grid */}
+        <Card>
+          <CardContent sx={{ p: 4 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Work color="primary" />
+              Chi Tiết Công Việc
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 6,
+                  lg: 3,
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel>Ngành Nghề</InputLabel>
+                  <Select
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Work color="secondary" />
+                      </InputAdornment>
+                    }
+                    value={jobFilterCreationForm.ocupation}
+                    onChange={(e) =>
+                      jobFilterCreationForm.updateOccupation(e.target.value)
+                    }
+                    label="Ngành Nghề"
+                  >
+                    {occupationList.map((occupation) => (
+                      <MenuItem key={occupation.key} value={occupation.key}>
+                        {occupation.value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 6,
+                  lg: 3,
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel>Cấp Độ Chuyên Môn</InputLabel>
+                  <Select
+                    value={jobFilterCreationForm.jobLevel}
+                    onChange={(e) =>
+                      jobFilterCreationForm.updateJobLevel(e.target.value)
+                    }
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <School color="secondary" />
+                      </InputAdornment>
+                    }
+                    label="Cấp Độ Chuyên Môn"
+                  >
+                    {jobLevelList.map((level) => (
+                      <MenuItem key={level.key} value={level.key}>
+                        {level.value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 6,
+                  lg: 3,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  label="Kinh Nghiệm Làm Việc (năm)"
+                  type="number"
+                  variant="outlined"
+                  value={jobFilterCreationForm.experience}
+                  onChange={(e) =>
+                    jobFilterCreationForm.updateExperience(
+                      parseInt(e.target.value, 10) || 0
+                    )
+                  }
+                  placeholder="Ví dụ: 2"
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccessTime color="secondary" />
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </Grid>
+
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 6,
+                  lg: 3,
+                }}
+              >
+                <TextField
+                  fullWidth
+                  label="Thành Phố Làm Việc"
+                  variant="outlined"
+                  value={jobFilterCreationForm.workingLocation}
+                  onChange={(e) =>
+                    jobFilterCreationForm.updateWorkingLocation(e.target.value)
+                  }
+                  placeholder="Ví dụ: TP. Hồ Chí Minh"
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LocationOn color="secondary" />
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+
+        {/* Skills Section */}
+        <Card>
+          <CardContent sx={{ p: 4 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Code color="secondary" />
+              Kỹ Năng & Công Cụ
+            </Typography>
+            <Stack spacing={3}>
+              <TagInput
+                value={jobFilterCreationForm.technicalKnowledge}
+                onTagChange={jobFilterCreationForm.updateTechnicalKnowledge}
+                label="Kiến Thức Chuyên Môn"
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Code color="secondary" />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                placeholder="Các kiến thức chuyên môn cần thiết cho công việc"
+                color="primary"
+              />
+
+              <TagInput
+                value={jobFilterCreationForm.softSkills}
+                onTagChange={jobFilterCreationForm.updateSoftSkills}
+                label="Kỹ Năng Mềm"
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Psychology color="secondary" />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                placeholder="Ví dụ: Giao tiếp, Làm việc nhóm, Lãnh đạo..."
+                color="secondary"
+              />
+
+              <TagInput
+                value={jobFilterCreationForm.tools}
+                onTagChange={jobFilterCreationForm.updateTools}
+                label="Công Cụ Thành Thạo"
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Build color="success" />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                placeholder="Ví dụ: Excel, Power Bi, Autodesk, Git..."
+                color="success"
+              />
+
+              <TagInput
+                value={jobFilterCreationForm.languages}
+                onTagChange={jobFilterCreationForm.updateLangeuages}
+                label="Ngôn Ngữ Thành Thạo"
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Language color="success" />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                placeholder="Ví dụ: Tiếng Việt, Tiếng Anh, Tiếng Nhật..."
+                color="success"
+              />
+            </Stack>
+          </CardContent>
+        </Card>
+      </Stack>
+
+      {/* Sticky Footer */}
+
+      <Stack direction="row" spacing={2} justifyContent="flex-end">
+        <Button
+          LinkComponent={"a"}
+          href="/job-filters"
+          variant="outlined"
+          size="large"
+          startIcon={<Close />}
+          sx={{
+            px: 4,
+            py: 1.5,
+            borderRadius: 3,
+            textTransform: "none",
+            fontWeight: 600,
+            borderWidth: 2,
+            "&:hover": {
+              borderWidth: 2,
+              transform: "translateY(-1px)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            },
+          }}
+        >
+          Hủy
+        </Button>
+        <Button
+          onClick={() => {
+            dispatch(
+              createNewJobFilter(jobFilterCreationForm.toJobFilterDTO())
+            );
+          }}
+          variant="contained"
+          size="large"
+          startIcon={<Send />}
+          sx={{
+            px: 4,
+            py: 1.5,
+            borderRadius: 3,
+            textTransform: "none",
+            fontWeight: 600,
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            boxShadow: "0 4px 16px rgba(102, 126, 234, 0.4)",
+            "&:hover": {
+              background: "linear-gradient(135deg, #5a6fd8 0%, #684d9c 100%)",
+              transform: "translateY(-2px)",
+              boxShadow: "0 8px 24px rgba(102, 126, 234, 0.6)",
+            },
+          }}
+        >
+          Tạo Bộ Lọc
+        </Button>
+      </Stack>
+    </Box>
   );
 }

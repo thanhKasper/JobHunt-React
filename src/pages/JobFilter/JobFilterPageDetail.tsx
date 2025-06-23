@@ -152,10 +152,10 @@ export default function JobFilterPageDetail() {
               <InfoRounded sx={{ color: "info.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  85% Độ Chính Xác
+                  85%
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Tỷ lệ phù hợp
+                  Độ Tương Thích Trung Bình
                 </Typography>
               </Box>
             </Stack>

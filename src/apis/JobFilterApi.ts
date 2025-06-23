@@ -1,3 +1,4 @@
+import type JobFilterCreationDTO from "./DTO/JobFilterCreationDTO";
 import type JobFilterDTO from "./DTO/JobFilterDTO";
 
 export default class JobFilterApi {
@@ -13,8 +14,8 @@ export default class JobFilterApi {
   }
 
   public static async createJobFilter(
-    jobFilter: JobFilterDTO
-  ): Promise<JobFilterDTO> {
+    jobFilter: JobFilterCreationDTO
+  ): Promise<JobFilterCreationDTO> {
     try {
       // Simulate API call to create job filter
       // Replace with actual API call logic
@@ -71,7 +72,7 @@ export default class JobFilterApi {
         isActive: true,
         isStarred: false,
         filterOccupation: "Engineering",
-        matchingPercentage: 85,
+        averageCompatibility: 85,
         desireWorkingLocation: "Remote",
         jobLevel: "Mid-level",
         exp: 3,
@@ -88,7 +89,7 @@ export default class JobFilterApi {
         isActive: true,
         isStarred: false,
         filterOccupation: "Data Science",
-        matchingPercentage: 90,
+        averageCompatibility: 90,
         desireWorkingLocation: "On-site",
         jobLevel: "Senior",
         exp: 5,
@@ -105,7 +106,7 @@ export default class JobFilterApi {
         isActive: true,
         isStarred: false,
         filterOccupation: "Management",
-        matchingPercentage: 75,
+        averageCompatibility: 75,
         desireWorkingLocation: "Hybrid",
         jobLevel: "Junior",
         exp: 1,
@@ -122,7 +123,7 @@ export default class JobFilterApi {
         isActive: true,
         isStarred: false,
         filterOccupation: "Design",
-        matchingPercentage: 80,
+        averageCompatibility: 80,
         desireWorkingLocation: "Remote",
         jobLevel: "Mid-level",
         exp: 4,
@@ -139,7 +140,7 @@ export default class JobFilterApi {
         isActive: true,
         isStarred: false,
         filterOccupation: "Engineering",
-        matchingPercentage: 88,
+        averageCompatibility: 88,
         desireWorkingLocation: "On-site",
         jobLevel: "Senior",
         exp: 6,
@@ -156,7 +157,7 @@ export default class JobFilterApi {
         isActive: true,
         isStarred: false,
         filterOccupation: "Security",
-        matchingPercentage: 92,
+        averageCompatibility: 92,
         desireWorkingLocation: "Remote",
         jobLevel: "Mid-level",
         exp: 3,
@@ -168,5 +169,18 @@ export default class JobFilterApi {
         jobs: [],
       },
     ]; // Mocked value, replace with actual API call
+  }
+
+  public static async createNewJobFilter(
+    jobFilter: JobFilterDTO
+  ): Promise<JobFilterDTO> {
+    try {
+      // Simulate API call to create a new job filter
+      // Replace with actual API call logic
+      console.log(`Creating new job filter: ${JSON.stringify(jobFilter)}`);
+      return jobFilter; // Return the created job filter
+    } catch (error) {
+      throw new Error("Failed to create new job filter"); // Handle error appropriately
+    }
   }
 }
