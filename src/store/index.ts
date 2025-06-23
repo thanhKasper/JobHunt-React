@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import jobReducer from "./jobSlice";
 import jobFilterReducer from "./jobFilterSlice";
 import jobFilterCreationReducer from "./jobFilterCreateSlice";
+import jobFilterDetailReducer from "./jobFilterDetailSlice";
 
 const store = configureStore({
   reducer: {
     jobState: jobReducer,
     jobFilterState: jobFilterReducer,
     jobFilterCreationState: jobFilterCreationReducer,
+    jobFilterDetailState: jobFilterDetailReducer,
   },
 });
 

@@ -1,4 +1,3 @@
-import type JobDetailDTO from "./JobDetailDTO";
 
 export default interface JobFilterDTO {
   jobFilterId: string;
@@ -15,5 +14,4 @@ export default interface JobFilterDTO {
   tools: string[];
   languages: string[];
   totalJobs: number;
-  jobs: JobDetailDTO[];
 }

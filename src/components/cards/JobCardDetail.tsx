@@ -1,4 +1,11 @@
-import { ArrowForward, CalendarToday, LocationOn } from "@mui/icons-material";
+import type JobDetailDTO from "@/apis/DTO/JobDetailDTO";
+import {
+  ArrowForward,
+  AssessmentOutlined,
+  CalendarToday,
+  Info,
+  LocationOn,
+} from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -7,6 +14,7 @@ import {
   Link as MuiLink,
   Paper,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -58,14 +66,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const JobCardDetail = () => {
-  const matchingKeywords = [
-    "ReactJS",
-    "Frontend",
-    "JavaScript",
-    "TypeScript",
-    "UI/UX",
-  ];
+const JobCardDetail = ({ job }: { job: JobDetailDTO }) => {
 
   return (
     <InfoCard elevation={0} sx={{ width: "100%", p: 2 }}>
@@ -82,18 +83,18 @@ const JobCardDetail = () => {
               transition: "all 0.3s ease",
             }}
           >
-            Tuyển Lập Trình Viên ReactJS
+            {job.jobTitle}
           </Typography>
 
           <CompanyChip elevation={0}>
             <Avatar
               alt="Company Logo"
-              src="/static/images/avatar/1.jpg"
+              src={job.companyLogo}
               sx={{ width: 28, height: 28 }}
             />
             <MuiLink
               component={Link}
-              to="#"
+              to={job.companyLink}
               sx={{
                 textDecoration: "none",
                 fontWeight: 600,
@@ -104,7 +105,7 @@ const JobCardDetail = () => {
                 },
               }}
             >
-              Công Ty TNHH MTV ABC
+              {job.companyName}
             </MuiLink>
           </CompanyChip>
         </Stack>
@@ -127,7 +128,7 @@ const JobCardDetail = () => {
             </Typography>
             <Chip
               size="small"
-              label={`${matchingKeywords.length}`}
+              label={`${job.matchingRequirement.length}`}
               sx={{
                 bgcolor: "success.light",
                 color: "success.contrastText",
@@ -139,7 +140,7 @@ const JobCardDetail = () => {
           </Stack>
 
           <Stack direction="row" flexWrap="wrap" gap={1}>
-            {matchingKeywords.map((keyword, index) => (
+            {job.matchingRequirement.map((keyword, index) => (
               <Chip
                 key={index}
                 size="small"
@@ -173,7 +174,11 @@ const JobCardDetail = () => {
               }}
             />
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              12/03/2025
+              {new Date(job.jobOpenDate).toLocaleDateString("vi-VN", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
             </Typography>
           </Stack>
 
@@ -181,7 +186,7 @@ const JobCardDetail = () => {
             direction="row"
             alignItems="center"
             spacing={1}
-            sx={{ flex: 1 }}
+            // sx={{ flex: 1 }}
           >
             <LocationOn
               sx={{
@@ -198,12 +203,43 @@ const JobCardDetail = () => {
                 whiteSpace: "nowrap",
               }}
             >
-              Quận 2, TP. Hồ Chí Minh
+              {job.workingLocation}
             </Typography>
+          </Stack>
+
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{ flex: 1 }}
+          >
+            <AssessmentOutlined
+              sx={{
+                fontSize: 16,
+                color: "text.secondary",
+              }}
+            />
+            <Typography
+              variant="caption"
+              sx={{
+                color: "text.secondary",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {job.jobCompatibilityPercentage}%
+            </Typography>
+            <Tooltip title="Độ tương thích của bạn với công việc này dựa trên các dự án bạn đã làm và yêu cầu công việc.">
+              <Info sx={{ fontSize: "12px" }} />
+            </Tooltip>
           </Stack>
 
           <StyledButton
             className="detail-button"
+            LinkComponent={"a"}
+            formTarget="_blank"
+            href={job.jobLink}
             endIcon={<ArrowForward sx={{ fontSize: 16 }} />}
             size="small"
             sx={{ minWidth: "auto", px: 2, py: 0.5 }}

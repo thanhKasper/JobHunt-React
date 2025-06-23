@@ -4,7 +4,7 @@ import {
   InfoRounded,
   ListAltRounded,
   TuneRounded,
-  WorkRounded
+  WorkRounded,
 } from "@mui/icons-material";
 import {
   Box,
@@ -14,14 +14,16 @@ import {
   Stack,
   Tab,
   Tabs,
-  Typography
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import JobFilter from "./components/JobFilter";
 import MatchJobList from "./components/MatchJobList";
 import JobFilterEditPage from "./JobFilterEditPage";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getJobFilter, getJobsBaseOnFilter } from "@/store/jobFilterDetailSlice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,7 +58,6 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
-
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -84,12 +85,26 @@ function a11yProps(index: number) {
   };
 }
 
-
 export default function JobFilterPageDetail() {
   const jobFilterId = useParams().jobFilterId;
   console.log("Chi tiết bộ lọc công việc: " + jobFilterId);
   const [editMode, setEditMode] = React.useState(false);
   const [value, setValue] = React.useState(0);
+  const jobFilterDetailState = useAppSelector(
+    (state) => state.jobFilterDetailState
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (jobFilterDetailState.jobFilterState === "idle") {
+      // Fetch job filter details if not already fetched
+      dispatch(getJobFilter(jobFilterId || ""));
+    }
+    if (jobFilterDetailState.jobsFromFilterState === "idle") {
+      // Fetch jobs based on filter if not already fetched
+      dispatch(getJobsBaseOnFilter(jobFilterId || ""));
+    }
+  }, [dispatch, jobFilterDetailState]);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -111,7 +126,11 @@ export default function JobFilterPageDetail() {
                 Chi Tiết Bộ Lọc
               </Typography>
               <Chip
-                label="Đang hoạt động"
+                label={
+                  jobFilterDetailState.jobFilter.isActive
+                    ? "Đang hoạt động"
+                    : "Tạm dừng"
+                }
                 size="small"
                 sx={{
                   bgcolor: "rgba(76, 175, 80, 0.2)",
@@ -136,7 +155,7 @@ export default function JobFilterPageDetail() {
               <WorkRounded sx={{ color: "primary.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  24 Công Việc
+                  {jobFilterDetailState.jobFilter.totalJobs} Công Việc
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Phù hợp với bộ lọc
@@ -152,7 +171,7 @@ export default function JobFilterPageDetail() {
               <InfoRounded sx={{ color: "info.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  85%
+                  {jobFilterDetailState.jobFilter.averageCompatibility}% Tương Thích
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Độ Tương Thích Trung Bình

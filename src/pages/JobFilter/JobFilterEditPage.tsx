@@ -15,12 +15,14 @@ import {
   Tooltip,
 } from "@mui/material";
 import HorizontalDisplay from "./components/HorizontalDisplay";
+import { useAppSelector } from "@/store/hooks";
 
 export default function JobFilterEditPage({
   setEditMode,
 }: {
   setEditMode: (mode: boolean) => void;
 }) {
+  const jobFilter = useAppSelector(state => state.jobFilterDetailState.jobFilter);
   return (
     <Stack>
       <Title title="Chi Tiết Bộ Lọc Công Việc" />

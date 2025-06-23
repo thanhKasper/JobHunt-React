@@ -26,6 +26,32 @@ export default class JobFilterApi {
     }
   }
 
+  public static async getJobFilter(jobFilterId: string): Promise<JobFilterDTO> {
+    try {
+      // Simulate API call to get job filter by ID
+      // Replace with actual API call logic
+      console.log(`Fetching job filter with ID: ${jobFilterId}`);
+      return {
+        jobFilterId,
+        jobFilterName: "Sample Job Filter",
+        isActive: true,
+        isStarred: false,
+        filterOccupation: "Engineering",
+        averageCompatibility: 85,
+        desireWorkingLocation: "Remote",
+        jobLevel: "Mid-level",
+        exp: 3,
+        technicalKnowledge: ["JavaScript", "React"],
+        softSkills: ["Communication", "Teamwork"],
+        tools: ["Git", "Docker"],
+        languages: ["English"],
+        totalJobs: 50,
+      }; // Mocked value, replace with actual API call
+    } catch (error) {
+      throw new Error("Failed to fetch job filter"); // Handle error appropriately
+    }
+  }
+
   public static async toggleJobFilterStar(
     jobFilterId: string
   ): Promise<string> {
@@ -81,7 +107,6 @@ export default class JobFilterApi {
         tools: ["Git", "Docker"],
         languages: ["English"],
         totalJobs: 50,
-        jobs: [],
       },
       {
         jobFilterId: "2",
@@ -98,7 +123,6 @@ export default class JobFilterApi {
         tools: ["Jupyter", "TensorFlow"],
         languages: ["English", "Spanish"],
         totalJobs: 30,
-        jobs: [],
       },
       {
         jobFilterId: "3",
@@ -115,7 +139,6 @@ export default class JobFilterApi {
         tools: ["Jira", "Confluence"],
         languages: ["English"],
         totalJobs: 20,
-        jobs: [],
       },
       {
         jobFilterId: "4",
@@ -132,7 +155,6 @@ export default class JobFilterApi {
         tools: ["Sketch", "InVision"],
         languages: ["English", "French"],
         totalJobs: 25,
-        jobs: [],
       },
       {
         jobFilterId: "5",
@@ -149,7 +171,6 @@ export default class JobFilterApi {
         tools: ["Terraform", "Ansible"],
         languages: ["English"],
         totalJobs: 40,
-        jobs: [],
       },
       {
         jobFilterId: "6",
@@ -166,7 +187,6 @@ export default class JobFilterApi {
         tools: ["Wireshark", "Metasploit"],
         languages: ["English"],
         totalJobs: 15,
-        jobs: [],
       },
     ]; // Mocked value, replace with actual API call
   }

@@ -1,3 +1,4 @@
+import type JobDetailDTO from "./DTO/JobDetailDTO";
 import type JobDTO from "./DTO/JobDTO";
 
 export default class JopApi {
@@ -13,9 +14,139 @@ export default class JopApi {
   static async getTodayNewJobs(): Promise<number> {
     return 5; // Mocked value, replace with actual API call
   }
+
   static async getTodayCompatibilityPercentage(): Promise<number> {
     return 75; // Mocked value, replace with actual API call
   }
+
+  static async getJobsBaseOnFilter(
+    jobFilterId: string
+  ): Promise<Array<JobDetailDTO>> {
+    console.log(`Fetching jobs for filter ID: ${jobFilterId}`);
+    return [
+      {
+        jobFilterId: "1",
+        jobFilterName: "Software Engineer",
+        jobTitle: "Frontend Developer",
+        jobId: "1",
+        companyName: "Tech Corp",
+        companyLink: "https://techcorp.com",
+        jobLink: "https://techcorp.com/jobs/frontend-developer",
+        workingLocation: "Remote",
+        jobOpenDate: "2023-10-01",
+        jobCompatibilityPercentage: 60,
+        companyLogo: "https://techcorp.com/logo.png",
+        matchingRequirement: [
+          "ReactJS",
+          "Frontend",
+          "JavaScript",
+          "TypeScript",
+          "UI/UX",
+        ],
+      },
+      {
+        jobFilterId: "2",
+        jobFilterName: "Data Science",
+        jobTitle: "Data Analyst",
+        jobId: "2",
+        companyName: "Data Inc.",
+        companyLink: "https://datainc.com",
+        jobLink: "https://datainc.com/jobs/data-analyst",
+        workingLocation: "On-site",
+        jobOpenDate: "2023-10-02",
+        jobCompatibilityPercentage: 80,
+        companyLogo: "https://datainc.com/logo.png",
+        matchingRequirement: [
+          "Python",
+          "Data Analysis",
+          "SQL",
+          "Machine Learning",
+          "Statistics",
+        ],
+      },
+      {
+        jobFilterId: "3",
+        jobFilterName: "DevOps",
+        jobTitle: "DevOps Engineer",
+        jobId: "3",
+        companyName: "Cloud Solutions",
+        companyLink: "https://cloudsolutions.com",
+        jobLink: "https://cloudsolutions.com/jobs/devops-engineer",
+        workingLocation: "Hybrid",
+        jobOpenDate: "2023-10-03",
+        jobCompatibilityPercentage: 75,
+        companyLogo: "https://cloudsolutions.com/logo.png",
+        matchingRequirement: [
+          "AWS",
+          "Docker",
+          "Kubernetes",
+          "CI/CD",
+          "Infrastructure as Code",
+        ],
+      },
+      {
+        jobFilterId: "4",
+        jobFilterName: "Product Management",
+        jobTitle: "Product Manager",
+        jobId: "4",
+        companyName: "Innovatech",
+        companyLink: "https://innovatech.com",
+        jobLink: "https://innovatech.com/jobs/product-manager",
+        workingLocation: "Remote",
+        jobOpenDate: "2023-10-04",
+        jobCompatibilityPercentage: 80,
+        companyLogo: "https://innovatech.com/logo.png",
+        matchingRequirement: [
+          "Product Strategy",
+          "Market Research",
+          "Agile Methodology",
+          "User Experience",
+          "Stakeholder Management",
+        ],
+      },
+      {
+        jobFilterId: "5",
+        jobFilterName: "Marketing",
+        jobTitle: "Marketing Specialist",
+        jobId: "5",
+        companyName: "Market Leaders",
+        companyLink: "https://marketleaders.com",
+        jobLink: "https://marketleaders.com/jobs/marketing-specialist",
+        workingLocation: "On-site",
+        jobOpenDate: "2023-10-05",
+        jobCompatibilityPercentage: 55,
+        companyLogo: "https://marketleaders.com/logo.png",
+        matchingRequirement: [
+          "Digital Marketing",
+          "SEO",
+          "Content Creation",
+          "Social Media",
+          "Analytics",
+        ],
+      },
+      {
+        jobFilterId: "6",
+        jobFilterName: "UI/UX Design",
+        jobTitle: "UI/UX Designer",
+        jobId: "6",
+        companyName: "Design Studio",
+        companyLink: "https://designstudio.com",
+        jobLink: "https://designstudio.com/jobs/ui-ux-designer",
+        workingLocation: "Remote",
+        jobOpenDate: "2023-10-06",
+        jobCompatibilityPercentage: 66,
+        companyLogo: "https://designstudio.com/logo.png",
+        matchingRequirement: [
+          "User Research",
+          "Wireframing",
+          "Prototyping",
+          "Visual Design",
+          "Usability Testing",
+        ],
+      },
+    ];
+  }
+
   static async getFirstTenLatestJobs(): Promise<Array<JobDTO>> {
     return [
       {
@@ -28,6 +159,7 @@ export default class JopApi {
         jobLink: "https://techcorp.com/jobs/frontend-developer",
         workingLocation: "Remote",
         jobOpenDate: "2023-10-01",
+        jobCompatibilityPercentage: 60,
       },
       {
         jobFilterId: "2",
@@ -39,6 +171,7 @@ export default class JopApi {
         jobLink: "https://datainc.com/jobs/data-analyst",
         workingLocation: "On-site",
         jobOpenDate: "2023-10-02",
+        jobCompatibilityPercentage: 80,
       },
       {
         jobFilterId: "3",
@@ -50,6 +183,7 @@ export default class JopApi {
         jobLink: "https://cloudsolutions.com/jobs/devops-engineer",
         workingLocation: "Hybrid",
         jobOpenDate: "2023-10-03",
+        jobCompatibilityPercentage: 75,
       },
       {
         jobFilterId: "4",
@@ -61,6 +195,7 @@ export default class JopApi {
         jobLink: "https://innovatech.com/jobs/product-manager",
         workingLocation: "Remote",
         jobOpenDate: "2023-10-04",
+        jobCompatibilityPercentage: 80,
       },
       {
         jobFilterId: "5",
@@ -72,6 +207,7 @@ export default class JopApi {
         jobLink: "https://marketleaders.com/jobs/marketing-specialist",
         workingLocation: "On-site",
         jobOpenDate: "2023-10-05",
+        jobCompatibilityPercentage: 55,
       },
       {
         jobFilterId: "6",
@@ -83,6 +219,7 @@ export default class JopApi {
         jobLink: "https://designstudio.com/jobs/ui-ux-designer",
         workingLocation: "Remote",
         jobOpenDate: "2023-10-06",
+        jobCompatibilityPercentage: 66,
       },
       {
         jobFilterId: "7",
@@ -94,6 +231,7 @@ export default class JopApi {
         jobLink: "https://securetech.com/jobs/security-analyst",
         workingLocation: "Hybrid",
         jobOpenDate: "2023-10-07",
+        jobCompatibilityPercentage: 90,
       },
       {
         jobFilterId: "8",
@@ -105,6 +243,7 @@ export default class JopApi {
         jobLink: "https://financehub.com/jobs/financial-analyst",
         workingLocation: "On-site",
         jobOpenDate: "2023-10-08",
+        jobCompatibilityPercentage: 50,
       },
       {
         jobFilterId: "9",
@@ -116,6 +255,7 @@ export default class JopApi {
         jobLink: "https://salespros.com/jobs/sales-executive",
         workingLocation: "Remote",
         jobOpenDate: "2023-10-09",
+        jobCompatibilityPercentage: 100,
       },
       {
         jobFilterId: "10",
@@ -127,6 +267,7 @@ export default class JopApi {
         jobLink: "https://peoplefirst.com/jobs/hr-manager",
         workingLocation: "On-site",
         jobOpenDate: "2023-10-10",
+        jobCompatibilityPercentage: 78,
       },
     ]; // Mocked value, replace with actual API call
   }
@@ -149,6 +290,7 @@ export default class JopApi {
           jobLink: "https://techcorp.com/jobs/frontend-developer",
           workingLocation: "Remote",
           jobOpenDate: "2023-10-01",
+          jobCompatibilityPercentage: 60,
         },
         {
           jobFilterId: "2",
@@ -160,6 +302,7 @@ export default class JopApi {
           jobLink: "https://datainc.com/jobs/data-analyst",
           workingLocation: "On-site",
           jobOpenDate: "2023-10-02",
+          jobCompatibilityPercentage: 80,
         },
         {
           jobFilterId: "3",
@@ -171,6 +314,7 @@ export default class JopApi {
           jobLink: "https://cloudsolutions.com/jobs/devops-engineer",
           workingLocation: "Hybrid",
           jobOpenDate: "2023-10-03",
+          jobCompatibilityPercentage: 75,
         },
         {
           jobFilterId: "4",
@@ -182,6 +326,7 @@ export default class JopApi {
           jobLink: "https://innovatech.com/jobs/product-manager",
           workingLocation: "Remote",
           jobOpenDate: "2023-10-04",
+          jobCompatibilityPercentage: 80,
         },
         {
           jobFilterId: "5",
@@ -193,6 +338,7 @@ export default class JopApi {
           jobLink: "https://marketleaders.com/jobs/marketing-specialist",
           workingLocation: "On-site",
           jobOpenDate: "2023-10-05",
+          jobCompatibilityPercentage: 55,
         },
         {
           jobFilterId: "6",
@@ -204,6 +350,7 @@ export default class JopApi {
           jobLink: "https://designstudio.com/jobs/ui-ux-designer",
           workingLocation: "Remote",
           jobOpenDate: "2023-10-06",
+          jobCompatibilityPercentage: 66,
         },
         {
           jobFilterId: "7",
@@ -215,6 +362,7 @@ export default class JopApi {
           jobLink: "https://securetech.com/jobs/security-analyst",
           workingLocation: "Hybrid",
           jobOpenDate: "2023-10-07",
+          jobCompatibilityPercentage: 90,
         },
         {
           jobFilterId: "8",
@@ -226,6 +374,7 @@ export default class JopApi {
           jobLink: "https://financehub.com/jobs/financial-analyst",
           workingLocation: "On-site",
           jobOpenDate: "2023-10-08",
+          jobCompatibilityPercentage: 50,
         },
         {
           jobFilterId: "9",
@@ -237,6 +386,7 @@ export default class JopApi {
           jobLink: "https://salespros.com/jobs/sales-executive",
           workingLocation: "Remote",
           jobOpenDate: "2023-10-09",
+          jobCompatibilityPercentage: 100,
         },
         {
           jobFilterId: "10",
@@ -248,6 +398,7 @@ export default class JopApi {
           jobLink: "https://peoplefirst.com/jobs/hr-manager",
           workingLocation: "On-site",
           jobOpenDate: "2023-10-10",
+          jobCompatibilityPercentage: 78,
         },
       ]
         .filter((job) =>

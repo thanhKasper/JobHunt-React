@@ -1,14 +1,18 @@
 import JobCardDetail from "@/components/cards/JobCardDetail";
 import StyledPagination from "@/components/StyledPagination";
+import { useAppSelector } from "@/store/hooks";
 import { List, ListItem, Paper, Stack } from "@mui/material";
 
 export default function MatchJobList() {
+  const jobs = useAppSelector(
+    (state) => state.jobFilterDetailState.jobsFromFilter
+  );
   return (
     <Stack>
       <List sx={{ maxHeight: "100%", overflowY: "auto" }}>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <ListItem sx={{ width: "100%" }} key={index}>
-            <JobCardDetail />
+        {jobs.map((job) => (
+          <ListItem sx={{ width: "100%" }} key={job.jobId}>
+            <JobCardDetail job={job} />
           </ListItem>
         ))}
       </List>
