@@ -3,6 +3,7 @@ export default interface JobDTO {
   jobFilterName: string;
   jobId: string;
   jobTitle: string;
+  jobCompatibilityPercentage: number;
   companyName: string;
   companyLink: string;
   jobLink: string;
