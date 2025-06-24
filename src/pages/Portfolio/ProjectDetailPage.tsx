@@ -1,59 +1,42 @@
 import HeaderCard from "@/components/cards/HeaderCard";
+import { useAppSelector } from "@/store/hooks";
 import {
-  Delete,
-  Edit,
-  GitHub,
-  Launch,
   CalendarToday,
   Code,
+  Delete,
+  Edit,
   Group,
+  Launch,
   Star,
 } from "@mui/icons-material";
 import {
+  alpha,
   Box,
   Button,
+  Card,
+  CardContent,
   Chip,
-  Container,
+  Fade,
   IconButton,
   Paper,
   Stack,
   Typography,
-  Card,
-  CardContent,
-  Fade,
   useTheme,
-  alpha,
 } from "@mui/material";
-import React, { useState } from "react";
+import dayjs from "dayjs";
+import React from "react";
+import { useParams } from "react-router";
 
 const ProjectDetailPage: React.FC = () => {
   const theme = useTheme();
-  const [hovered, setHovered] = useState<string | null>(null);
+  const projectId = useParams().projectId || "";
+  const project = useAppSelector((state) =>
+    state.projectState.projects.find((p) => p.projectId === projectId)
+  );
 
-  const technologies = [
-    { name: "Node.js", color: "#68A063" },
-    { name: "MongoDB", color: "#4DB33D" },
-    { name: "Docker", color: "#2496ED" },
-    { name: "Natural Language Processing", color: "#FF6B35" },
-  ];
-
-  const features = [
-    { title: "Resume keyword extraction", icon: "🔍" },
-    { title: "Job-resume matching score", icon: "🎯" },
-    { title: "Admin dashboard for analytics", icon: "📊" },
-    { title: "PDF parsing and skill tagging", icon: "📄" },
-  ];
-
-  const roles = [
-    {
-      name: "Backend Developer",
-      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    },
-    {
-      name: "DevOps Engineer",
-      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-    },
-  ];
+  if (!project) {
+    throw new Error("Project not found");
+  }
 
   return (
     <Box paddingY={4}>
@@ -66,12 +49,15 @@ const ProjectDetailPage: React.FC = () => {
         >
           <Box>
             <Typography variant="h3" fontWeight="700" gutterBottom>
-              AI Resume Analyzer
+              {project.projectName}
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2} mb={2}>
               <CalendarToday sx={{ fontSize: 20 }} />
               <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                Jan 2023 - May 2023
+                {dayjs(project.startDate).format("MMM YYYY")} -{" "}
+                {project.endDate
+                  ? dayjs(project.endDate).format("MMM YYYY")
+                  : "Hiện tại"}
               </Typography>
             </Stack>
           </Box>
@@ -79,7 +65,7 @@ const ProjectDetailPage: React.FC = () => {
           <Stack direction="row" spacing={1}>
             <IconButton
               LinkComponent="a"
-              href="/portfolio/jkdf-17wjgj-178saasb-16782/edit"
+              href={`/portfolio/${project.projectId}/edit`}
               sx={{
                 bgcolor: alpha("#ffffff", 0.2),
                 color: "white",
@@ -104,8 +90,7 @@ const ProjectDetailPage: React.FC = () => {
           variant="h6"
           sx={{ opacity: 0.95, maxWidth: "70%", lineHeight: 1.6 }}
         >
-          Advanced NLP-powered resume analysis tool that automatically extracts
-          skills and provides intelligent job-resume compatibility scoring.
+          {project.projectDescription}
         </Typography>
       </HeaderCard>
 
@@ -121,13 +106,12 @@ const ProjectDetailPage: React.FC = () => {
                 </Typography>
               </Stack>
               <Stack direction="row" spacing={2} flexWrap="wrap">
-                {roles.map((role, index) => (
+                {project.roles.map((role, index) => (
                   <Chip
                     key={index}
-                    label={role.name}
+                    label={role}
                     sx={{
-                      background: role.gradient,
-                      color: "white",
+                      bgcolor: alpha(theme.palette.success.main, 0.3),
                       fontWeight: 500,
                       px: 2,
                       py: 1,
@@ -135,6 +119,7 @@ const ProjectDetailPage: React.FC = () => {
                       "&:hover": {
                         transform: "translateY(-2px)",
                         boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+                        bgcolor: alpha(theme.palette.success.main, 0.5),
                       },
                       transition: "all 0.3s ease",
                     }}
@@ -154,27 +139,25 @@ const ProjectDetailPage: React.FC = () => {
                 </Typography>
               </Stack>
               <Stack direction="row" spacing={2} flexWrap="wrap">
-                {technologies.map((tech, index) => (
+                {project.techOrSkills.map((tech, index) => (
                   <Chip
                     key={index}
-                    label={tech.name}
-                    onMouseEnter={() => setHovered(tech.name)}
-                    onMouseLeave={() => setHovered(null)}
+                    label={tech}
                     sx={{
-                      bgcolor:
-                        hovered === tech.name
-                          ? tech.color
-                          : alpha(tech.color, 0.1),
-                      color: hovered === tech.name ? "white" : tech.color,
+                      bgcolor: alpha(theme.palette.info.main, 0.2),
                       fontWeight: 500,
                       px: 2,
                       py: 1,
                       fontSize: "0.9rem",
-                      border: `2px solid ${tech.color}`,
+                      // border: `2px solid ${tech.color}`,
                       transition: "all 0.3s ease",
                       "&:hover": {
+                        backgroundColor: alpha(theme.palette.info.main, 0.5),
                         transform: "translateY(-2px)",
-                        boxShadow: `0 8px 25px ${alpha(tech.color, 0.3)}`,
+                        boxShadow: `0 8px 25px ${alpha(
+                          theme.palette.info.main,
+                          0.3
+                        )}`,
                       },
                     }}
                   />
@@ -195,7 +178,7 @@ const ProjectDetailPage: React.FC = () => {
                 </Typography>
               </Stack>
               <Stack spacing={2}>
-                {features.map((feature, index) => (
+                {project.features.map((feature, index) => (
                   <Fade in timeout={500 + index * 200} key={index}>
                     <Paper
                       elevation={0}
@@ -211,17 +194,17 @@ const ProjectDetailPage: React.FC = () => {
                           bgcolor: alpha(theme.palette.primary.main, 0.08),
                           transform: "translateX(8px)",
                           boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                          transitionProperty: "transform",
+                          transitionDuration: "10s",
+                          transitionTimingFunction: "ease-in-out",
                         },
-                        transition: "all 0.3s ease",
+                        transition: "all 1s ease-in",
                         cursor: "pointer",
                       }}
                     >
                       <Stack direction="row" alignItems="center" spacing={2}>
-                        {/* <Typography sx={{ fontSize: "1.5rem" }}>
-                          {feature.icon}
-                        </Typography> */}
                         <Typography variant="body1" fontWeight="500">
-                          {feature.title}
+                          {feature}
                         </Typography>
                       </Stack>
                     </Paper>
@@ -238,10 +221,9 @@ const ProjectDetailPage: React.FC = () => {
         <Button
           variant="contained"
           size="large"
-          // startIcon={<GitHub />}
-          href="https://github.com/example/resume-analyzer"
+          LinkComponent={"a"}
+          href={project.projectLink ?? "#"}
           target="_blank"
-          rel="noopener noreferrer"
           sx={{
             background: "linear-gradient(135deg, #24292e 0%, #040d21 100%)",
             px: 4,
@@ -264,6 +246,9 @@ const ProjectDetailPage: React.FC = () => {
           variant="outlined"
           size="large"
           startIcon={<Launch />}
+          href={project.liveDemoLink ?? "#"}
+          target="_blank"
+          LinkComponent={"a"}
           sx={{
             px: 4,
             py: 2,

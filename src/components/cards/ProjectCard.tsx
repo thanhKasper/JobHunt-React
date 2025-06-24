@@ -37,7 +37,7 @@ export default function ProjectCard({ project }: { project: ProjectDTO }) {
         {/* Project Title */}
         <Typography
           component={Link}
-          to="jkdf-17wjgj-178saasb-16782"
+          to={`/portfolio/${project.projectId}`}
           className="project-title"
           variant="h6"
           sx={{

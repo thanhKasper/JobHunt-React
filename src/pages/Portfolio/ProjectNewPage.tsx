@@ -1,6 +1,8 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import LongTextInput from "@/components/input/LongTextInput";
 import TagInput from "@/components/input/TagInput";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { createNewProject, updateField } from "@/store/projectNewSlice";
 import {
   Add as AddIcon,
   CalendarToday as CalendarIcon,
@@ -26,12 +28,13 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 const ProjectNewPage = () => {
-  const handleSubmit = () => {
-    console.log("Form submitted");
-    // Handle form submission here
-  };
+  const newProject = useAppSelector(
+    (state) => state.projectCreationState.newProject
+  );
+  const dispatch = useAppDispatch();
 
   return (
     <Box paddingY={4}>
@@ -70,6 +73,15 @@ const ProjectNewPage = () => {
                     required
                     placeholder="Nhập tên dự án..."
                     variant="outlined"
+                    value={newProject.projectName}
+                    onChange={(e) =>
+                      dispatch(
+                        updateField({
+                          field: "projectName",
+                          value: e.target.value,
+                        })
+                      )
+                    }
                   />
                 </Grid>
                 <Grid size={12}>
@@ -81,6 +93,15 @@ const ProjectNewPage = () => {
                     rows={4}
                     placeholder="Mô tả chi tiết về dự án của bạn..."
                     variant="outlined"
+                    value={newProject.projectDescription}
+                    onChange={(e) =>
+                      dispatch(
+                        updateField({
+                          field: "projectDescription",
+                          value: e.target.value,
+                        })
+                      )
+                    }
                   />
                 </Grid>
               </Grid>
@@ -100,13 +121,42 @@ const ProjectNewPage = () => {
               <Grid container spacing={3}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Grid size={12}>
-                    <DatePicker label="Ngày Bắt Đầu" sx={{ width: "100%" }} />
+                    <DatePicker
+                      label="Ngày Bắt Đầu"
+                      sx={{ width: "100%" }}
+                      views={["month", "year"]}
+                      value={
+                        newProject.startDate.length == 0
+                          ? null
+                          : dayjs(newProject.startDate)
+                      }
+                      onChange={(date) =>
+                        dispatch(
+                          updateField({
+                            field: "startDate",
+                            value: date ? date.toISOString() : "",
+                          })
+                        )
+                      }
+                    />
                   </Grid>
                   <Grid size={12}>
                     <FormControl fullWidth>
                       <DatePicker
                         label="Ngày Kết Thúc"
+                        views={["month", "year"]}
                         sx={{ width: "100%" }}
+                        value={
+                          newProject.endDate ? dayjs(newProject.endDate) : null
+                        }
+                        onChange={(date) =>
+                          dispatch(
+                            updateField({
+                              field: "endDate",
+                              value: date ? date.toISOString() : undefined,
+                            })
+                          )
+                        }
                       />
                       <FormHelperText>
                         Để trống nếu dự án chưa hoàn thành
@@ -129,7 +179,18 @@ const ProjectNewPage = () => {
                   Vai Trò Của Tôi
                 </Typography>
               </Box>
-              <TagInput label="Vai Trò"/>
+              <TagInput
+                label="Vai Trò"
+                value={newProject.roles}
+                onTagChange={(tags) =>
+                  dispatch(
+                    updateField({
+                      field: "roles",
+                      value: tags,
+                    })
+                  )
+                }
+              />
             </CardContent>
           </Card>
 
@@ -142,7 +203,18 @@ const ProjectNewPage = () => {
                   Công Nghệ / Kỹ Thuật Sử Dụng
                 </Typography>
               </Box>
-              <TagInput label="Công Nghệ/Kỹ Thuật" />
+              <TagInput
+                label="Công Nghệ/Kỹ Thuật"
+                value={newProject.techOrSkills}
+                onTagChange={(tags) =>
+                  dispatch(
+                    updateField({
+                      field: "techOrSkills",
+                      value: tags,
+                    })
+                  )
+                }
+              />
             </CardContent>
           </Card>
         </Stack>
@@ -156,12 +228,18 @@ const ProjectNewPage = () => {
                 Đặc Điểm Nổi Bật
               </Typography>
             </Box>
-            {/* <FeaturesList /> */}
             <LongTextInput
               label="Điểm Nổi Bật"
               placeholder=""
-              textList={[]}
-              onListChange={() => {}}
+              textList={newProject.features}
+              onListChange={(features) =>
+                dispatch(
+                  updateField({
+                    field: "features",
+                    value: features,
+                  })
+                )
+              }
             />
           </CardContent>
         </Card>
@@ -193,6 +271,15 @@ const ProjectNewPage = () => {
                     },
                   }}
                   variant="outlined"
+                  value={newProject.projectLink || null}
+                  onChange={(e) =>
+                    dispatch(
+                      updateField({
+                        field: "projectLink",
+                        value: e.target.value,
+                      })
+                    )
+                  }
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -211,6 +298,15 @@ const ProjectNewPage = () => {
                     },
                   }}
                   variant="outlined"
+                  value={newProject.liveDemoLink || null}
+                  onChange={(e) =>
+                    dispatch(
+                      updateField({
+                        field: "liveDemoLink",
+                        value: e.target.value,
+                      })
+                    )
+                  }
                 />
               </Grid>
             </Grid>
@@ -219,13 +315,18 @@ const ProjectNewPage = () => {
 
         {/* Submit Buttons */}
         <Box sx={{ display: "flex", gap: 2, justifyContent: "center", pt: 4 }}>
-          <Button variant="outlined" size="large" sx={{ px: 4, py: 1.5 }}>
-            Hủy Bỏ
+          <Button
+            href="/portfolio"
+            variant="outlined"
+            size="large"
+            sx={{ px: 4, py: 1.5 }}
+          >
+            Trở Lại
           </Button>
           <Button
             variant="contained"
             size="large"
-            onClick={handleSubmit}
+            onClick={() => dispatch(createNewProject(newProject))}
             sx={{
               px: 4,
               py: 1.5,
