@@ -18,6 +18,13 @@ const LongTextInput = ({
 }: LongTextInputProps) => {
   const [text, setText] = React.useState<string>("");
   const [texts, setTexts] = React.useState<string[]>(textList ?? []);
+
+  // Re-render won't update the default value in useState(...) => use useEffect to set it again.
+  // useState only reset when that component is unmounted and mounted again.
+  React.useEffect(() => {
+    setTexts(textList);
+  }, [textList]);
+
   const handleEnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setTexts([...texts, (event.target as HTMLInputElement).value]);
@@ -66,6 +73,7 @@ const LongTextInput = ({
             }}
             removeText={(pos) => {
               setTexts(texts.filter((_, i) => i !== pos));
+              onListChange?.(texts.filter((_, i) => i !== pos));
             }}
           />
         ))}

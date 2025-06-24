@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import jobReducer from "./jobSlice";
-import jobFilterReducer from "./jobFilterSlice";
 import jobFilterCreationReducer from "./jobFilterCreateSlice";
 import jobFilterDetailReducer from "./jobFilterDetailSlice";
-import projectReducer from "./projectSlice";
+import jobFilterReducer from "./jobFilterSlice";
+import jobReducer from "./jobSlice";
+import profileReducer from "./profileSlice";
 import projectCreationReducer from "./projectNewSlice";
+import projectReducer from "./projectSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     jobFilterDetailState: jobFilterDetailReducer,
     projectState: projectReducer,
     projectCreationState: projectCreationReducer,
+    profileState: profileReducer,
   },
 });
 

@@ -1,5 +1,14 @@
 import educationLevels from "@/apis/BusinessData/EducationLevel";
 import majors from "@/apis/BusinessData/Major";
+import HeaderCard from "@/components/cards/HeaderCard";
+import LongTextInput from "@/components/input/LongTextInput";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  restoreProfile,
+  saveChangeProfile,
+  updateProfileField,
+} from "@/store/profileSlice";
+import { Save } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
@@ -8,6 +17,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   Chip,
@@ -19,15 +29,18 @@ import {
   MenuItem,
   Paper,
   Select,
+  Slide,
   TextField,
   Typography,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import LongTextInput from "@/components/input/LongTextInput";
-import HeaderCard from "@/components/cards/HeaderCard";
+import dayjs from "dayjs";
 
 export default function ProfilePage() {
+  const profile = useAppSelector((state) => state.profileState.profile);
+  const isEditing = useAppSelector((state) => state.profileState.isEditing);
+  const dispatch = useAppDispatch();
   return (
     <Box paddingY={4}>
       {/* <Title title="Thông Tin Ứng Viên" /> */}
@@ -87,10 +100,14 @@ export default function ProfilePage() {
                     label="Họ Tên Ứng Viên"
                     id="fullName"
                     variant="outlined"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
+                    value={profile.fullName}
+                    onChange={(e) => {
+                      dispatch(
+                        updateProfileField({
+                          field: "fullName",
+                          value: e.target.value,
+                        })
+                      );
                     }}
                   />
                 </Grid>
@@ -100,26 +117,33 @@ export default function ProfilePage() {
                     label="Email Làm Việc"
                     id="email"
                     variant="outlined"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
+                    value={profile.workingEmail}
+                    onChange={(e) => {
+                      dispatch(
+                        updateProfileField({
+                          field: "workingEmail",
+                          value: e.target.value,
+                        })
+                      );
                     }}
+                    type="email"
                   />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Ngày Sinh"
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          sx: {
-                            "& .MuiOutlinedInput-root": {
-                              borderRadius: 2,
-                            },
-                          },
-                        },
+                      value={
+                        profile.dateOfBirth ? dayjs(profile.dateOfBirth) : null
+                      }
+                      sx={{ width: "100%" }}
+                      onChange={(newValue) => {
+                        dispatch(
+                          updateProfileField({
+                            field: "dateOfBirth",
+                            value: newValue ? newValue.toISOString() : "",
+                          })
+                        );
                       }}
                     />
                   </LocalizationProvider>
@@ -130,10 +154,15 @@ export default function ProfilePage() {
                     label="Số Điện Thoại"
                     id="phone"
                     variant="outlined"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
+                    type="tel"
+                    value={profile.phone}
+                    onChange={(e) => {
+                      dispatch(
+                        updateProfileField({
+                          field: "phone",
+                          value: e.target.value,
+                        })
+                      );
                     }}
                   />
                 </Grid>
@@ -143,10 +172,14 @@ export default function ProfilePage() {
                     label="Địa Chỉ"
                     id="address"
                     variant="outlined"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
+                    value={profile.address}
+                    onChange={(e) => {
+                      dispatch(
+                        updateProfileField({
+                          field: "address",
+                          value: e.target.value,
+                        })
+                      );
                     }}
                   />
                 </Grid>
@@ -174,27 +207,25 @@ export default function ProfilePage() {
                     label="Trường Đại Học"
                     id="university"
                     variant="outlined"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
-                    }}
+                    value={profile.university}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <FormControl
-                    fullWidth
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
-                    }}
-                  >
+                  <FormControl fullWidth>
                     <InputLabel id="educationLevel">Học vấn</InputLabel>
                     <Select
                       labelId="educationLevel"
                       id="educationLevel"
                       label="Học vấn"
+                      value={profile.degree || ""}
+                      onChange={(e) => {
+                        dispatch(
+                          updateProfileField({
+                            field: "degree",
+                            value: e.target.value,
+                          })
+                        );
+                      }}
                     >
                       {educationLevels.map((level) => (
                         <MenuItem key={level.key} value={level.key}>
@@ -205,16 +236,22 @@ export default function ProfilePage() {
                   </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <FormControl
-                    fullWidth
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: 2,
-                      },
-                    }}
-                  >
+                  <FormControl fullWidth>
                     <InputLabel id="major">Chuyên Ngành</InputLabel>
-                    <Select labelId="major" id="major" label="Chuyên Ngành">
+                    <Select
+                      labelId="major"
+                      id="major"
+                      label="Chuyên Ngành"
+                      value={profile.major || "none"}
+                      onChange={(e) => {
+                        dispatch(
+                          updateProfileField({
+                            field: "major",
+                            value: e.target.value,
+                          })
+                        );
+                      }}
+                    >
                       {majors.map((major) => (
                         <MenuItem key={major.key} value={major.key}>
                           {major.value}
@@ -248,10 +285,14 @@ export default function ProfilePage() {
                 id="about"
                 placeholder="Hãy chia sẻ về bản thân, kinh nghiệm, và mục tiêu nghề nghiệp của bạn..."
                 variant="outlined"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                  },
+                value={profile.aboutMe}
+                onChange={(e) => {
+                  dispatch(
+                    updateProfileField({
+                      field: "aboutMe",
+                      value: e.target.value,
+                    })
+                  );
                 }}
               />
             </CardContent>
@@ -278,9 +319,16 @@ export default function ProfilePage() {
               <Divider sx={{ mb: 3 }} />
 
               <LongTextInput
-                label=""
-                onListChange={() => {}}
-                textList={[]}
+                label="Thành Tích"
+                onListChange={(awards) => {
+                  dispatch(
+                    updateProfileField({
+                      field: "awards",
+                      value: awards,
+                    })
+                  );
+                }}
+                textList={profile.awards}
                 placeholder=""
               />
             </CardContent>
@@ -305,6 +353,60 @@ export default function ProfilePage() {
           </Typography>
         </Paper>
       </Box>
+
+      <Slide direction="up" in={isEditing}>
+        <Box
+          sx={{
+            position: "fixed",
+            left: "10%",
+            right: "10%",
+            bottom: 10,
+            display: "flex",
+            flexDirection: "row",
+            p: 2,
+            gap: 2,
+            zIndex: 1000,
+            borderRadius: 2,
+            boxShadow: 3,
+            justifyContent: "center",
+            alignItems: "center",
+            bgcolor: "grey.100",
+          }}
+        >
+          <Typography>
+            Bạn Có Các Thay Đổi Chưa Lưu. Bạn Có Muốn{" "}
+            <Box component="span" fontWeight={700}>
+              Lưu Các Thay Đổi
+            </Box>{" "}
+            Này?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+            <Button
+              startIcon={<Save />}
+              color="success"
+              variant="contained"
+              size="medium"
+              sx={{
+                textTransform: "none",
+              }}
+              onClick={() => {
+                dispatch(saveChangeProfile(profile));
+              }}
+            >
+              Lưu Thay Đổi
+            </Button>
+            <Button
+              color="error"
+              variant="outlined"
+              onClick={() => {
+                dispatch(restoreProfile());
+              }}
+            >
+              Hủy
+            </Button>
+          </Box>
+        </Box>
+      </Slide>
     </Box>
   );
 }
