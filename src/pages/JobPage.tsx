@@ -143,16 +143,6 @@ const JobPage = () => {
                     animation: `fadeInUp 0.6s ease-out ${
                       (index % 6) * 0.1
                     }s both`,
-                    "@keyframes fadeInUp": {
-                      "0%": {
-                        opacity: 0,
-                        transform: "translateY(30px)",
-                      },
-                      "100%": {
-                        opacity: 1,
-                        transform: "translateY(0)",
-                      },
-                    },
                   }}
                 >
                   <JobCard job={job} />
