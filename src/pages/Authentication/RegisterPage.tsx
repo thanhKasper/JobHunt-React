@@ -23,10 +23,13 @@ import {
   Paper,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useRegistration } from "./RegisterPage.Hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { signup } from "@/store/slices/authenticationSlice";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +38,12 @@ const RegisterPage = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
+
+  const regForm = useRegistration();
+  const formErrors = useAppSelector((state) => state.authState.errors);
+  const isSuccess = useAppSelector((state) => state.authState.isSuccess);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <Box overflow={"hidden"}>
@@ -67,6 +76,12 @@ const RegisterPage = () => {
                 fullWidth
                 type="text"
                 variant="outlined"
+                value={regForm.fullname}
+                onChange={(e) =>
+                  regForm.updateField("fullname", e.target.value)
+                }
+                error={!!regForm.errors.fullname}
+                helperText={regForm.errors.fullname}
                 slotProps={{
                   input: {
                     startAdornment: (
@@ -84,6 +99,10 @@ const RegisterPage = () => {
                 fullWidth
                 type="email"
                 variant="outlined"
+                value={regForm.email}
+                onChange={(e) => regForm.updateField("email", e.target.value)}
+                error={!!regForm.errors.email || !!formErrors.email}
+                helperText={regForm.errors.email || formErrors.email}
                 slotProps={{
                   input: {
                     startAdornment: (
@@ -100,6 +119,12 @@ const RegisterPage = () => {
                 label="Password"
                 fullWidth
                 type={showPassword ? "text" : "password"}
+                value={regForm.password}
+                onChange={(e) =>
+                  regForm.updateField("password", e.target.value)
+                }
+                error={!!regForm.errors.password}
+                helperText={regForm.errors.password}
                 variant="outlined"
                 slotProps={{
                   input: {
@@ -128,6 +153,12 @@ const RegisterPage = () => {
                 label="Confirm Password"
                 fullWidth
                 type={showConfirmPassword ? "text" : "password"}
+                value={regForm.confirmPassword}
+                onChange={(e) =>
+                  regForm.updateField("confirmPassword", e.target.value)
+                }
+                error={!!regForm.errors.confirmPassword}
+                helperText={regForm.errors.confirmPassword}
                 variant="outlined"
                 slotProps={{
                   input: {
@@ -163,6 +194,18 @@ const RegisterPage = () => {
                 variant="contained"
                 size="large"
                 fullWidth
+                onClick={() => {
+                  const validatedRegistration = regForm.validate();
+
+                  if (validatedRegistration) {
+                    dispatch(signup(validatedRegistration));
+                  }
+
+                  if (isSuccess) {
+                    console.log("Registration successful");
+                    navigate("/");
+                  }
+                }}
                 sx={{
                   paddingY: 1.5,
                   background: `linear-gradient(135deg, ${theme.palette.success.main} 0%, ${theme.palette.info.main} 100%)`,

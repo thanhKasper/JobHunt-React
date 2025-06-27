@@ -10,6 +10,7 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   Button,
   CardActions,
@@ -25,12 +26,35 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useLogin } from "./LoginPage.Hook";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { signin } from "@/store/slices/authenticationSlice";
 
 const LoginPage = () => {
+  console.log("Render LoginPage");
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const loginHandler = useLogin();
+  const authenState = useAppSelector((state) => state.authState);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  console.log("Authen State:", authenState);
+
+  const handleLogin = () => {
+    loginHandler.validate(() => {
+      // Handle login logic here, e.g., dispatch an action
+      dispatch(
+        signin({
+          email: loginHandler.email,
+          password: loginHandler.password,
+        })
+      ).then((arg) => {
+        console.log("Signin Result:", arg);
+      });
+    });
+  };
 
   return (
     <Box overflow={"hidden"}>
@@ -50,6 +74,9 @@ const LoginPage = () => {
             background: "rgba(255, 255, 255, 0.95)",
           }}
         >
+          {authenState.errors.general && (
+            <Alert severity="error">{authenState.errors.general}</Alert>
+          )}
           <CardContent sx={{ padding: 0 }}>
             <Title title="Welcome Back" />
             <Subtitle title="Sign in to your account to continue" />
@@ -61,6 +88,12 @@ const LoginPage = () => {
                 fullWidth
                 type="email"
                 variant="outlined"
+                value={loginHandler.email}
+                onChange={(e) =>
+                  loginHandler.updateLogin("email", e.target.value)
+                }
+                error={!!loginHandler.errors.email}
+                helperText={loginHandler.errors.email}
                 slotProps={{
                   input: {
                     startAdornment: (
@@ -77,6 +110,12 @@ const LoginPage = () => {
                 fullWidth
                 type={showPassword ? "text" : "password"}
                 variant="outlined"
+                value={loginHandler.password}
+                onChange={(e) =>
+                  loginHandler.updateLogin("password", e.target.value)
+                }
+                error={!!loginHandler.errors.password}
+                helperText={loginHandler.errors.password}
                 slotProps={{
                   input: {
                     startAdornment: (
@@ -114,6 +153,7 @@ const LoginPage = () => {
                 variant="contained"
                 size="large"
                 fullWidth
+                onClick={handleLogin}
                 sx={{
                   paddingY: 1.5,
                   background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.secondary.main} 100%)`,
