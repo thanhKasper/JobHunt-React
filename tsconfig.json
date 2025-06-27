@@ -9,15 +9,7 @@
   // So does the tsconfig.app.json
   
   // "include": ["src"],
-  // "compilerOptions": {
-  //   "baseUrl": ".",
-  //   "paths": {
-  //     "@/*": ["src/*"],
-  //     "@pages/*": ["src/pages/*"],
-  //     "@components/*": ["src/components/*"],
-  //     "@apis/*": ["src/apis/*"],
-  //     "@assets/*": ["src/assets/*"],
-  //     "@layouts/*": ["src/layouts/*"]
-  //   }
-  // }
+  "compilerOptions": {
+    "strict": true,
+  }
 }
