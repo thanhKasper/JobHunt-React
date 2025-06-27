@@ -23,7 +23,10 @@ import JobFilter from "./components/JobFilter";
 import MatchJobList from "./components/MatchJobList";
 import JobFilterEditPage from "./JobFilterEditPage";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { getJobFilter, getJobsBaseOnFilter } from "@/store/jobFilterDetailSlice";
+import {
+  getJobFilter,
+  getJobsBaseOnFilter,
+} from "@/store/slices/jobFilterDetailSlice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -171,7 +174,8 @@ export default function JobFilterPageDetail() {
               <InfoRounded sx={{ color: "info.main", fontSize: 28 }} />
               <Box>
                 <Typography variant="h6" fontWeight={600}>
-                  {jobFilterDetailState.jobFilter.averageCompatibility}% Tương Thích
+                  {jobFilterDetailState.jobFilter.averageCompatibility}% Tương
+                  Thích
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Độ Tương Thích Trung Bình

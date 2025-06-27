@@ -2,7 +2,7 @@ import HeaderCard from "@/components/cards/HeaderCard";
 import LongTextInput from "@/components/input/LongTextInput";
 import TagInput from "@/components/input/TagInput";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { createNewProject, updateField } from "@/store/projectNewSlice";
+import { createNewProject, updateField } from "@/store/slices/projectNewSlice";
 import {
   Add as AddIcon,
   CalendarToday as CalendarIcon,

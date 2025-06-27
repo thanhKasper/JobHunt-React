@@ -7,7 +7,7 @@ import {
   restoreProfile,
   saveChangeProfile,
   updateProfileField,
-} from "@/store/profileSlice";
+} from "@/store/slices/profileSlice";
 import { Save } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";

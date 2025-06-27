@@ -1,7 +1,7 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { filterJobFilters } from "@/store/jobFilterSlice";
+import { filterJobFilters } from "@/store/slices/jobFilterSlice";
 import {
   Add,
   AutoAwesome,

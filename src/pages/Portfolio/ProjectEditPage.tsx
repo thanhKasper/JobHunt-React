@@ -30,7 +30,7 @@ import dayjs from "dayjs";
 import useProjectForm from "./ProjectEditPage.Hook";
 import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { editProject } from "@/store/projectSlice";
+import { editProject } from "@/store/slices/projectSlice";
 
 const ProjectEditPage = () => {
   const projectEditId = useParams().projectId;

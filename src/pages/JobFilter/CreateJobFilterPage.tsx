@@ -34,7 +34,7 @@ import {
 import { ListFilterPlus } from "lucide-react";
 import useCreateJobFilter from "./CreateJobFilterPage.Hook";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { createNewJobFilter } from "@/store/jobFilterCreateSlice";
+import { createNewJobFilter } from "@/store/slices/jobFilterCreateSlice";
 
 export default function CreateJobFilterPage() {
   const jobFilterCreationForm = useCreateJobFilter();

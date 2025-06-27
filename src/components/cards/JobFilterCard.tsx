@@ -4,7 +4,7 @@ import {
   deleteJobFilter,
   toggleJobFilterActiveState,
   toggleJobFilterStar,
-} from "@/store/jobFilterSlice";
+} from "@/store/slices/jobFilterSlice";
 import {
   BusinessCenter,
   ChevronRight,

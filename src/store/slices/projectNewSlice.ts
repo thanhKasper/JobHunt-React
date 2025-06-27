@@ -43,10 +43,10 @@ export const projectNewSlice = createSlice({
       state,
       action: PayloadAction<{
         field: keyof ProjectDTO;
-        value: typeof state.newProject[keyof ProjectDTO];
+        value: (typeof state.newProject)[keyof ProjectDTO];
       }>
     ) => {
-        (state.newProject as any)[action.payload.field] = action.payload.value;
+      (state.newProject as any)[action.payload.field] = action.payload.value;
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +63,6 @@ export const projectNewSlice = createSlice({
       });
   },
 });
-
 
 export default projectNewSlice.reducer;
 export const { updateField } = projectNewSlice.actions;

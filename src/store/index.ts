@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import jobFilterCreationReducer from "./jobFilterCreateSlice";
-import jobFilterDetailReducer from "./jobFilterDetailSlice";
-import jobFilterReducer from "./jobFilterSlice";
-import jobReducer from "./jobSlice";
-import profileReducer from "./profileSlice";
-import projectCreationReducer from "./projectNewSlice";
-import projectReducer from "./projectSlice";
+import jobFilterCreationReducer from "./slices/jobFilterCreateSlice";
+import jobFilterDetailReducer from "./slices/jobFilterDetailSlice";
+import jobFilterReducer from "./slices/jobFilterSlice";
+import jobReducer from "./slices/jobSlice";
+import profileReducer from "./slices/profileSlice";
+import projectCreationReducer from "./slices/projectNewSlice";
+import projectReducer from "./slices/projectSlice";
+import authenReducer from "./slices/authenticationSlice";
 
 const store = configureStore({
   reducer: {
     jobState: jobReducer,
     jobFilterState: jobFilterReducer,
+    authState: authenReducer,
     jobFilterCreationState: jobFilterCreationReducer,
     jobFilterDetailState: jobFilterDetailReducer,
     projectState: projectReducer,

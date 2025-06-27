@@ -2,7 +2,7 @@ import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
 import StyledPagination from "@/components/StyledPagination";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { reloadJobPage } from "@/store/jobSlice";
+import { reloadJobPage } from "@/store/slices/jobSlice";
 import {
   AutoAwesome,
   SearchRounded,
