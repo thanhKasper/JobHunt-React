@@ -11,6 +11,7 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  Button,
   CardContent,
   Chip,
   Fade,
@@ -22,6 +23,7 @@ import {
 import { useEffect } from "react";
 import JobCard from "../components/cards/JobCard";
 import JobSearchAndFilter from "../components/JobSearchAndFilter";
+import { BaseApi } from "@/apis/BaseApi";
 
 const JobPage = () => {
   const dispatch = useAppDispatch();

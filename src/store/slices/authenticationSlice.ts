@@ -3,7 +3,7 @@ import type SignupDTO from "@/apis/DTO/SignupDTO";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthenticationState {
-  isSuccess: boolean;
+  isAuthenticated: boolean;
   jwt: string | null;
   user: {
     userId: string;
@@ -18,7 +18,7 @@ interface AuthenticationState {
 }
 
 const initialState: AuthenticationState = {
-  isSuccess: !!window.localStorage.getItem("token"),
+  isAuthenticated: !!window.localStorage.getItem("token"),
   jwt: window.localStorage.getItem("token") || null,
   user: {
     userId: "",
@@ -35,7 +35,6 @@ const signup = createAsyncThunk(
       const response = await AuthenAPI.signup(data);
       return response;
     } catch (error) {
-      console.error("Signup AsynThunk Error:", error);
       return thunkApi.rejectWithValue(error);
     }
   }
@@ -44,15 +43,11 @@ const signup = createAsyncThunk(
 const signin = createAsyncThunk(
   "authentication/signin",
   async (data: { email: string; password: string }, thunkApi) => {
-    console.log("Signin AsyncThunk Data:");
     try {
       const response = await AuthenAPI.signin(data);
       return response;
     } catch (error) {
-      console.error("Signin AsynThunk Error:", error);
-      return thunkApi.rejectWithValue(
-        "Uh oh! Something went wrong. Please try again later."
-      );
+      return thunkApi.rejectWithValue(error);
     }
   }
 );
@@ -63,11 +58,8 @@ const authenSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signup.pending, (state) => {
-        state.errors = {};
-      })
       .addCase(signup.fulfilled, (state, action) => {
-        state.isSuccess = true;
+        state.isAuthenticated = true;
         state.jwt = action.payload.token;
         state.user = {
           userId: action.payload.userId,
@@ -77,9 +69,8 @@ const authenSlice = createSlice({
         window.localStorage.setItem("token", action.payload.token);
       })
       .addCase(signup.rejected, (state, action) => {
-        state.isSuccess = false;
+        state.isAuthenticated = false;
         state.jwt = null;
-        console.error("Error in extraReducers:", action);
         if ((action.payload as any).title == "DuplicateUserName") {
           state.errors.email = "This email is already registered.";
         }
@@ -87,8 +78,7 @@ const authenSlice = createSlice({
 
     builder
       .addCase(signin.fulfilled, (state, action) => {
-        console.log("Run here");
-        state.isSuccess = true;
+        state.isAuthenticated = true;
         state.jwt = action.payload.token;
         state.user = {
           userId: action.payload.userId,
@@ -98,14 +88,12 @@ const authenSlice = createSlice({
         window.localStorage.setItem("token", action.payload.token);
       })
       .addCase(signin.rejected, (state, action) => {
-        console.log("Run because api failed");
-        state.isSuccess = false;
+        state.isAuthenticated = false;
         state.jwt = null;
-        console.error("Error in signin extraReducers:", action);
+        state.errors.general = (action.payload as any).description;
       });
   },
 });
 
 export default authenSlice.reducer;
 export { signin, signup };
-

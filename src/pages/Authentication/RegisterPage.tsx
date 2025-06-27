@@ -25,7 +25,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useRegistration } from "./RegisterPage.Hook";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -41,9 +41,13 @@ const RegisterPage = () => {
 
   const regForm = useRegistration();
   const formErrors = useAppSelector((state) => state.authState.errors);
-  const isSuccess = useAppSelector((state) => state.authState.isSuccess);
+  const authenState = useAppSelector((state) => state.authState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authenState.isAuthenticated) navigate("/");
+  });
 
   return (
     <Box overflow={"hidden"}>
@@ -199,11 +203,6 @@ const RegisterPage = () => {
 
                   if (validatedRegistration) {
                     dispatch(signup(validatedRegistration));
-                  }
-
-                  if (isSuccess) {
-                    console.log("Registration successful");
-                    navigate("/");
                   }
                 }}
                 sx={{

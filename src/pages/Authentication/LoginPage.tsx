@@ -1,6 +1,8 @@
 import Subtitle from "@/components/Subtitle";
 import Title from "@/components/Title";
 import theme from "@/layouts/Theme";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { signin } from "@/store/slices/authenticationSlice";
 import {
   Email,
   Facebook,
@@ -28,11 +30,8 @@ import {
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useLogin } from "./LoginPage.Hook";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { signin } from "@/store/slices/authenticationSlice";
 
 const LoginPage = () => {
-  console.log("Render LoginPage");
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -40,7 +39,6 @@ const LoginPage = () => {
   const authenState = useAppSelector((state) => state.authState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  console.log("Authen State:", authenState);
 
   const handleLogin = () => {
     loginHandler.validate(() => {
@@ -51,7 +49,7 @@ const LoginPage = () => {
           password: loginHandler.password,
         })
       ).then((arg) => {
-        console.log("Signin Result:", arg);
+        if (arg.meta.requestStatus === "fulfilled") navigate("/");
       });
     });
   };
