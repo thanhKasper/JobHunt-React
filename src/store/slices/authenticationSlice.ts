@@ -1,10 +1,10 @@
 import { AuthenAPI } from "@/apis/AuthenAPI";
 import type SignupDTO from "@/apis/DTO/SignupDTO";
+import { jwtPayloadExtract } from "@/utils";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthenticationState {
   isAuthenticated: boolean;
-  jwt: string | null;
   user: {
     userId: string;
     fullname: string;
@@ -17,13 +17,16 @@ interface AuthenticationState {
   };
 }
 
+const { userId, name, email } = jwtPayloadExtract(
+  window.localStorage.getItem("token")
+);
+
 const initialState: AuthenticationState = {
   isAuthenticated: !!window.localStorage.getItem("token"),
-  jwt: window.localStorage.getItem("token") || null,
   user: {
-    userId: "",
-    fullname: "",
-    email: "",
+    userId: userId,
+    fullname: name,
+    email: email,
   },
   errors: {},
 };
@@ -55,22 +58,30 @@ const signin = createAsyncThunk(
 const authenSlice = createSlice({
   name: "authentication",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("refreshToken");
+      state.isAuthenticated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signup.fulfilled, (state, action) => {
         state.isAuthenticated = true;
-        state.jwt = action.payload.token;
         state.user = {
           userId: action.payload.userId,
           fullname: action.payload.fullname,
           email: action.payload.email,
         };
         window.localStorage.setItem("token", action.payload.token);
+        window.localStorage.setItem(
+          "refreshToken",
+          action.payload.refreshToken
+        );
       })
       .addCase(signup.rejected, (state, action) => {
         state.isAuthenticated = false;
-        state.jwt = null;
         if ((action.payload as any).title == "DuplicateUserName") {
           state.errors.email = "This email is already registered.";
         }
@@ -79,17 +90,19 @@ const authenSlice = createSlice({
     builder
       .addCase(signin.fulfilled, (state, action) => {
         state.isAuthenticated = true;
-        state.jwt = action.payload.token;
         state.user = {
           userId: action.payload.userId,
           fullname: action.payload.fullname,
           email: action.payload.email,
         };
         window.localStorage.setItem("token", action.payload.token);
+        window.localStorage.setItem(
+          "refreshToken",
+          action.payload.refreshToken
+        );
       })
       .addCase(signin.rejected, (state, action) => {
         state.isAuthenticated = false;
-        state.jwt = null;
         state.errors.general = (action.payload as any).description;
       });
   },
@@ -97,3 +110,4 @@ const authenSlice = createSlice({
 
 export default authenSlice.reducer;
 export { signin, signup };
+export const { logout } = authenSlice.actions;

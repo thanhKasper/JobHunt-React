@@ -3,10 +3,18 @@ import { BaseApi } from "./BaseApi";
 import type SigninDTO from "./DTO/SigninDTO";
 import type SignupDTO from "./DTO/SignupDTO";
 
+interface AuthenticationResponse {
+  token: string;
+  refreshToken: string;
+  fullname: string;
+  email: string;
+  userId: string;
+}
+
 export class AuthenAPI extends BaseApi {
-  static async signup(signupData: SignupDTO): Promise<any> {
+  static async signup(signupData: SignupDTO): Promise<AuthenticationResponse> {
     try {
-      const response = await this.post<any>(
+      const response = await this.post<AuthenticationResponse>(
         "/api/account/register",
         signupData
       );
@@ -20,9 +28,12 @@ export class AuthenAPI extends BaseApi {
     }
   }
 
-  static async signin(signinData: SigninDTO): Promise<any> {
+  static async signin(signinData: SigninDTO): Promise<AuthenticationResponse> {
     try {
-      const response = await this.post<any>("/api/account/login", signinData);
+      const response = await this.post<AuthenticationResponse>(
+        "/api/account/login",
+        signinData
+      );
       return response;
     } catch (err) {
       const axiosError = err as AxiosError;

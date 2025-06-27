@@ -1,4 +1,7 @@
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { logout } from "@/store/slices/authenticationSlice";
 import {
+  AppBar,
   Avatar,
   Box,
   Button,
@@ -6,13 +9,13 @@ import {
   Menu,
   MenuItem,
   Stack,
+  styled,
   Toolbar,
   Typography,
-  AppBar,
-  styled,
 } from "@mui/material";
+import { orange } from "@mui/material/colors";
 import React, { useState } from "react";
-import { useNavigate, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 
 const AnimatedNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
@@ -67,6 +70,14 @@ export default function Navigation() {
     fontWeight: "bold",
   };
 
+  const dispatch = useAppDispatch();
+  const authState = useAppSelector((state) => state.authState);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <Box position="sticky" top={0} zIndex={1000}>
       <AppBar
@@ -107,30 +118,63 @@ export default function Navigation() {
             </AnimatedNavLink>
           </Stack>
           <div>
-            <IconButton
-              onClick={handleClick}
-              size="medium"
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
-            >
-              <MenuItem onClick={navigateProfile}>Thông Tin Ứng Viên</MenuItem>
-              <MenuItem onClick={handleClose}>Tài Khoản Của Tôi</MenuItem>
-              <Box paddingX={1} marginTop={2}>
-                <Button fullWidth color="error" variant="outlined">
-                  Đăng Xuất
+            {authState.isAuthenticated ? (
+              <>
+                <IconButton
+                  onClick={handleClick}
+                  size="medium"
+                  aria-controls={open ? "account-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                >
+                  <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                >
+                  <MenuItem onClick={navigateProfile}>
+                    Thông Tin Ứng Viên
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>Tài Khoản Của Tôi</MenuItem>
+                  <Box paddingX={1} marginTop={2}>
+                    <Button
+                      fullWidth
+                      color="error"
+                      variant="outlined"
+                      onClick={handleLogout}
+                    >
+                      Đăng Xuất
+                    </Button>
+                  </Box>
+                </Menu>
+              </>
+            ) : (
+              <>
+                <Button color="primary" variant="contained">
+                  <Link to={"/login"}>LogIn</Link>
                 </Button>
-              </Box>
-            </Menu>
+                <Button
+                  // color={orange[500]}
+                  variant="outlined"
+                  sx={{
+                    ml: 1,
+                    // bgcolor: orange[500],
+                    borderColor: "white",
+                    color: "white",
+                    "&:hover": {
+                      borderColor: orange[500],
+                      color: orange[500],
+                    },
+                  }}
+                >
+                  <Link to={"/register"}>Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </Toolbar>
       </AppBar>
