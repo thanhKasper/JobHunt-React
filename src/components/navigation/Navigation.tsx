@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authenticationSlice";
+import { getGeneralJobFilterPage } from "@/store/slices/jobFilterSlice";
 import {
   AppBar,
   Avatar,
@@ -97,6 +98,9 @@ export default function Navigation() {
               style={({ isActive }) =>
                 isActive ? { ...linkStyle, ...activeStyle } : linkStyle
               }
+              onClick={() => {
+                /* Call api to prefetch information about jobs */
+              }}
             >
               Công Việc Phù Hợp
             </AnimatedNavLink>
@@ -105,6 +109,7 @@ export default function Navigation() {
               style={({ isActive }) =>
                 isActive ? { ...linkStyle, ...activeStyle } : linkStyle
               }
+              onClick={() => dispatch(getGeneralJobFilterPage())}
             >
               Bộ Lọc Công Việc
             </AnimatedNavLink>

@@ -1,7 +1,10 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { filterJobFilters } from "@/store/slices/jobFilterSlice";
+import {
+  filterJobFilters,
+  getGeneralJobFilterPage,
+} from "@/store/slices/jobFilterSlice";
 import {
   Add,
   AutoAwesome,
@@ -19,15 +22,22 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import JobFilterCard from "../../components/cards/JobFilterCard";
 import AddButton from "./components/AddButton";
+import { Link } from "react-router";
 
 export default function JobFilterPage() {
   const [filterType, setFilterType] = React.useState("Tất cả");
   const dispatch = useAppDispatch();
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
   const totalJobs = useAppSelector((state) => state.jobState.totalJobs);
+
+  console.log(jobFilterState);
+
+  useEffect(() => {
+    dispatch(getGeneralJobFilterPage());
+  }, []);
 
   return (
     <Box paddingY={4}>
@@ -67,21 +77,21 @@ export default function JobFilterPage() {
             spacing={2}
             sx={{ zIndex: 1 }}
           >
-            <AddButton
-              LinkComponent={"a"}
-              href="/job-filters/new"
-              variant="contained"
-              startIcon={<Add />}
-              sx={{
-                bgcolor: "rgba(255,255,255,0.2)",
-                color: "white",
-                "&:hover": {
-                  bgcolor: "rgba(255,255,255,0.3)",
-                },
-              }}
-            >
-              Thêm Bộ Lọc
-            </AddButton>
+            <Link to="/job-filters/new">
+              <AddButton
+                variant="contained"
+                startIcon={<Add />}
+                sx={{
+                  bgcolor: "rgba(255,255,255,0.2)",
+                  color: "white",
+                  "&:hover": {
+                    bgcolor: "rgba(255,255,255,0.3)",
+                  },
+                }}
+              >
+                Thêm Bộ Lọc
+              </AddButton>
+            </Link>
           </Stack>
         </Stack>
       </HeaderCard>

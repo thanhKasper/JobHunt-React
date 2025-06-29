@@ -35,6 +35,8 @@ import { ListFilterPlus } from "lucide-react";
 import useCreateJobFilter from "./CreateJobFilterPage.Hook";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createNewJobFilter } from "@/store/slices/jobFilterCreateSlice";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
 export default function CreateJobFilterPage() {
   const jobFilterCreationForm = useCreateJobFilter();
@@ -42,8 +44,16 @@ export default function CreateJobFilterPage() {
   const jobFilterCreationResult = useAppSelector(
     (state) => state.jobFilterCreationState
   );
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    dispatch(createNewJobFilter(jobFilterCreationForm.toJobFilterDTO()));
+  };
 
   console.log("Job Filter Creation Result:", jobFilterCreationResult);
+  // useEffect(() => {
+  //   if (jobFilterCreationResult.state == "succeeded") navigate("/job-filters")
+  // })
 
   return (
     <Box paddingY={4}>
@@ -336,34 +346,30 @@ export default function CreateJobFilterPage() {
       {/* Sticky Footer */}
 
       <Stack direction="row" spacing={2} justifyContent="flex-end">
-        <Button
-          LinkComponent={"a"}
-          href="/job-filters"
-          variant="outlined"
-          size="large"
-          startIcon={<Close />}
-          sx={{
-            px: 4,
-            py: 1.5,
-            borderRadius: 3,
-            textTransform: "none",
-            fontWeight: 600,
-            borderWidth: 2,
-            "&:hover": {
+        <Link to="job-filters">
+          <Button
+            variant="outlined"
+            size="large"
+            startIcon={<Close />}
+            sx={{
+              px: 4,
+              py: 1.5,
+              borderRadius: 3,
+              textTransform: "none",
+              fontWeight: 600,
               borderWidth: 2,
-              transform: "translateY(-1px)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            },
-          }}
-        >
-          Hủy
-        </Button>
+              "&:hover": {
+                borderWidth: 2,
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              },
+            }}
+          >
+            Hủy
+          </Button>
+        </Link>
         <Button
-          onClick={() => {
-            dispatch(
-              createNewJobFilter(jobFilterCreationForm.toJobFilterDTO())
-            );
-          }}
+          onClick={handleSubmit}
           variant="contained"
           size="large"
           startIcon={<Send />}

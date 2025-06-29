@@ -86,7 +86,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                   },
                 }}
               >
-                {jobFilter.jobFilterName}
+                {jobFilter.title}
               </MuiLink>
               <ChevronRight
                 sx={{
@@ -152,7 +152,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                     jobFilter.isActive ? "text.secondary" : "text.disabled"
                   }
                 >
-                  {jobFilter.filterOccupation}
+                  {jobFilter.occupation}
                 </Typography>
               </Stack>
 

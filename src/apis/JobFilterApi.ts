@@ -1,13 +1,12 @@
+import { AxiosError } from "axios";
 import { BaseApi } from "./BaseApi";
 import type JobFilterCreationDTO from "./DTO/JobFilterCreationDTO";
 import type JobFilterDTO from "./DTO/JobFilterDTO";
 
-export default class JobFilterApi extends BaseApi {
-  
+export default class JobFilterApi{
+
   public static async deleteJobFilter(jobFilterId: string): Promise<string> {
     try {
-      // Simulate API call to delete job filter
-      // Replace with actual API call logic
       console.log(`Deleting job filter with ID: ${jobFilterId}`);
       return jobFilterId;
     } catch (error) {
@@ -17,14 +16,28 @@ export default class JobFilterApi extends BaseApi {
 
   public static async createJobFilter(
     jobFilter: JobFilterCreationDTO
-  ): Promise<JobFilterCreationDTO> {
+  ): Promise<boolean> {
+    console.log("Calling API to creat new job filter: ", jobFilter)
+    const matchingBodyRequest = {
+      filterTitle: jobFilter.jobFilterName,
+      isActive: true,
+      isStarred: false,
+      occupation: jobFilter.filterOccupation,
+      level: jobFilter.jobLevel,
+      yearsOfExperience: jobFilter.expectedExp,
+      technicalKnowledge: jobFilter.technicalKnowledge,
+      tools: jobFilter.tools,
+      softSkills: jobFilter.softSkills,
+      languages: jobFilter.languages,
+      workingLocation: jobFilter.desireWorkingLocation,
+    };
     try {
-      // Simulate API call to create job filter
-      // Replace with actual API call logic
-      console.log(`Creating job filter: ${JSON.stringify(jobFilter)}`);
-      return jobFilter; // Return the created job filter
+      await BaseApi.post("/api/jobfilter", matchingBodyRequest);
+      return true;
     } catch (error) {
-      throw new Error("Failed to create job filter"); // Handle error appropriately
+      const axiosError = error as AxiosError
+      console.error(axiosError);
+      throw axiosError.response?.data;
     }
   }
 
@@ -80,129 +93,24 @@ export default class JobFilterApi extends BaseApi {
     }
   }
 
-  public static async getTotalJobFilters(): Promise<number> {
-    // Simulate API call to get total job filters
-    // Replace with actual API call logic
-    return 50; // Mocked value, replace with actual API call
-  }
-  public static async getActiveJobFilters(): Promise<number> {
-    // Simulate API call to get active job filters
-    // Replace with actual API call logic
-    return 22; // Mocked value, replace with actual API call
-  }
-  public static async getJobFilters(): Promise<JobFilterDTO[]> {
-    // Simulate API call to get job filters
-    // Replace with actual API call logic
-    return [
-      {
-        jobFilterId: "1",
-        jobFilterName: "Software Engineer",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Engineering",
-        averageCompatibility: 85,
-        desireWorkingLocation: "Remote",
-        jobLevel: "Mid-level",
-        exp: 3,
-        technicalKnowledge: ["JavaScript", "React"],
-        softSkills: ["Communication", "Teamwork"],
-        tools: ["Git", "Docker"],
-        languages: ["English"],
-        totalJobs: 50,
-      },
-      {
-        jobFilterId: "2",
-        jobFilterName: "Data Science",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Data Science",
-        averageCompatibility: 90,
-        desireWorkingLocation: "On-site",
-        jobLevel: "Senior",
-        exp: 5,
-        technicalKnowledge: ["Python", "Machine Learning"],
-        softSkills: ["Analytical Thinking", "Problem Solving"],
-        tools: ["Jupyter", "TensorFlow"],
-        languages: ["English", "Spanish"],
-        totalJobs: 30,
-      },
-      {
-        jobFilterId: "3",
-        jobFilterName: "Product Management",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Management",
-        averageCompatibility: 75,
-        desireWorkingLocation: "Hybrid",
-        jobLevel: "Junior",
-        exp: 1,
-        technicalKnowledge: ["Agile", "Scrum"],
-        softSkills: ["Leadership", "Time Management"],
-        tools: ["Jira", "Confluence"],
-        languages: ["English"],
-        totalJobs: 20,
-      },
-      {
-        jobFilterId: "4",
-        jobFilterName: "UX Design",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Design",
-        averageCompatibility: 80,
-        desireWorkingLocation: "Remote",
-        jobLevel: "Mid-level",
-        exp: 4,
-        technicalKnowledge: ["Figma", "Adobe XD"],
-        softSkills: ["Creativity", "User Empathy"],
-        tools: ["Sketch", "InVision"],
-        languages: ["English", "French"],
-        totalJobs: 25,
-      },
-      {
-        jobFilterId: "5",
-        jobFilterName: "DevOps Engineer",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Engineering",
-        averageCompatibility: 88,
-        desireWorkingLocation: "On-site",
-        jobLevel: "Senior",
-        exp: 6,
-        technicalKnowledge: ["AWS", "Kubernetes"],
-        softSkills: ["Problem Solving", "Collaboration"],
-        tools: ["Terraform", "Ansible"],
-        languages: ["English"],
-        totalJobs: 40,
-      },
-      {
-        jobFilterId: "6",
-        jobFilterName: "Cybersecurity Analyst",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Security",
-        averageCompatibility: 92,
-        desireWorkingLocation: "Remote",
-        jobLevel: "Mid-level",
-        exp: 3,
-        technicalKnowledge: ["Network Security", "Penetration Testing"],
-        softSkills: ["Attention to Detail", "Critical Thinking"],
-        tools: ["Wireshark", "Metasploit"],
-        languages: ["English"],
-        totalJobs: 15,
-      },
-    ]; // Mocked value, replace with actual API call
-  }
-
-  public static async createNewJobFilter(
-    jobFilter: JobFilterDTO
-  ): Promise<JobFilterDTO> {
+  public static async getJobFilters(): Promise<{
+    totalJobFilters: number;
+    activeJobFilters: number;
+    jobFilters: JobFilterDTO[];
+  }> {
     try {
-      // Simulate API call to create a new job filter
-      // Replace with actual API call logic
-      console.log(`Creating new job filter: ${JSON.stringify(jobFilter)}`);
-      return jobFilter; // Return the created job filter
-    } catch (error) {
-      throw new Error("Failed to create new job filter"); // Handle error appropriately
+      const result: any = await BaseApi.get("/api/jobfilter");
+      console.log("Result from getJobFilters() API");
+      console.log(result);
+      return {
+        totalJobFilters: result.totalJobs,
+        activeJobFilters: result.totalActiveJobs,
+        jobFilters: result.jobFilters,
+      };
+    } catch (err) {
+      console.log("Error in getJobFilters() method");
+      console.error(err);
+      throw err;
     }
   }
 }

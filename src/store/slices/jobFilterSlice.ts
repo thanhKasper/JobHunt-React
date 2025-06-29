@@ -5,8 +5,10 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
+import type { FetchingState } from "./type";
 
 interface JobFilterState {
+  state: FetchingState;
   filterTotal: number;
   activeFilterTotal: number;
   jobFilters: JobFilterDTO[];
@@ -15,26 +17,13 @@ interface JobFilterState {
 
 // Logic: inactive filters cannot have star. both FE and BE should handle this logic.
 
-const [totalFilters, activeFilters, jobFilters] = await Promise.all([
-  JobFilterApi.getTotalJobFilters(),
-  JobFilterApi.getActiveJobFilters(),
-  JobFilterApi.getJobFilters(),
-]);
-
 const deleteJobFilter = createAsyncThunk(
   "jobFilter/deleteJobFilter",
   async (jobFilterId: string) => {
     return await JobFilterApi.deleteJobFilter(jobFilterId);
   }
 );
-const createJobFilter = createAsyncThunk(
-  "jobFilter/createJobFilter",
-  async (jobFilter: JobFilterDTO) => {
-    // Logic to create a job filter
-    // This is a placeholder; replace with actual API call
-    return await JobFilterApi.createJobFilter(jobFilter);
-  }
-);
+
 const toggleJobFilterStar = createAsyncThunk(
   "jobFilter/toggleJobFilterStar",
   async (jobFilterId: string) => {
@@ -54,16 +43,16 @@ const toggleJobFilterActiveState = createAsyncThunk(
 const getGeneralJobFilterPage = createAsyncThunk(
   "jobFilter/getGeneralJobFilterPage",
   async (): Promise<JobFilterState> => {
-    // Logic to fetch the general job filter page
-    // This is a placeholder; replace with actual API call
-    const totalFilters = await JobFilterApi.getTotalJobFilters();
-    const activeFilters = await JobFilterApi.getActiveJobFilters();
-    const jobFilters = await JobFilterApi.getJobFilters();
+    console.log("Getting all job filters from user.....");
+    const { totalJobFilters, activeJobFilters, jobFilters } =
+      await JobFilterApi.getJobFilters();
+    console.log(totalJobFilters, activeJobFilters, jobFilters);
     return {
-      filterTotal: totalFilters, // Mocked value, replace with actual API call
-      activeFilterTotal: activeFilters, // Mocked value, replace with actual API call
-      jobFilters: jobFilters, // Mocked value, replace with actual API call
-      filteredJobFilters: jobFilters, // Initially, all filters are shown
+      state: "succeeded",
+      filterTotal: totalJobFilters,
+      activeFilterTotal: activeJobFilters,
+      jobFilters: jobFilters,
+      filteredJobFilters: jobFilters,
     };
   }
 );
@@ -71,10 +60,11 @@ const getGeneralJobFilterPage = createAsyncThunk(
 const jobFilterSlice = createSlice({
   name: "jobFilter",
   initialState: {
-    activeFilterTotal: activeFilters,
-    filterTotal: totalFilters,
-    jobFilters: jobFilters,
-    filteredJobFilters: jobFilters,
+    state: "idle",
+    activeFilterTotal: 0,
+    filterTotal: 0,
+    jobFilters: [],
+    filteredJobFilters: [],
   } as JobFilterState,
   reducers: {
     filterJobFilters: (state, action: PayloadAction<string>) => {
@@ -94,6 +84,8 @@ const jobFilterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getGeneralJobFilterPage.fulfilled, (state, action) => {
+      console.log("fullfilled getGeneralJobFIlterPage");
+      console.log(action.payload);
       const { filterTotal, activeFilterTotal, jobFilters } = action.payload;
       return {
         ...state,
@@ -114,15 +106,6 @@ const jobFilterSlice = createSlice({
         filteredJobFilters: state.filteredJobFilters.filter(
           (filter) => filter.jobFilterId !== jobFilterId
         ),
-      };
-    });
-
-    builder.addCase(createJobFilter.fulfilled, (state, action) => {
-      const newJobFilter = action.payload;
-      return {
-        ...state,
-        jobFilters: [...state.jobFilters, newJobFilter],
-        filteredJobFilters: [...state.filteredJobFilters, newJobFilter],
       };
     });
 
@@ -190,7 +173,6 @@ const jobFilterSlice = createSlice({
 
 export default jobFilterSlice.reducer;
 export {
-  createJobFilter,
   deleteJobFilter,
   getGeneralJobFilterPage,
   toggleJobFilterActiveState,

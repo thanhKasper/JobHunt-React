@@ -10,14 +10,21 @@ interface JobFilterCreateState {
 
 const createNewJobFilter = createAsyncThunk(
   "jobFilterCreate/createNewJobFilter",
-  async (jobFilter: JobFilterCreationDTO) => {
+  async (jobFilter: JobFilterCreationDTO, thunkApi) => {
+    console.log("Create job filter with dat: ", jobFilter);
     try {
-      const message = await JobFilterApi.createJobFilter(jobFilter);
-      //   console.log("New job filter created successfully:", message);
-      return message;
+      await JobFilterApi.createJobFilter(jobFilter);
     } catch (error) {
-      console.error("Error creating new job filter:", error);
-      throw error;
+      const validationErrors = (error as any).errors as Record<
+        string,
+        string[]
+      >;
+      console.error("Error creating new job filter:", validationErrors);
+      return thunkApi.rejectWithValue({
+        jobFilterName: validationErrors["FilterTitle"],
+        expectedExp: validationErrors["YearsOfExperience"],
+        filterOccupation: validationErrors["Occupation"]
+      } as Record<string, string[]>);
     }
   }
 );
@@ -32,21 +39,18 @@ const jobFilterCreateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createNewJobFilter.pending, (state) => {
-        // Handle pending state if needed
-        state.state = "loading";
-      })
-      .addCase(createNewJobFilter.fulfilled, (state, action) => {
+      .addCase(createNewJobFilter.fulfilled, (state) => {
         // Handle successful creation of job filter
-        console.log("Job filter created:", action.payload);
+        console.log("Job filter created:");
         // state.isSuccess = true;
         state.state = "succeeded";
       })
       .addCase(createNewJobFilter.rejected, (state, action) => {
+        console.log("Handle reject form createNewJobFilter async thunk")
         // Handle error in job filter creation
         state.state = "failed";
         console.log(action);
-        console.error("Failed to create job filter:", action.error.message);
+        state.errors = action.payload as any;
       });
   },
 });
