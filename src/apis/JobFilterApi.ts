@@ -16,7 +16,6 @@ export default class JobFilterApi {
   public static async createJobFilter(
     jobFilter: JobFilterCreationDTO
   ): Promise<boolean> {
-    console.log("Calling API to creat new job filter: ", jobFilter);
     const matchingBodyRequest = {
       filterTitle: jobFilter.jobFilterName,
       isActive: true,
@@ -35,7 +34,6 @@ export default class JobFilterApi {
       return true;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.error(axiosError);
       throw axiosError.response?.data;
     }
   }

@@ -210,6 +210,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                     "& .MuiChip-icon": {
                       marginLeft: 1,
                     },
+                    width: "fit-content"
                   }}
                 />
               </Zoom>

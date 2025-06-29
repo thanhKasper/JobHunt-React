@@ -16,9 +16,7 @@ export class BaseApi {
       window.localStorage.removeItem("refreshToken");
       window.localStorage.setItem("token", response.data.token);
       window.localStorage.setItem("refreshToken", response.data.refreshToken);
-
     } catch {
-      console.log("Cannot revoke token, please sign in again");
       window.localStorage.removeItem("token");
       window.localStorage.removeItem("refreshToken");
       window.location.href = "/login";
@@ -27,7 +25,6 @@ export class BaseApi {
 
   public static async post<T>(url: string, data: any): Promise<T> {
     try {
-      console.log("Post request from BaseAPI");
       const response = await axios.post<T>(`${this.baseUrl}${url}`, data, {
         headers: {
           "Content-Type": "application/json",
@@ -37,9 +34,7 @@ export class BaseApi {
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.log(axiosError);
       if (axiosError.status === 401) {
-        console.log("Authentication error, revoke token");
         await this.revokeToken();
         return await this.post<T>(url, data);
       } else {
@@ -49,32 +44,62 @@ export class BaseApi {
   }
 
   public static async get<T>(url: string): Promise<T> {
-    const response = await axios.get<T>(`${this.baseUrl}${url}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-      },
-    });
-    return response.data;
+    try {
+      const response = await axios.get<T>(`${this.baseUrl}${url}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      if (axiosError.status === 401) {
+        await this.revokeToken();
+        return await this.get<T>(url);
+      } else {
+        throw err;
+      }
+    }
   }
 
   public static async put<T>(url: string, data: any): Promise<T> {
-    const response = await axios.put<T>(`${this.baseUrl}${url}`, data, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-      },
-    });
-    return response.data;
+    try {
+      const response = await axios.put<T>(`${this.baseUrl}${url}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      if (axiosError.status === 401) {
+        await this.revokeToken();
+        return await this.put<T>(url, data);
+      } else {
+        throw err;
+      }
+    }
   }
 
   public static async delete<T>(url: string): Promise<T> {
-    const response = await axios.delete<T>(`${this.baseUrl}${url}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-      },
-    });
-    return response.data;
+    try {
+      const response = await axios.delete<T>(`${this.baseUrl}${url}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.status === 401) {
+        await this.revokeToken();
+        return await this.delete<T>(url);
+      } else {
+        throw error;
+      }
+    }
   }
 }

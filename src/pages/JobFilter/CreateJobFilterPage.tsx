@@ -22,6 +22,7 @@ import {
   Card,
   CardContent,
   FormControl,
+  FormHelperText,
   Grid,
   InputAdornment,
   InputLabel,
@@ -50,10 +51,9 @@ export default function CreateJobFilterPage() {
     dispatch(createNewJobFilter(jobFilterCreationForm.toJobFilterDTO()));
   };
 
-  console.log("Job Filter Creation Result:", jobFilterCreationResult);
-  // useEffect(() => {
-  //   if (jobFilterCreationResult.state == "succeeded") navigate("/job-filters")
-  // })
+  useEffect(() => {
+    if (jobFilterCreationResult.state == "succeeded") navigate("/job-filters")
+  })
 
   return (
     <Box paddingY={4}>
@@ -104,6 +104,8 @@ export default function CreateJobFilterPage() {
                 jobFilterCreationForm.updateFilterTitle(e.target.value)
               }
               placeholder="Ví dụ: Công việc IT tại TP.HCM"
+              error={!!jobFilterCreationResult.errors?.jobFilterName}
+              helperText={jobFilterCreationResult.errors?.jobFilterName}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -153,6 +155,7 @@ export default function CreateJobFilterPage() {
                       jobFilterCreationForm.updateOccupation(e.target.value)
                     }
                     label="Ngành Nghề"
+                    error={!!jobFilterCreationResult.errors.filterOccupation}
                   >
                     {occupationList.map((occupation) => (
                       <MenuItem key={occupation.key} value={occupation.key}>
@@ -160,6 +163,11 @@ export default function CreateJobFilterPage() {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText
+                    error={!!jobFilterCreationResult.errors.filterOccupation}
+                  >
+                    {jobFilterCreationResult.errors.filterOccupation}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
 

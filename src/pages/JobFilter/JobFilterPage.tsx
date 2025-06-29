@@ -180,7 +180,7 @@ export default function JobFilterPage() {
         <Fade in={true} timeout={800}>
           <Grid container spacing={3}>
             {jobFilterState.filteredJobFilters.map((jobFilter, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={index}>
                 <Box
                   sx={{
                     animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
@@ -232,8 +232,6 @@ export default function JobFilterPage() {
           </AddButton>
         </Paper>
       )}
-
-      {/* <CreateJobFilterPage open={open} toggleDrawer={setOpen} /> */}
     </Box>
   );
 }
