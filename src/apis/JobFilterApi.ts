@@ -3,8 +3,7 @@ import { BaseApi } from "./BaseApi";
 import type JobFilterCreationDTO from "./DTO/JobFilterCreationDTO";
 import type JobFilterDTO from "./DTO/JobFilterDTO";
 
-export default class JobFilterApi{
-
+export default class JobFilterApi {
   public static async deleteJobFilter(jobFilterId: string): Promise<string> {
     try {
       console.log(`Deleting job filter with ID: ${jobFilterId}`);
@@ -17,7 +16,7 @@ export default class JobFilterApi{
   public static async createJobFilter(
     jobFilter: JobFilterCreationDTO
   ): Promise<boolean> {
-    console.log("Calling API to creat new job filter: ", jobFilter)
+    console.log("Calling API to creat new job filter: ", jobFilter);
     const matchingBodyRequest = {
       filterTitle: jobFilter.jobFilterName,
       isActive: true,
@@ -35,7 +34,7 @@ export default class JobFilterApi{
       await BaseApi.post("/api/jobfilter", matchingBodyRequest);
       return true;
     } catch (error) {
-      const axiosError = error as AxiosError
+      const axiosError = error as AxiosError;
       console.error(axiosError);
       throw axiosError.response?.data;
     }
@@ -100,17 +99,13 @@ export default class JobFilterApi{
   }> {
     try {
       const result: any = await BaseApi.get("/api/jobfilter");
-      console.log("Result from getJobFilters() API");
-      console.log(result);
       return {
         totalJobFilters: result.totalJobs,
         activeJobFilters: result.totalActiveJobs,
         jobFilters: result.jobFilters,
       };
     } catch (err) {
-      console.log("Error in getJobFilters() method");
-      console.error(err);
-      throw err;
+      throw err
     }
   }
 }

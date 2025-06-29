@@ -1,6 +1,6 @@
 import { AuthenAPI } from "@/apis/AuthenAPI";
 import type SignupDTO from "@/apis/DTO/SignupDTO";
-import { jwtPayloadExtract } from "@/utils";
+import { ProfileApi } from "@/apis/ProfileApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthenticationState {
@@ -17,16 +17,14 @@ interface AuthenticationState {
   };
 }
 
-const { userId, name, email } = jwtPayloadExtract(
-  window.localStorage.getItem("token")
-);
+const simpleProfile = await ProfileApi.getSimpleProfile();
 
 const initialState: AuthenticationState = {
   isAuthenticated: !!window.localStorage.getItem("token"),
   user: {
-    userId: userId,
-    fullname: name,
-    email: email,
+    userId: simpleProfile?.userId ?? "",
+    fullname: simpleProfile?.fullName ?? "",
+    email: simpleProfile?.email ?? "",
   },
   errors: {},
 };

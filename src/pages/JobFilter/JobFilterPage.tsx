@@ -33,8 +33,6 @@ export default function JobFilterPage() {
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
   const totalJobs = useAppSelector((state) => state.jobState.totalJobs);
 
-  console.log(jobFilterState);
-
   useEffect(() => {
     dispatch(getGeneralJobFilterPage());
   }, []);
