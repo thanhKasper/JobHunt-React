@@ -52,8 +52,8 @@ export default function CreateJobFilterPage() {
   };
 
   useEffect(() => {
-    if (jobFilterCreationResult.state == "succeeded") navigate("/job-filters")
-  })
+    if (jobFilterCreationResult.state == "succeeded") navigate("/job-filters");
+  });
 
   return (
     <Box paddingY={4}>
@@ -219,6 +219,8 @@ export default function CreateJobFilterPage() {
                       parseInt(e.target.value, 10) || 0
                     )
                   }
+                  error={!!jobFilterCreationResult.errors.expectedExp}
+                  helperText={jobFilterCreationResult.errors.expectedExp}
                   placeholder="Ví dụ: 2"
                   slotProps={{
                     input: {
@@ -354,7 +356,7 @@ export default function CreateJobFilterPage() {
       {/* Sticky Footer */}
 
       <Stack direction="row" spacing={2} justifyContent="flex-end">
-        <Link to="job-filters">
+        <Link to="/job-filters">
           <Button
             variant="outlined"
             size="large"
