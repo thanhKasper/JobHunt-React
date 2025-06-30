@@ -6,6 +6,8 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import type { FetchingState } from "./type";
+import type { AxiosError } from "axios";
+import { logout } from "./authenticationSlice";
 
 interface JobFilterState {
   state: FetchingState;
@@ -19,40 +21,54 @@ interface JobFilterState {
 
 const deleteJobFilter = createAsyncThunk(
   "jobFilter/deleteJobFilter",
-  async (jobFilterId: string) => {
-    return await JobFilterApi.deleteJobFilter(jobFilterId);
+  async (jobFilterId: string, thunkApi) => {
+    try {
+      return await JobFilterApi.deleteJobFilter(jobFilterId);
+    } catch (err) {
+      if ((err as AxiosError).status == 452) return thunkApi.dispatch(logout());
+    }
   }
 );
 
 const toggleJobFilterStar = createAsyncThunk(
   "jobFilter/toggleJobFilterStar",
-  async (jobFilterId: string) => {
-    // Logic to toggle the start state of a job filter
-    // This is a placeholder; replace with actual API call
-    return await JobFilterApi.toggleJobFilterStar(jobFilterId);
+  async (jobFilterId: string, thunkApi) => {
+    try {
+      await JobFilterApi.toggleJobFilterStar(jobFilterId);
+      return jobFilterId;
+    } catch (err) {
+      if ((err as AxiosError).status == 452) return thunkApi.dispatch(logout());
+    }
   }
 );
 const toggleJobFilterActiveState = createAsyncThunk(
   "jobFilter/toggleJobFilterActiveState",
-  async (jobFilterId: string) => {
-    // Logic to toggle the active state of a job filter
-    // This is a placeholder; replace with actual API call
-    return await JobFilterApi.toggleJobFilterActiveState(jobFilterId);
+  async (jobFilterId: string, thunkApi) => {
+    try {
+      await JobFilterApi.toggleJobFilterActiveState(jobFilterId);
+      return jobFilterId;
+    } catch (err) {
+      if ((err as AxiosError).status == 452) return thunkApi.dispatch(logout());
+    }
   }
 );
 const getGeneralJobFilterPage = createAsyncThunk(
   "jobFilter/getGeneralJobFilterPage",
-  async (): Promise<JobFilterState> => {
-    const { totalJobFilters, activeJobFilters, jobFilters } =
-      await JobFilterApi.getJobFilters();
-    console.log(totalJobFilters, activeJobFilters, jobFilters);
-    return {
-      state: "succeeded",
-      filterTotal: totalJobFilters,
-      activeFilterTotal: activeJobFilters,
-      jobFilters: jobFilters,
-      filteredJobFilters: jobFilters,
-    };
+  async (_, thunkApi) => {
+    try {
+      const { totalJobFilters, activeJobFilters, jobFilters } =
+        await JobFilterApi.getJobFilters();
+      console.log(totalJobFilters, activeJobFilters, jobFilters);
+      return {
+        state: "succeeded",
+        filterTotal: totalJobFilters,
+        activeFilterTotal: activeJobFilters,
+        jobFilters: jobFilters,
+        filteredJobFilters: jobFilters,
+      };
+    } catch (err) {
+      if ((err as AxiosError).status == 452) return thunkApi.dispatch(logout());
+    }
   }
 );
 
@@ -83,7 +99,7 @@ const jobFilterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getGeneralJobFilterPage.fulfilled, (state, action) => {
-      const { filterTotal, activeFilterTotal, jobFilters } = action.payload;
+      const { filterTotal, activeFilterTotal, jobFilters } = action.payload as JobFilterState;
       return {
         ...state,
         filterTotal,
@@ -117,6 +133,7 @@ const jobFilterSlice = createSlice({
       if (!toggledFilter) return state;
 
       toggledFilter.isStarred = !toggledFilter.isStarred;
+      toggledFilter.isActive = true; // True as any case
       // remove the starred filter from the list to push it to the top
       state.jobFilters = state.jobFilters.filter(
         (jobfilter) => jobfilter.jobFilterId !== jobFilterId
@@ -153,6 +170,7 @@ const jobFilterSlice = createSlice({
       state.jobFilters = state.jobFilters.filter(
         (filter) => filter.jobFilterId !== jobFilterId
       );
+
       // find the first deactivated filter
       const firstDeactivatedIndex = state.jobFilters.findIndex(
         (filter) => !filter.isActive

@@ -72,11 +72,6 @@ const authenSlice = createSlice({
           fullname: action.payload.fullname,
           email: action.payload.email,
         };
-        window.localStorage.setItem("token", action.payload.token);
-        window.localStorage.setItem(
-          "refreshToken",
-          action.payload.refreshToken
-        );
       })
       .addCase(signup.rejected, (state, action) => {
         state.isAuthenticated = false;
@@ -93,11 +88,6 @@ const authenSlice = createSlice({
           fullname: action.payload.fullname,
           email: action.payload.email,
         };
-        window.localStorage.setItem("token", action.payload.token);
-        window.localStorage.setItem(
-          "refreshToken",
-          action.payload.refreshToken
-        );
       })
       .addCase(signin.rejected, (state, action) => {
         state.isAuthenticated = false;

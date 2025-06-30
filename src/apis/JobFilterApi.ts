@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { BaseApi } from "./BaseApi";
 import type JobFilterCreationDTO from "./DTO/JobFilterCreationDTO";
 import type JobFilterDTO from "./DTO/JobFilterDTO";
@@ -30,11 +29,11 @@ export default class JobFilterApi {
       workingLocation: jobFilter.desireWorkingLocation,
     };
     try {
-      await BaseApi.post("/api/jobfilter", matchingBodyRequest);
+      await BaseApi.post("/jobfilter", matchingBodyRequest);
       return true;
     } catch (error) {
-      const axiosError = error as AxiosError;
-      throw axiosError.response?.data;
+      console.log("Catching error while creating new job filter");
+      throw error;
     }
   }
 
@@ -66,12 +65,9 @@ export default class JobFilterApi {
 
   public static async toggleJobFilterStar(
     jobFilterId: string
-  ): Promise<string> {
+  ): Promise<boolean> {
     try {
-      // Simulate API call to toggle job filter start state
-      // Replace with actual API call logic
-      console.log("Toggling job filter star state for ID:", jobFilterId);
-      return jobFilterId; // Return the job filter ID if successful
+      return await BaseApi.put(`/jobfilter/star/${jobFilterId}`, null);
     } catch (error) {
       throw new Error("Failed to toggle job filter star state"); // Handle error appropriately
     }
@@ -79,12 +75,9 @@ export default class JobFilterApi {
 
   public static async toggleJobFilterActiveState(
     jobFilterId: string
-  ): Promise<string> {
+  ): Promise<boolean> {
     try {
-      // Simulate API call to toggle job filter active state
-      // Replace with actual API call logic
-      console.log("Toggling job filter active state for ID:", jobFilterId);
-      return jobFilterId; // Return the job filter ID if successful
+      return await BaseApi.put(`/jobfilter/active/${jobFilterId}`, null);
     } catch (error) {
       throw new Error("Failed to toggle job filter active state"); // Handle error appropriately
     }
@@ -96,14 +89,17 @@ export default class JobFilterApi {
     jobFilters: JobFilterDTO[];
   }> {
     try {
-      const result: any = await BaseApi.get("/api/jobfilter");
+      const result: any = await BaseApi.get("/jobfilter");
       return {
         totalJobFilters: result.totalJobs,
         activeJobFilters: result.totalActiveJobs,
-        jobFilters: result.jobFilters,
+        jobFilters: result.jobFilters.map((jf: any) => ({
+          jobFilterId: jf.id,
+          ...jf,
+        })),
       };
     } catch (err) {
-      throw err
+      throw err;
     }
   }
 }
