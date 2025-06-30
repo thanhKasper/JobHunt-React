@@ -39,27 +39,26 @@ export default class JobFilterApi {
 
   public static async getJobFilter(jobFilterId: string): Promise<JobFilterDTO> {
     try {
-      // Simulate API call to get job filter by ID
-      // Replace with actual API call logic
-      console.log(`Fetching job filter with ID: ${jobFilterId}`);
+      const res = (await BaseApi.get(`/jobfilter/${jobFilterId}`)) as any;
+      console.log(res);
       return {
-        jobFilterId,
-        jobFilterName: "Sample Job Filter",
-        isActive: true,
-        isStarred: false,
-        filterOccupation: "Engineering",
-        averageCompatibility: 85,
-        desireWorkingLocation: "Remote",
-        jobLevel: "Mid-level",
-        exp: 3,
-        technicalKnowledge: ["JavaScript", "React"],
-        softSkills: ["Communication", "Teamwork"],
-        tools: ["Git", "Docker"],
-        languages: ["English"],
-        totalJobs: 50,
-      }; // Mocked value, replace with actual API call
+        level: res.level ?? "",
+        yearsOfExperience: res.yearsOfExperience ?? 0,
+        technicalKnowledge: res.technicalKnowledge ?? [],
+        tools: res.tools ?? [],
+        softSkills: res.softSkills ?? [],
+        languages: res.languages ?? [],
+        location: res.workingLocation ?? "",
+        jobFilterId: res.id,
+        title: res.title ?? "",
+        occupation: res.occupation ?? "",
+        isStarred: res.isStarred,
+        isActive: res.isActive,
+        averageCompatibility: res.averageCompatibility, // need to update later on the backend side
+        totalJobs: res.totalJobs,
+      };
     } catch (error) {
-      throw new Error("Failed to fetch job filter"); // Handle error appropriately
+      throw error;
     }
   }
 
@@ -69,7 +68,7 @@ export default class JobFilterApi {
     try {
       return await BaseApi.put(`/jobfilter/star/${jobFilterId}`, null);
     } catch (error) {
-      throw new Error("Failed to toggle job filter star state"); // Handle error appropriately
+      throw error;
     }
   }
 
@@ -79,7 +78,7 @@ export default class JobFilterApi {
     try {
       return await BaseApi.put(`/jobfilter/active/${jobFilterId}`, null);
     } catch (error) {
-      throw new Error("Failed to toggle job filter active state"); // Handle error appropriately
+      throw error;
     }
   }
 

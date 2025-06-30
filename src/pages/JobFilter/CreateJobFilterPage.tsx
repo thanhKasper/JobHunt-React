@@ -35,7 +35,10 @@ import {
 import { ListFilterPlus } from "lucide-react";
 import useCreateJobFilter from "./CreateJobFilterPage.Hook";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { createNewJobFilter } from "@/store/slices/jobFilterCreateSlice";
+import {
+  createNewJobFilter,
+  jobfilterFormSwitchToNormal,
+} from "@/store/slices/jobFilterCreateSlice";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 
@@ -46,13 +49,15 @@ export default function CreateJobFilterPage() {
     (state) => state.jobFilterCreationState
   );
   const navigate = useNavigate();
-
   const handleSubmit = () => {
     dispatch(createNewJobFilter(jobFilterCreationForm.toJobFilterDTO()));
   };
 
   useEffect(() => {
-    if (jobFilterCreationResult.state == "succeeded") navigate("/job-filters");
+    if (jobFilterCreationResult.state == "succeeded") {
+      navigate("/job-filters");
+      jobfilterFormSwitchToNormal();
+    }
   });
 
   return (

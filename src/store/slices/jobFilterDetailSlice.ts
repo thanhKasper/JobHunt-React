@@ -3,6 +3,8 @@ import type JobFilterDTO from "@/apis/DTO/JobFilterDTO";
 import JobApi from "@/apis/JobApi";
 import JobFilterApi from "@/apis/JobFilterApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { AxiosError } from "axios";
+import { logout } from "./authenticationSlice";
 
 interface JobFilterDetailState {
   jobFilterState: "idle" | "loading" | "succeeded" | "failed";
@@ -15,14 +17,14 @@ const initialState: JobFilterDetailState = {
   jobFilterState: "idle",
   jobFilter: {
     jobFilterId: "",
-    jobFilterName: "",
+    title: "",
     isActive: false,
     isStarred: false,
     averageCompatibility: 0,
-    filterOccupation: "",
-    desireWorkingLocation: "",
-    jobLevel: "",
-    exp: 0,
+    occupation: "",
+    location: "",
+    level: "",
+    yearsOfExperience: 0,
     technicalKnowledge: [],
     softSkills: [],
     tools: [],
@@ -35,17 +37,27 @@ const initialState: JobFilterDetailState = {
 
 const getJobFilter = createAsyncThunk(
   "jobFilterDetail/getJobFilter",
-  async (jobFilterId: string) => {
-    const response = await JobFilterApi.getJobFilter(jobFilterId);
-    return response;
+  async (jobFilterId: string, thunkApi) => {
+    console.log("Calling jobfilter detail create thunk")
+    try {
+      const response = await JobFilterApi.getJobFilter(jobFilterId);
+      return thunkApi.fulfillWithValue(response);
+    } catch (err) {
+      if (((err as AxiosError).status = 452))
+        return thunkApi.dispatch(logout());
+    }
   }
 );
 
 const getJobsBaseOnFilter = createAsyncThunk(
   "jobFilterDetail/getJobsBaseOnFilter",
-  async (jobFilterId: string) => {
-    const response = await JobApi.getJobsBaseOnFilter(jobFilterId);
-    return response;
+  async (jobFilterId: string, thunkApi) => {
+    try {
+      const response = await JobApi.getJobsBaseOnFilter(jobFilterId);
+      return response;
+    } catch (err) {
+      if ((err as AxiosError).status == 452) return thunkApi.dispatch(logout());
+    }
   }
 );
 
@@ -61,7 +73,7 @@ const jobFilterDetailSlice = createSlice({
       })
       .addCase(getJobFilter.fulfilled, (state, action) => {
         state.jobFilterState = "succeeded";
-        state.jobFilter = action.payload;
+        state.jobFilter = action.payload as JobFilterDTO;
       })
       .addCase(getJobFilter.rejected, (state, action) => {
         state.jobFilterState = "failed";
@@ -75,7 +87,7 @@ const jobFilterDetailSlice = createSlice({
       })
       .addCase(getJobsBaseOnFilter.fulfilled, (state, action) => {
         state.jobsFromFilterState = "succeeded";
-        state.jobsFromFilter = action.payload;
+        state.jobsFromFilter = action.payload as JobDetailDTO[];
       })
       .addCase(getJobsBaseOnFilter.rejected, (state, action) => {
         state.jobsFromFilterState = "failed";

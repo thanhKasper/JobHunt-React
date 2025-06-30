@@ -34,7 +34,11 @@ const jobFilterCreateSlice = createSlice({
     state: "idle",
     errors: {},
   } as JobFilterCreateState,
-  reducers: {},
+  reducers: {
+    jobfilterFormSwitchToNormal: (state) => {
+      state.state = "idle"
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewJobFilter.fulfilled, (state) => {
@@ -47,6 +51,6 @@ const jobFilterCreateSlice = createSlice({
   },
 });
 
-export const {} = jobFilterCreateSlice.actions;
+export const {jobfilterFormSwitchToNormal} = jobFilterCreateSlice.actions;
 export { createNewJobFilter };
 export default jobFilterCreateSlice.reducer;

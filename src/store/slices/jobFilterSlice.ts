@@ -58,7 +58,6 @@ const getGeneralJobFilterPage = createAsyncThunk(
     try {
       const { totalJobFilters, activeJobFilters, jobFilters } =
         await JobFilterApi.getJobFilters();
-      console.log(totalJobFilters, activeJobFilters, jobFilters);
       return {
         state: "succeeded",
         filterTotal: totalJobFilters,
@@ -99,7 +98,8 @@ const jobFilterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getGeneralJobFilterPage.fulfilled, (state, action) => {
-      const { filterTotal, activeFilterTotal, jobFilters } = action.payload as JobFilterState;
+      const { filterTotal, activeFilterTotal, jobFilters } =
+        action.payload as JobFilterState;
       return {
         ...state,
         filterTotal,

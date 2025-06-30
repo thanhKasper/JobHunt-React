@@ -89,25 +89,11 @@ function a11yProps(index: number) {
 }
 
 export default function JobFilterPageDetail() {
-  const jobFilterId = useParams().jobFilterId;
-  console.log("Chi tiết bộ lọc công việc: " + jobFilterId);
   const [editMode, setEditMode] = React.useState(false);
   const [value, setValue] = React.useState(0);
   const jobFilterDetailState = useAppSelector(
     (state) => state.jobFilterDetailState
   );
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (jobFilterDetailState.jobFilterState === "idle") {
-      // Fetch job filter details if not already fetched
-      dispatch(getJobFilter(jobFilterId || ""));
-    }
-    if (jobFilterDetailState.jobsFromFilterState === "idle") {
-      // Fetch jobs based on filter if not already fetched
-      dispatch(getJobsBaseOnFilter(jobFilterId || ""));
-    }
-  }, [dispatch, jobFilterDetailState]);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -209,11 +195,15 @@ export default function JobFilterPageDetail() {
 
       {/* Tab Content */}
       <CustomTabPanel value={value} index={0}>
-        {editMode ? (
-          <JobFilterEditPage setEditMode={setEditMode} />
-        ) : (
-          <JobFilter setEditMode={setEditMode} />
-        )}
+        {jobFilterDetailState.jobFilterState == "succeeded" &&
+          (editMode ? (
+            <JobFilterEditPage setEditMode={setEditMode} />
+          ) : (
+            <JobFilter
+              jobFilter={jobFilterDetailState.jobFilter}
+              setEditMode={setEditMode}
+            />
+          ))}
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>

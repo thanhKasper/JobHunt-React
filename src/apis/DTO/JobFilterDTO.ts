@@ -12,6 +12,6 @@ export default interface JobFilterDTO {
   languages: string[];
   jobFilterId: string;
   title: string;
-  createdAt: string;
+  // createdAt: string;
   totalJobs: number;
 }

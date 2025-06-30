@@ -2,6 +2,12 @@ import axios, { AxiosError } from "axios";
 export class BaseApi {
   static readonly baseUrl: string = "http://localhost:5221/api";
 
+  public static formatUrl(url: string) {
+    let trimmedUrl = url.trim();
+    if (!trimmedUrl.startsWith("/")) return "/" + trimmedUrl;
+    return trimmedUrl;
+  }
+
   public static async revokeToken() {
     try {
       const response = await axios.post(
@@ -23,13 +29,18 @@ export class BaseApi {
     data: any,
     hasRetried: boolean = false
   ): Promise<T> {
+    const formattedUrl = this.formatUrl(url);
     try {
-      const response = await axios.post<T>(`${this.baseUrl}${url}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.post<T>(
+        `${this.baseUrl}${formattedUrl}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -50,8 +61,9 @@ export class BaseApi {
     url: string,
     hasRetried: boolean = false
   ): Promise<T> {
+    const formattedUrl = this.formatUrl(url);
     try {
-      const response = await axios.get<T>(`${this.baseUrl}${url}`, {
+      const response = await axios.get<T>(`${this.baseUrl}${formattedUrl}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${window.localStorage.getItem("token")}`,
@@ -78,13 +90,18 @@ export class BaseApi {
     data: any,
     hasRetried: boolean = false
   ): Promise<T> {
+    const formattedUrl = this.formatUrl(url);
     try {
-      const response = await axios.put<T>(`${this.baseUrl}${url}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.put<T>(
+        `${this.baseUrl}${formattedUrl}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -105,8 +122,9 @@ export class BaseApi {
     url: string,
     hasRetried: boolean = false
   ): Promise<T> {
+    const formattedUrl = this.formatUrl(url);
     try {
-      const response = await axios.delete<T>(`${this.baseUrl}${url}`, {
+      const response = await axios.delete<T>(`${this.baseUrl}${formattedUrl}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${window.localStorage.getItem("token")}`,
