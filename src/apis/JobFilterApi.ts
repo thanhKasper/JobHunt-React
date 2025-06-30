@@ -5,10 +5,10 @@ import type JobFilterDTO from "./DTO/JobFilterDTO";
 export default class JobFilterApi {
   public static async deleteJobFilter(jobFilterId: string): Promise<string> {
     try {
-      console.log(`Deleting job filter with ID: ${jobFilterId}`);
+      await BaseApi.delete(`/jobfilter/${jobFilterId}`);
       return jobFilterId;
     } catch (error) {
-      throw new Error("Failed to delete job filter"); // Handle error appropriately
+      throw error;
     }
   }
 
