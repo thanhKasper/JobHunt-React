@@ -208,6 +208,14 @@ export default function ProfilePage() {
                     id="university"
                     variant="outlined"
                     value={profile.university}
+                    onChange={(e) => {
+                      dispatch(
+                        updateProfileField({
+                          field: "university",
+                          value: e.target.value,
+                        })
+                      );
+                    }}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>

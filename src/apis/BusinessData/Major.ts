@@ -1,30 +1,30 @@
 const majors = [
   {
-    key: "none",
+    key: "None",
     value: "Không có chuyên ngành",
   },
   {
-    key: "computerScience",
+    key: "computer_Science",
     value: "Khoa học máy tính",
   },
   {
-    key: "businessAdministration",
+    key: "business_Administration",
     value: "Quản trị kinh doanh",
   },
   {
-    key: "mechanicalEngineering",
+    key: "mechanical_Engineering",
     value: "Kỹ thuật cơ khí",
   },
   {
-    key: "electricalEngineering",
+    key: "electrical_Engineering",
     value: "Kỹ thuật điện",
   },
   {
-    key: "civilEngineering",
+    key: "civil_Engineering",
     value: "Kỹ thuật xây dựng",
   },
   {
-    key: "biomedicalEngineering",
+    key: "biomedical_Engineering",
     value: "Kỹ thuật y sinh",
   },
 ];
