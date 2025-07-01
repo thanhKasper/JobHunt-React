@@ -1,12 +1,14 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import ProjectCard from "@/components/cards/ProjectCard";
 import StatsCard from "@/components/cards/StatCard";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getProjectGeneral, getProjects } from "@/store/slices/projectSlice";
 import {
   Add,
   CalendarTodayRounded,
   CategoryRounded,
   CodeRounded,
+  FolderOpenRounded,
   FolderRounded,
 } from "@mui/icons-material";
 import {
@@ -21,6 +23,8 @@ import {
   styled,
   Typography,
 } from "@mui/material";
+import { useEffect } from "react";
+import { Link } from "react-router";
 
 const StyledButton = styled(Button)(() => ({
   borderRadius: 25,
@@ -56,6 +60,13 @@ const StyledButton = styled(Button)(() => ({
 
 export default function PortfolioPage() {
   const projectState = useAppSelector((state) => state.projectState);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getProjectGeneral());
+    dispatch(getProjects());
+  }, []);
+
   return (
     <Box paddingY={4}>
       {/* Header Section */}
@@ -88,22 +99,21 @@ export default function PortfolioPage() {
             việc của tôi.
           </Typography>
         </Box>
-        <StyledButton
-          // onClick={() => setOpen(true)}
-          LinkComponent={"a"}
-          href="/portfolio/new"
-          variant="contained"
-          startIcon={<Add />}
-          sx={{
-            bgcolor: "rgba(255,255,255,0.2)",
-            color: "white",
-            "&:hover": {
-              bgcolor: "rgba(255,255,255,0.3)",
-            },
-          }}
-        >
-          Thêm Dự Án
-        </StyledButton>
+        <Link to="/portfolio/new">
+          <StyledButton
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              bgcolor: "rgba(255,255,255,0.2)",
+              color: "white",
+              "&:hover": {
+                bgcolor: "rgba(255,255,255,0.3)",
+              },
+            }}
+          >
+            Thêm Dự Án
+          </StyledButton>
+        </Link>
       </HeaderCard>
 
       {/* Project Summary */}
@@ -198,29 +208,157 @@ export default function PortfolioPage() {
       {/* Projects Grid */}
       <Fade in={true} timeout={800}>
         <Grid container spacing={3}>
-          {projectState.projects.map((project, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.projectId}>
-              <Box
-                sx={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
-                  "@keyframes fadeInUp": {
-                    "0%": {
-                      opacity: 0,
-                      transform: "translateY(30px)",
+          {projectState.projects.length > 0 ? (
+            projectState.projects.map((project, index) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.projectId}>
+                <Box
+                  sx={{
+                    animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
+                    "@keyframes fadeInUp": {
+                      "0%": {
+                        opacity: 0,
+                        transform: "translateY(30px)",
+                      },
+                      "100%": {
+                        opacity: 1,
+                        transform: "translateY(0)",
+                      },
                     },
-                    "100%": {
-                      opacity: 1,
-                      transform: "translateY(0)",
-                    },
-                  },
-                }}
-              >
-                <ProjectCard project={project} />
-              </Box>
-            </Grid>
-          ))}
+                  }}
+                >
+                  <ProjectCard project={project} />
+                </Box>
+              </Grid>
+            ))
+          ) : (
+            <EmptyProjectDisplay />
+          )}
         </Grid>
       </Fade>
     </Box>
   );
 }
+
+const EmptyProjectDisplay = () => (
+  <Fade in={true} timeout={800}>
+    <Paper
+      sx={{
+        p: 6,
+        textAlign: "center",
+        borderRadius: 3,
+        bgcolor: "rgba(255,255,255,0.9)",
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(255,255,255,0.2)",
+        minHeight: 400,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          width: 120,
+          height: 120,
+          borderRadius: "50%",
+          bgcolor: "rgba(102, 126, 234, 0.1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 3,
+          animation: "pulse 2s infinite",
+          "@keyframes pulse": {
+            "0%": {
+              transform: "scale(1)",
+              opacity: 0.7,
+            },
+            "50%": {
+              transform: "scale(1.05)",
+              opacity: 1,
+            },
+            "100%": {
+              transform: "scale(1)",
+              opacity: 0.7,
+            },
+          },
+        }}
+      >
+        <FolderOpenRounded
+          sx={{
+            fontSize: 48,
+            color: "rgba(102, 126, 234, 0.6)",
+          }}
+        />
+      </Box>
+
+      <Typography variant="h5" fontWeight={600} color="text.primary" mb={2}>
+        Chưa Có Dự Án Nào
+      </Typography>
+
+      <Typography
+        variant="body1"
+        color="text.secondary"
+        mb={4}
+        sx={{ maxWidth: 500, lineHeight: 1.6 }}
+      >
+        Bạn chưa có dự án nào trong danh sách. Hãy bắt đầu thêm các dự án đầu
+        tiên để xây dựng portfolio ấn tượng của mình!
+      </Typography>
+
+      <Stack>
+        <Link to="/portfolio/new">
+          <StyledButton
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              bgcolor: "primary.main",
+              color: "white",
+              "&:hover": {
+                bgcolor: "primary.dark",
+              },
+            }}
+          >
+            Thêm Dự Án Đầu Tiên
+          </StyledButton>
+        </Link>
+      </Stack>
+
+      <Box mt={4}>
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          Gợi ý các loại dự án bạn có thể thêm:
+        </Typography>
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          justifyContent="center"
+        >
+          {["Web App", "Mobile App", "API", "E-commerce", "Portfolio"].map(
+            (type) => (
+              <Chip
+                key={type}
+                label={type}
+                size="small"
+                variant="outlined"
+                sx={{
+                  borderRadius: 2,
+                  fontWeight: 500,
+                  borderColor: "rgba(102, 126, 234, 0.2)",
+                  color: "text.secondary",
+                  "&:hover": {
+                    bgcolor: "rgba(102, 126, 234, 0.1)",
+                    borderColor: "rgba(102, 126, 234, 0.4)",
+                    transform: "scale(1.02)",
+                  },
+                  transition: "all 0.2s ease",
+                  mb: 1,
+                }}
+              />
+            )
+          )}
+        </Stack>
+      </Box>
+    </Paper>
+  </Fade>
+);

@@ -1,3 +1,4 @@
+import type JobFilterDTO from "@/apis/DTO/JobFilterDTO";
 import StatsCard from "@/components/cards/StatCard";
 import { useAppSelector } from "@/store/hooks";
 import { Edit } from "@mui/icons-material";
@@ -10,6 +11,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { useEffect } from "react";
 
 const StyledButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 12,
@@ -39,14 +41,12 @@ const StatsCardWithAnimation = styled(StatsCard)(() => ({
 }));
 
 export default function JobFilter({
+  jobFilter,
   setEditMode,
 }: {
+  jobFilter: JobFilterDTO;
   setEditMode: (mode: boolean) => void;
 }) {
-  const jobFilter = useAppSelector(
-    (state) => state.jobFilterDetailState.jobFilter
-  );
-
   return (
     <Stack spacing={3}>
       <StatsCardWithAnimation>
@@ -77,15 +77,17 @@ export default function JobFilter({
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                {jobFilter.jobFilterName}
+                {jobFilter.title}
               </Typography>
             </Stack>
           </Box>
 
           <Tooltip title="Chỉnh Sửa Bộ Lọc" arrow>
-            <StyledButton disabled onClick={() => setEditMode(true)}>
-              <Edit />
-            </StyledButton>
+            <span>
+              <StyledButton disabled onClick={() => setEditMode(true)}>
+                <Edit />
+              </StyledButton>
+            </span>
           </Tooltip>
         </Stack>
       </StatsCardWithAnimation>
@@ -103,7 +105,7 @@ export default function JobFilter({
 
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="body1" fontWeight={500}>
-            {jobFilter.filterOccupation}
+            {jobFilter.occupation}
           </Typography>
         </Stack>
       </StatsCardWithAnimation>
@@ -121,7 +123,7 @@ export default function JobFilter({
 
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="body1" fontWeight={500}>
-            {jobFilter.desireWorkingLocation}
+            {jobFilter.location}
           </Typography>
         </Stack>
       </StatsCardWithAnimation>
@@ -139,7 +141,7 @@ export default function JobFilter({
 
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="body1" fontWeight={500}>
-            {jobFilter.jobLevel}
+            {jobFilter.level}
           </Typography>
         </Stack>
       </StatsCardWithAnimation>
@@ -157,7 +159,7 @@ export default function JobFilter({
 
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="body1" fontWeight={500}>
-            {jobFilter.exp} Năm
+            {jobFilter.yearsOfExperience} Năm
           </Typography>
         </Stack>
       </StatsCardWithAnimation>
@@ -270,7 +272,7 @@ export default function JobFilter({
         </Typography>
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          {jobFilter.softSkills.map((chip, chipIndex) => (
+          {jobFilter.languages.map((chip, chipIndex) => (
             <Chip
               key={chipIndex}
               label={chip}

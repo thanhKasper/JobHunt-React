@@ -30,6 +30,10 @@ import {
 } from "@mui/material";
 import { Link } from "react-router";
 import InfoCard from "./InfoCard";
+import {
+  getJobFilter,
+  getJobsBaseOnFilter,
+} from "@/store/slices/jobFilterDetailSlice";
 // import theme from "@/layouts/Theme";
 
 interface JobFilterCardProps {
@@ -50,6 +54,11 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
 
   const handleDelete = () => {
     dispatch(deleteJobFilter(jobFilter.jobFilterId));
+  };
+
+  const handleJobFilterViewDetail = () => {
+    dispatch(getJobFilter(jobFilter.jobFilterId));
+    dispatch(getJobsBaseOnFilter(jobFilter.jobFilterId));
   };
 
   return (
@@ -73,6 +82,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
               <MuiLink
                 component={Link}
                 to={jobFilter.jobFilterId}
+                onClick={handleJobFilterViewDetail}
                 underline="none"
                 sx={{
                   fontSize: "1.25rem",
@@ -86,7 +96,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                   },
                 }}
               >
-                {jobFilter.jobFilterName}
+                {jobFilter.title}
               </MuiLink>
               <ChevronRight
                 sx={{
@@ -152,7 +162,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                     jobFilter.isActive ? "text.secondary" : "text.disabled"
                   }
                 >
-                  {jobFilter.filterOccupation}
+                  {jobFilter.occupation}
                 </Typography>
               </Stack>
 
@@ -210,6 +220,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                     "& .MuiChip-icon": {
                       marginLeft: 1,
                     },
+                    width: "fit-content",
                   }}
                 />
               </Zoom>

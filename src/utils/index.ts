@@ -5,17 +5,18 @@ export function headCase(str: string): string {
     .join(" ");
 }
 
-export function jwtPayloadExtract(jwt: string | null): {
+export function jwtPayloadExtract(jwt: string | undefined | null): {
   userId: string;
   name: string;
   email: string;
 } {
-  if (jwt == null)
+  if (jwt == undefined || jwt == "undefined") {
     return {
       userId: "",
       name: "",
       email: "",
     };
+  }
 
   const payloadBase64 = jwt.split(".")[1];
 

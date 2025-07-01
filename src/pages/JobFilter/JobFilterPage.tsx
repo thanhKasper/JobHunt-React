@@ -1,7 +1,10 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { filterJobFilters } from "@/store/slices/jobFilterSlice";
+import {
+  filterJobFilters,
+  getGeneralJobFilterPage,
+} from "@/store/slices/jobFilterSlice";
 import {
   Add,
   AutoAwesome,
@@ -19,15 +22,20 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import JobFilterCard from "../../components/cards/JobFilterCard";
 import AddButton from "./components/AddButton";
+import { Link } from "react-router";
 
 export default function JobFilterPage() {
   const [filterType, setFilterType] = React.useState("Tất cả");
   const dispatch = useAppDispatch();
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
   const totalJobs = useAppSelector((state) => state.jobState.totalJobs);
+
+  useEffect(() => {
+    dispatch(getGeneralJobFilterPage());
+  }, []);
 
   return (
     <Box paddingY={4}>
@@ -67,21 +75,21 @@ export default function JobFilterPage() {
             spacing={2}
             sx={{ zIndex: 1 }}
           >
-            <AddButton
-              LinkComponent={"a"}
-              href="/job-filters/new"
-              variant="contained"
-              startIcon={<Add />}
-              sx={{
-                bgcolor: "rgba(255,255,255,0.2)",
-                color: "white",
-                "&:hover": {
-                  bgcolor: "rgba(255,255,255,0.3)",
-                },
-              }}
-            >
-              Thêm Bộ Lọc
-            </AddButton>
+            <Link to="/job-filters/new">
+              <AddButton
+                variant="contained"
+                startIcon={<Add />}
+                sx={{
+                  bgcolor: "rgba(255,255,255,0.2)",
+                  color: "white",
+                  "&:hover": {
+                    bgcolor: "rgba(255,255,255,0.3)",
+                  },
+                }}
+              >
+                Thêm Bộ Lọc
+              </AddButton>
+            </Link>
           </Stack>
         </Stack>
       </HeaderCard>
@@ -172,7 +180,7 @@ export default function JobFilterPage() {
         <Fade in={true} timeout={800}>
           <Grid container spacing={3}>
             {jobFilterState.filteredJobFilters.map((jobFilter, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={index}>
                 <Box
                   sx={{
                     animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
@@ -224,8 +232,6 @@ export default function JobFilterPage() {
           </AddButton>
         </Paper>
       )}
-
-      {/* <CreateJobFilterPage open={open} toggleDrawer={setOpen} /> */}
     </Box>
   );
 }

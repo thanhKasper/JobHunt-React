@@ -1,23 +1,29 @@
 import type JobFilterCreationDTO from "@/apis/DTO/JobFilterCreationDTO";
 import JobFilterApi from "@/apis/JobFilterApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { AxiosError } from "axios";
+import { logout } from "./authenticationSlice";
 
 interface JobFilterCreateState {
-  //   jobFilterForm: JobFilterDTO;
   errors: Record<keyof JobFilterCreationDTO, string[]>;
   state: "idle" | "loading" | "succeeded" | "failed";
 }
 
 const createNewJobFilter = createAsyncThunk(
   "jobFilterCreate/createNewJobFilter",
-  async (jobFilter: JobFilterCreationDTO) => {
+  async (jobFilter: JobFilterCreationDTO, thunkApi) => {
     try {
-      const message = await JobFilterApi.createJobFilter(jobFilter);
-      //   console.log("New job filter created successfully:", message);
-      return message;
+      await JobFilterApi.createJobFilter(jobFilter);
     } catch (error) {
-      console.error("Error creating new job filter:", error);
-      throw error;
+      const axiosError = error as AxiosError;
+      if (axiosError.status == 452) return thunkApi.dispatch(logout()); // logout when refresh token is expired
+      const validationErrors = (axiosError.response?.data as any)
+        .errors as Record<string, string[]>;
+      return thunkApi.rejectWithValue({
+        jobFilterName: validationErrors["FilterTitle"],
+        expectedExp: validationErrors["YearsOfExperience"],
+        filterOccupation: validationErrors["Occupation"],
+      } as Record<string, string[]>);
     }
   }
 );
@@ -26,31 +32,25 @@ const jobFilterCreateSlice = createSlice({
   name: "jobFilterCreate",
   initialState: {
     state: "idle",
-    // jobFilterForm: {},
     errors: {},
   } as JobFilterCreateState,
-  reducers: {},
+  reducers: {
+    jobfilterFormSwitchToNormal: (state) => {
+      state.state = "idle"
+    }
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(createNewJobFilter.pending, (state) => {
-        // Handle pending state if needed
-        state.state = "loading";
-      })
-      .addCase(createNewJobFilter.fulfilled, (state, action) => {
-        // Handle successful creation of job filter
-        console.log("Job filter created:", action.payload);
-        // state.isSuccess = true;
+      .addCase(createNewJobFilter.fulfilled, (state) => {
         state.state = "succeeded";
       })
       .addCase(createNewJobFilter.rejected, (state, action) => {
-        // Handle error in job filter creation
         state.state = "failed";
-        console.log(action);
-        console.error("Failed to create job filter:", action.error.message);
+        state.errors = action.payload as any;
       });
   },
 });
 
-export const {} = jobFilterCreateSlice.actions;
+export const {jobfilterFormSwitchToNormal} = jobFilterCreateSlice.actions;
 export { createNewJobFilter };
 export default jobFilterCreateSlice.reducer;

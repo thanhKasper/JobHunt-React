@@ -7,6 +7,7 @@ import profileReducer from "./slices/profileSlice";
 import projectCreationReducer from "./slices/projectNewSlice";
 import projectReducer from "./slices/projectSlice";
 import authenReducer from "./slices/authenticationSlice";
+import projectUpdateReducer from "./slices/projectUpdateSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     projectState: projectReducer,
     projectCreationState: projectCreationReducer,
     profileState: profileReducer,
+    projectUpdateState: projectUpdateReducer,
   },
 });
 

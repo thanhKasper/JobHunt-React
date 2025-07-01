@@ -22,6 +22,7 @@ import {
   Card,
   CardContent,
   FormControl,
+  FormHelperText,
   Grid,
   InputAdornment,
   InputLabel,
@@ -34,7 +35,12 @@ import {
 import { ListFilterPlus } from "lucide-react";
 import useCreateJobFilter from "./CreateJobFilterPage.Hook";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { createNewJobFilter } from "@/store/slices/jobFilterCreateSlice";
+import {
+  createNewJobFilter,
+  jobfilterFormSwitchToNormal,
+} from "@/store/slices/jobFilterCreateSlice";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
 export default function CreateJobFilterPage() {
   const jobFilterCreationForm = useCreateJobFilter();
@@ -42,8 +48,17 @@ export default function CreateJobFilterPage() {
   const jobFilterCreationResult = useAppSelector(
     (state) => state.jobFilterCreationState
   );
+  const navigate = useNavigate();
+  const handleSubmit = () => {
+    dispatch(createNewJobFilter(jobFilterCreationForm.toJobFilterDTO()));
+  };
 
-  console.log("Job Filter Creation Result:", jobFilterCreationResult);
+  useEffect(() => {
+    if (jobFilterCreationResult.state == "succeeded") {
+      navigate("/job-filters");
+      jobfilterFormSwitchToNormal();
+    }
+  });
 
   return (
     <Box paddingY={4}>
@@ -94,6 +109,8 @@ export default function CreateJobFilterPage() {
                 jobFilterCreationForm.updateFilterTitle(e.target.value)
               }
               placeholder="Ví dụ: Công việc IT tại TP.HCM"
+              error={!!jobFilterCreationResult.errors?.jobFilterName}
+              helperText={jobFilterCreationResult.errors?.jobFilterName}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -143,6 +160,7 @@ export default function CreateJobFilterPage() {
                       jobFilterCreationForm.updateOccupation(e.target.value)
                     }
                     label="Ngành Nghề"
+                    error={!!jobFilterCreationResult.errors.filterOccupation}
                   >
                     {occupationList.map((occupation) => (
                       <MenuItem key={occupation.key} value={occupation.key}>
@@ -150,6 +168,11 @@ export default function CreateJobFilterPage() {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText
+                    error={!!jobFilterCreationResult.errors.filterOccupation}
+                  >
+                    {jobFilterCreationResult.errors.filterOccupation}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
 
@@ -201,6 +224,8 @@ export default function CreateJobFilterPage() {
                       parseInt(e.target.value, 10) || 0
                     )
                   }
+                  error={!!jobFilterCreationResult.errors.expectedExp}
+                  helperText={jobFilterCreationResult.errors.expectedExp}
                   placeholder="Ví dụ: 2"
                   slotProps={{
                     input: {
@@ -336,34 +361,30 @@ export default function CreateJobFilterPage() {
       {/* Sticky Footer */}
 
       <Stack direction="row" spacing={2} justifyContent="flex-end">
-        <Button
-          LinkComponent={"a"}
-          href="/job-filters"
-          variant="outlined"
-          size="large"
-          startIcon={<Close />}
-          sx={{
-            px: 4,
-            py: 1.5,
-            borderRadius: 3,
-            textTransform: "none",
-            fontWeight: 600,
-            borderWidth: 2,
-            "&:hover": {
+        <Link to="/job-filters">
+          <Button
+            variant="outlined"
+            size="large"
+            startIcon={<Close />}
+            sx={{
+              px: 4,
+              py: 1.5,
+              borderRadius: 3,
+              textTransform: "none",
+              fontWeight: 600,
               borderWidth: 2,
-              transform: "translateY(-1px)",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            },
-          }}
-        >
-          Hủy
-        </Button>
+              "&:hover": {
+                borderWidth: 2,
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              },
+            }}
+          >
+            Hủy
+          </Button>
+        </Link>
         <Button
-          onClick={() => {
-            dispatch(
-              createNewJobFilter(jobFilterCreationForm.toJobFilterDTO())
-            );
-          }}
+          onClick={handleSubmit}
           variant="contained"
           size="large"
           startIcon={<Send />}

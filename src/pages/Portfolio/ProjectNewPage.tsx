@@ -29,12 +29,12 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { Link, useNavigate } from "react-router";
 
 const ProjectNewPage = () => {
-  const newProject = useAppSelector(
-    (state) => state.projectCreationState.newProject
-  );
+  const newProjectState = useAppSelector((state) => state.projectCreationState);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <Box paddingY={4}>
@@ -73,7 +73,7 @@ const ProjectNewPage = () => {
                     required
                     placeholder="Nhập tên dự án..."
                     variant="outlined"
-                    value={newProject.projectName}
+                    value={newProjectState.newProject.projectName}
                     onChange={(e) =>
                       dispatch(
                         updateField({
@@ -82,6 +82,8 @@ const ProjectNewPage = () => {
                         })
                       )
                     }
+                    error={!!newProjectState.errors.projectName}
+                    helperText={newProjectState.errors.projectName}
                   />
                 </Grid>
                 <Grid size={12}>
@@ -93,7 +95,9 @@ const ProjectNewPage = () => {
                     rows={4}
                     placeholder="Mô tả chi tiết về dự án của bạn..."
                     variant="outlined"
-                    value={newProject.projectDescription}
+                    value={newProjectState.newProject.projectDescription}
+                    error={!!newProjectState.errors.projectDescription}
+                    helperText={newProjectState.errors.projectDescription}
                     onChange={(e) =>
                       dispatch(
                         updateField({
@@ -121,24 +125,31 @@ const ProjectNewPage = () => {
               <Grid container spacing={3}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Grid size={12}>
-                    <DatePicker
-                      label="Ngày Bắt Đầu"
-                      sx={{ width: "100%" }}
-                      views={["month", "year"]}
-                      value={
-                        newProject.startDate.length == 0
-                          ? null
-                          : dayjs(newProject.startDate)
-                      }
-                      onChange={(date) =>
-                        dispatch(
-                          updateField({
-                            field: "startDate",
-                            value: date ? date.toISOString() : "",
-                          })
-                        )
-                      }
-                    />
+                    <FormControl>
+                      <DatePicker
+                        label="Ngày Bắt Đầu"
+                        sx={{ width: "100%" }}
+                        views={["month", "year"]}
+                        value={
+                          newProjectState.newProject.startDate.length == 0
+                            ? null
+                            : dayjs(newProjectState.newProject.startDate)
+                        }
+                        onChange={(date) =>
+                          dispatch(
+                            updateField({
+                              field: "startDate",
+                              value: date ? date.toISOString() : "",
+                            })
+                          )
+                        }
+                      />
+                      <FormHelperText
+                        error={!!newProjectState.errors.startDate}
+                      >
+                        {newProjectState.errors.startDate}
+                      </FormHelperText>
+                    </FormControl>
                   </Grid>
                   <Grid size={12}>
                     <FormControl fullWidth>
@@ -147,7 +158,9 @@ const ProjectNewPage = () => {
                         views={["month", "year"]}
                         sx={{ width: "100%" }}
                         value={
-                          newProject.endDate ? dayjs(newProject.endDate) : null
+                          newProjectState.newProject.endDate
+                            ? dayjs(newProjectState.newProject.endDate)
+                            : null
                         }
                         onChange={(date) =>
                           dispatch(
@@ -158,8 +171,9 @@ const ProjectNewPage = () => {
                           )
                         }
                       />
-                      <FormHelperText>
-                        Để trống nếu dự án chưa hoàn thành
+                      <FormHelperText error={!!newProjectState.errors.endDate}>
+                        {newProjectState.errors.endDate ??
+                          "Để trống nếu dự án chưa hoàn thành"}
                       </FormHelperText>
                     </FormControl>
                   </Grid>
@@ -181,7 +195,7 @@ const ProjectNewPage = () => {
               </Box>
               <TagInput
                 label="Vai Trò"
-                value={newProject.roles}
+                value={newProjectState.newProject.roles}
                 onTagChange={(tags) =>
                   dispatch(
                     updateField({
@@ -190,6 +204,8 @@ const ProjectNewPage = () => {
                     })
                   )
                 }
+                error={!!newProjectState.errors.roles}
+                helperText={newProjectState.errors.roles}
               />
             </CardContent>
           </Card>
@@ -205,7 +221,7 @@ const ProjectNewPage = () => {
               </Box>
               <TagInput
                 label="Công Nghệ/Kỹ Thuật"
-                value={newProject.techOrSkills}
+                value={newProjectState.newProject.techOrSkills}
                 onTagChange={(tags) =>
                   dispatch(
                     updateField({
@@ -231,7 +247,7 @@ const ProjectNewPage = () => {
             <LongTextInput
               label="Điểm Nổi Bật"
               placeholder=""
-              textList={newProject.features}
+              textList={newProjectState.newProject.features}
               onListChange={(features) =>
                 dispatch(
                   updateField({
@@ -271,7 +287,7 @@ const ProjectNewPage = () => {
                     },
                   }}
                   variant="outlined"
-                  value={newProject.projectLink || null}
+                  value={newProjectState.newProject.projectLink || null}
                   onChange={(e) =>
                     dispatch(
                       updateField({
@@ -298,7 +314,7 @@ const ProjectNewPage = () => {
                     },
                   }}
                   variant="outlined"
-                  value={newProject.liveDemoLink || null}
+                  value={newProjectState.newProject.liveDemoLink || null}
                   onChange={(e) =>
                     dispatch(
                       updateField({
@@ -315,18 +331,21 @@ const ProjectNewPage = () => {
 
         {/* Submit Buttons */}
         <Box sx={{ display: "flex", gap: 2, justifyContent: "center", pt: 4 }}>
-          <Button
-            href="/portfolio"
-            variant="outlined"
-            size="large"
-            sx={{ px: 4, py: 1.5 }}
-          >
-            Trở Lại
-          </Button>
+          <Link to={"/portfolio"}>
+            <Button variant="outlined" size="large" sx={{ px: 4, py: 1.5 }}>
+              Trở Lại
+            </Button>
+          </Link>
           <Button
             variant="contained"
             size="large"
-            onClick={() => dispatch(createNewProject(newProject))}
+            onClick={() => {
+              dispatch(createNewProject(newProjectState.newProject)).then(
+                () => {
+                  navigate("/portfolio");
+                }
+              );
+            }}
             sx={{
               px: 4,
               py: 1.5,

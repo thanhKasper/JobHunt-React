@@ -15,9 +15,11 @@ export class AuthenAPI extends BaseApi {
   static async signup(signupData: SignupDTO): Promise<AuthenticationResponse> {
     try {
       const response = await this.post<AuthenticationResponse>(
-        "/api/account/register",
+        "/account/register",
         signupData
       );
+      window.localStorage.setItem("token", response.token);
+      window.localStorage.setItem("refreshToken", response.refreshToken);
       return response;
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -31,9 +33,11 @@ export class AuthenAPI extends BaseApi {
   static async signin(signinData: SigninDTO): Promise<AuthenticationResponse> {
     try {
       const response = await this.post<AuthenticationResponse>(
-        "/api/account/login",
+        "/account/login",
         signinData
       );
+      window.localStorage.setItem("token", response.token);
+      window.localStorage.setItem("refreshToken", response.refreshToken);
       return response;
     } catch (err) {
       const axiosError = err as AxiosError;
