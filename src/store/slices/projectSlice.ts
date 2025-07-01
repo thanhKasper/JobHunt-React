@@ -13,21 +13,15 @@ interface ProjectState {
   projectsLoadingState: FetchingState;
 }
 
-const [
+const {
+  mostUsedTech,
+  totalCompleteProjects,
   totalProjects,
-  totalCompletedProjects,
-  projects,
-  mainTechnologies,
-  toolsCount,
-  rolesCount,
-] = await Promise.all([
-  ProjectApi.getTotalProjects(),
-  ProjectApi.getCompletedProjects(),
-  ProjectApi.getProjects(),
-  ProjectApi.getMainTechnologies(),
-  ProjectApi.getToolsCount(),
-  ProjectApi.getRolesCount(),
-]);
+  totalRoles,
+  totalUsedTools,
+} = await ProjectApi.getGeneralInfo();
+
+const projects = await ProjectApi.getProjects();
 
 const editProject = createAsyncThunk(
   "project/editProject",
@@ -43,10 +37,10 @@ const projectSlice = createSlice({
   initialState: {
     projectsLoadingState: "idle",
     totalProjects: totalProjects,
-    totalCompletedProjects: totalCompletedProjects,
-    toolsCount: toolsCount,
-    rolesCount: rolesCount,
-    mainTechnologies: mainTechnologies,
+    totalCompletedProjects: totalCompleteProjects,
+    toolsCount: totalUsedTools,
+    rolesCount: totalRoles,
+    mainTechnologies: mostUsedTech,
     projects: projects,
   } as ProjectState,
   reducers: {},

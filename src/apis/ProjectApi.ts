@@ -1,3 +1,4 @@
+import { BaseApi } from "./BaseApi";
 import type ProjectDTO from "./DTO/ProjectDTO";
 
 export class ProjectApi {
@@ -56,33 +57,20 @@ export class ProjectApi {
     // Replace with actual API call logic
   }
 
-  public static async getTotalProjects(): Promise<number> {
-    // Simulate API call to get total projects
-    // Replace with actual API call logic
-    return 3; // Mocked value, replace with actual API call
-  }
-
-  public static async getCompletedProjects(): Promise<number> {
-    // Simulate API call to get completed projects
-    // Replace with actual API call logic
-    return 2; // Mocked value, replace with actual API call
-  }
-
-  public static async getMainTechnologies(): Promise<string[]> {
-    // Simulate API call to get main technologies
-    // Replace with actual API call logic
-    return ["AI", "Machine Learning", "React", "Node.js", "Flutter"];
-  }
-
-  public static async getToolsCount(): Promise<number> {
-    // Simulate API call to get tools count
-    // Replace with actual API call logic
-    return 5; // Mocked value, replace with actual API call
-  }
-
-  public static async getRolesCount(): Promise<number> {
-    // Simulate API call to get roles count
-    // Replace with actual API call logic
-    return 3; // Mocked value, replace with actual API call
+  public static async getGeneralInfo(): Promise<{
+    totalProjects: number,
+    totalCompleteProjects: number,
+    totalRoles: number,
+    totalUsedTools: number,
+    mostUsedTech: string[]
+  }> {
+    try {
+      const res = await BaseApi.get("/project/general-info")
+      console.log(res)
+      return res as any;
+    }
+    catch (err) {
+      throw err;
+    }
   }
 }
