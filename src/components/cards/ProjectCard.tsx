@@ -35,27 +35,27 @@ export default function ProjectCard({ project }: { project: ProjectDTO }) {
     <InfoCard elevation={2}>
       <CardContent sx={{ p: 3 }}>
         {/* Project Title */}
-        <Typography
-          component={Link}
-          to={`/portfolio/${project.projectId}`}
-          className="project-title"
-          variant="h6"
-          sx={{
-            textDecoration: "none",
-            fontWeight: 700,
-            mb: 1.5,
-            fontSize: "1.25rem",
-            lineHeight: 1.3,
-            transition: "color 0.3s ease",
-            color: "text.primary",
-            display: "block",
-            "&:hover": {
+        <Link to={`/portfolio/${project.projectId}`}>
+          <Typography
+            className="project-title"
+            variant="h6"
+            sx={{
               textDecoration: "none",
-            },
-          }}
-        >
-          {project.projectName}
-        </Typography>
+              fontWeight: 700,
+              mb: 1.5,
+              fontSize: "1.25rem",
+              lineHeight: 1.3,
+              transition: "color 0.3s ease",
+              color: "text.primary",
+              display: "block",
+              "&:hover": {
+                textDecoration: "none",
+              },
+            }}
+          >
+            {project.projectName}
+          </Typography>
+        </Link>
 
         {/* Project Duration */}
         <Stack direction="row" alignItems="center" spacing={1} mb={2}>
@@ -183,15 +183,15 @@ export default function ProjectCard({ project }: { project: ProjectDTO }) {
       </CardContent>
 
       <CardActions sx={{ p: 3, pt: 0 }}>
-        <ViewButton
-          LinkComponent={"a"}
-          href={`portfolio/${project.projectId}`}
-          size="small"
-          className="view-button"
-          startIcon={<Visibility />}
-        >
-          Xem Chi Tiết
-        </ViewButton>
+        <Link to={`/portfolio/${project.projectId}`}>
+          <ViewButton
+            size="small"
+            className="view-button"
+            startIcon={<Visibility />}
+          >
+            Xem Chi Tiết
+          </ViewButton>
+        </Link>
       </CardActions>
     </InfoCard>
   );

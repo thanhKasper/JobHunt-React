@@ -3,73 +3,97 @@ import type ProjectDTO from "./DTO/ProjectDTO";
 
 export class ProjectApi {
   public static async getProjects(): Promise<ProjectDTO[]> {
-    return [
-      {
-        projectId: "1",
-        projectName: "Project Alpha",
-        projectDescription: "A groundbreaking project in AI.",
-        roles: ["Developer", "Designer"],
-        startDate: "2023-01-01",
-        endDate: "2023-12-31",
-        techOrSkills: ["AI", "Machine Learning"],
-        projectLink: "https://example.com/project-alpha",
-        features: ["Feature A", "Feature B"],
-        liveDemoLink: "https://example.com/demo-alpha",
-      },
-      {
-        projectId: "2",
-        projectName: "Project Beta",
-        projectDescription: "An innovative web application.",
-        roles: ["Frontend Developer", "Backend Developer"],
-        startDate: "2023-02-01",
-        endDate: "2023-11-30",
-        techOrSkills: ["React", "Node.js"],
-        projectLink: "https://example.com/project-beta",
-        features: ["Feature X", "Feature Y"],
-        liveDemoLink: "https://example.com/demo-beta",
-      },
-      {
-        projectId: "3",
-        projectName: "Project Gamma",
-        projectDescription: "A mobile app for productivity.",
-        roles: ["Mobile Developer", "UI/UX Designer"],
-        startDate: "2023-03-01",
-        endDate: "2023-10-31",
-        techOrSkills: ["Flutter", "Firebase"],
-        projectLink: "https://example.com/project-gamma",
-        features: ["Feature 1", "Feature 2"],
-        liveDemoLink: "https://example.com/demo-gamma",
-      },
-    ];
+    try {
+      const projectList = (await BaseApi.get("project")) as Array<any>;
+      return projectList.map(
+        (ele: any) =>
+          ({
+            ...ele,
+            projectName: ele.projectTitle,
+            techOrSkills: ele.technologiesOrSkills,
+            projectDescription: ele.description,
+            liveDemoLink: ele.demoLink,
+          } as ProjectDTO)
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public static async getProject(id: string): Promise<ProjectDTO> {
+    try {
+      const project = (await BaseApi.get("project/" + id)) as any;
+      return {
+        ...project,
+        projectName: project.projectTitle,
+        techOrSkills: project.technologiesOrSkills,
+        projectDescription: project.description,
+        liveDemoLink: project.demoLink,
+      } as ProjectDTO;
+    } catch (err) {
+      throw err;
+    }
   }
 
   public static async updateProject(project: ProjectDTO): Promise<ProjectDTO> {
-    // Simulate API call to update project
-    // Replace with actual API call logic
-    console.log("Updating project:", project);
-    return project; // Mocked response, replace with actual API response
+    try {
+      const updatedProject = (await BaseApi.put(
+        "project/" + project.projectId,
+        {
+          ...project,
+          projectTitle: project.projectName,
+          description: project.projectDescription,
+          technologiesOrSkills: project.techOrSkills,
+          demoLink: project.liveDemoLink,
+        }
+      )) as any;
+      return {
+        ...updatedProject,
+        projectName: updatedProject.projectName,
+        techOrSkills: updatedProject.techOrSkills,
+        projectDescription: updatedProject.projectDescription,
+        liveDemoLink: updatedProject.liveDemoLink,
+      } as ProjectDTO;
+    } catch (err) {
+      throw err;
+    }
   }
 
   public static async createProject(project: ProjectDTO): Promise<ProjectDTO> {
-    console.log("Creating new project:", project);
-    return project;
-    // Simulate API call to create a new project
-    // Replace with actual API call logic
+    try {
+      const sendingBody = {
+        ...project,
+        projectTitle: project.projectName,
+        description: project.projectDescription,
+        technologiesOrSkills: project.techOrSkills,
+      };
+      await BaseApi.post("project", sendingBody);
+      return project;
+    } catch (err) {
+      throw err;
+    }
   }
 
   public static async getGeneralInfo(): Promise<{
-    totalProjects: number,
-    totalCompleteProjects: number,
-    totalRoles: number,
-    totalUsedTools: number,
-    mostUsedTech: string[]
+    totalProjects: number;
+    totalCompleteProjects: number;
+    totalRoles: number;
+    totalUsedTools: number;
+    mostUsedTech: string[];
   }> {
     try {
-      const res = await BaseApi.get("/project/general-info")
-      console.log(res)
+      const res = await BaseApi.get("/project/general-info");
       return res as any;
+    } catch (err) {
+      throw err;
     }
-    catch (err) {
+  }
+
+  public static async deleteProject(id: string) {
+    try {
+      const res = await BaseApi.delete("project/" + id);
+      return res;
+    } catch (err) {
       throw err;
     }
   }
