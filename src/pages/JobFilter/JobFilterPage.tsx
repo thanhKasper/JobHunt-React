@@ -1,10 +1,7 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import StatsCard from "@/components/cards/StatCard";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  filterJobFilters,
-  getGeneralJobFilterPage,
-} from "@/store/slices/jobFilterSlice";
+import { filterJobFilters } from "@/store/slices/jobFilterSlice";
 import {
   Add,
   AutoAwesome,
@@ -22,20 +19,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
+import { Link } from "react-router";
 import JobFilterCard from "../../components/cards/JobFilterCard";
 import AddButton from "./components/AddButton";
-import { Link } from "react-router";
 
 export default function JobFilterPage() {
   const [filterType, setFilterType] = React.useState("Tất cả");
   const dispatch = useAppDispatch();
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
   const totalJobs = useAppSelector((state) => state.jobState.totalJobs);
-
-  useEffect(() => {
-    dispatch(getGeneralJobFilterPage());
-  }, []);
 
   return (
     <Box paddingY={4}>

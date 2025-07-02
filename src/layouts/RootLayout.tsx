@@ -4,6 +4,7 @@ import Navigation from "../components/navigation/Navigation";
 import theme from "./Theme";
 
 const RootLayout = () => {
+  console.log("This is root layout");
   return (
     <ThemeProvider theme={theme}>
       <Navigation />

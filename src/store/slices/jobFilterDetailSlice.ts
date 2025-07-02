@@ -6,6 +6,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { AxiosError } from "axios";
 import { logout } from "./authenticationSlice";
 
+console.info("This is jobFilterDetailSlice.ts")
+
 interface JobFilterDetailState {
   jobFilterState: "idle" | "loading" | "succeeded" | "failed";
   jobFilter: JobFilterDTO;
@@ -42,8 +44,7 @@ const getJobFilter = createAsyncThunk(
       const response = await JobFilterApi.getJobFilter(jobFilterId);
       return thunkApi.fulfillWithValue(response);
     } catch (err) {
-      if (((err as AxiosError).status = 452))
-        return thunkApi.dispatch(logout());
+      if (((err as AxiosError).status = 452)) thunkApi.dispatch(logout());
     }
   }
 );

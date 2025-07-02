@@ -30,10 +30,6 @@ import {
 } from "@mui/material";
 import { Link } from "react-router";
 import InfoCard from "./InfoCard";
-import {
-  getJobFilter,
-  getJobsBaseOnFilter,
-} from "@/store/slices/jobFilterDetailSlice";
 // import theme from "@/layouts/Theme";
 
 interface JobFilterCardProps {
@@ -54,11 +50,6 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
 
   const handleDelete = () => {
     dispatch(deleteJobFilter(jobFilter.jobFilterId));
-  };
-
-  const handleJobFilterViewDetail = () => {
-    dispatch(getJobFilter(jobFilter.jobFilterId));
-    dispatch(getJobsBaseOnFilter(jobFilter.jobFilterId));
   };
 
   return (
@@ -82,7 +73,6 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
               <MuiLink
                 component={Link}
                 to={jobFilter.jobFilterId}
-                onClick={handleJobFilterViewDetail}
                 underline="none"
                 sx={{
                   fontSize: "1.25rem",

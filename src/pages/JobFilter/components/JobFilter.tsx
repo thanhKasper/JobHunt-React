@@ -1,6 +1,5 @@
 import type JobFilterDTO from "@/apis/DTO/JobFilterDTO";
 import StatsCard from "@/components/cards/StatCard";
-import { useAppSelector } from "@/store/hooks";
 import { Edit } from "@mui/icons-material";
 import {
   Box,
@@ -11,7 +10,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
 
 const StyledButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 12,

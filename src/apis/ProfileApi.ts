@@ -8,7 +8,7 @@ export class ProfileApi extends BaseApi {
     email: string;
   } | null> {
     try {
-      const data: any = await this.get("/api/profile/simple-profile");
+      const data: any = await this.get("profile/simple-profile");
       return {
         userId: data.UserId,
         fullName: data.FullName,

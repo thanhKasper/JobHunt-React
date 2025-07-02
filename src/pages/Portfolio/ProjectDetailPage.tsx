@@ -1,4 +1,5 @@
 import HeaderCard from "@/components/cards/HeaderCard";
+import useFetch from "@/hooks/useFetch";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteProject, getProjectDetail } from "@/store/slices/projectSlice";
 import {
@@ -25,7 +26,6 @@ import {
   useTheme,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
 const ProjectDetailPage = () => {
@@ -36,9 +36,7 @@ const ProjectDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getProjectDetail(projectId));
-  }, []);
+  useFetch(() => getProjectDetail(projectId));
 
   const handleDeleteProject = () => {
     dispatch(deleteProject(projectId)).then(() => navigate("/portfolio"));

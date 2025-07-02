@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getGeneralJobFilterPage } from "@/store/slices/jobFilterSlice";
-import { getProjects } from "@/store/slices/projectSlice";
+import { getProjectGeneral, getProjects } from "@/store/slices/projectSlice";
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 
@@ -13,7 +13,7 @@ const AuthenticatedRoute = () => {
     if (!authState.isAuthenticated) navigate("/login");
     else {
       dispatch(getGeneralJobFilterPage());
-      dispatch(getProjects());
+      dispatch(getProjectGeneral());
     }
   });
 

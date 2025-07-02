@@ -1,8 +1,8 @@
 import { AuthenAPI } from "@/apis/AuthenAPI";
 import type SignupDTO from "@/apis/DTO/SignupDTO";
-import { ProfileApi } from "@/apis/ProfileApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+console.info("This is authenticationSlice.ts")
 interface AuthenticationState {
   isAuthenticated: boolean;
   user: {
@@ -17,14 +17,14 @@ interface AuthenticationState {
   };
 }
 
-const simpleProfile = await ProfileApi.getSimpleProfile();
+// const simpleProfile = await ProfileApi.getSimpleProfile();
 
 const initialState: AuthenticationState = {
   isAuthenticated: !!window.localStorage.getItem("token"),
   user: {
-    userId: simpleProfile?.userId ?? "",
-    fullname: simpleProfile?.fullName ?? "",
-    email: simpleProfile?.email ?? "",
+    email: "",
+    fullname: "",
+    userId: "",
   },
   errors: {},
 };

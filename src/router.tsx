@@ -13,6 +13,8 @@ import LoginPage from "@pages/Authentication/LoginPage";
 import RegisterPage from "@pages/Authentication/RegisterPage";
 import AuthenticatedRoute from "@/layouts/AuthenticatedRoute";
 
+console.log("This is router.tsx")
+
 let router = createBrowserRouter([
   {
     path: "/",

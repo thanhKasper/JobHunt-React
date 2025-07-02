@@ -11,6 +11,8 @@ import { CssBaseline } from "@mui/material";
 import { Provider } from "react-redux";
 import store from "@/store"
 
+console.info("This is main.tsx")
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>

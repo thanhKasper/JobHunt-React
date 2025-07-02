@@ -1,8 +1,9 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import ProjectCard from "@/components/cards/ProjectCard";
 import StatsCard from "@/components/cards/StatCard";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { getProjectGeneral, getProjects } from "@/store/slices/projectSlice";
+import useFetch from "@/hooks/useFetch";
+import { useAppSelector } from "@/store/hooks";
+import { getProjects } from "@/store/slices/projectSlice";
 import {
   Add,
   CalendarTodayRounded,
@@ -23,7 +24,6 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
 import { Link } from "react-router";
 
 const StyledButton = styled(Button)(() => ({
@@ -60,12 +60,7 @@ const StyledButton = styled(Button)(() => ({
 
 export default function PortfolioPage() {
   const projectState = useAppSelector((state) => state.projectState);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getProjectGeneral());
-    dispatch(getProjects());
-  }, []);
+  useFetch(() => getProjects());
 
   return (
     <Box paddingY={4}>

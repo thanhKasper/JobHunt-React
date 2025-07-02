@@ -6,6 +6,8 @@ import {
 import type { FetchingState } from "./type";
 import type { ProfileDTO } from "@/apis/DTO/ProfileDTO";
 import { ProfileApi } from "@/apis/ProfileApi";
+import type { AxiosError } from "axios";
+import { logout } from "./authenticationSlice";
 
 interface ProfileState {
   isEditing: boolean;
@@ -15,20 +17,30 @@ interface ProfileState {
   previousProfile: ProfileDTO; // used to restore and the user cancel the update
 }
 
-const profile = await ProfileApi.getProfile();
-
 const initialState: ProfileState = {
   isEditing: false,
   state: "idle",
   errors: {} as Record<keyof ProfileDTO, string[]>,
-  profile: profile,
-  previousProfile: { ...profile, awards: [...profile.awards] }, // Store a copy of the initial profile for restoration
+  profile: {} as ProfileDTO,
+  previousProfile: {} as ProfileDTO, // Store a copy of the initial profile for restoration
 };
 
 const saveChangeProfile = createAsyncThunk(
   "profile/saveChangeProfile",
   async (profile: ProfileDTO) => {
     return await ProfileApi.updateProfile(profile);
+  }
+);
+
+const getProfile = createAsyncThunk(
+  "profile/getProfile",
+  async (_, thunkApi) => {
+    try {
+      const profile = await ProfileApi.getProfile();
+      return profile;
+    } catch (err) {
+      if ((err as AxiosError).status == 452) thunkApi.dispatch(logout());
+    }
   }
 );
 
@@ -69,9 +81,19 @@ const profileSlice = createSlice({
         state.state = "failed";
         // Later development
       });
+
+    builder
+      .addCase(getProfile.pending, (state) => {
+        state.state = "loading";
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.profile = action.payload as ProfileDTO;
+        state.previousProfile = action.payload as ProfileDTO;
+        state.state = "succeeded";
+      });
   },
 });
 
 export const { updateProfileField, restoreProfile } = profileSlice.actions;
 export default profileSlice.reducer;
-export { saveChangeProfile };
+export { saveChangeProfile, getProfile };
