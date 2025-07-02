@@ -2,7 +2,7 @@ import { Button, styled } from "@mui/material";
 
 const AddButton = styled(Button)(() => ({
   borderRadius: 25,
-  padding: "12px 24px",
+  paddingX: 8,
   fontWeight: 600,
   textTransform: "none",
   boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",

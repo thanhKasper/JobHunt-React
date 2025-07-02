@@ -10,6 +10,7 @@ import {
   TuneRounded,
 } from "@mui/icons-material";
 import {
+  alpha,
   Box,
   CardContent,
   Chip,
@@ -18,6 +19,8 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router";
@@ -25,6 +28,8 @@ import JobFilterCard from "../../components/cards/JobFilterCard";
 import AddButton from "./components/AddButton";
 
 export default function JobFilterPage() {
+  const theme = useTheme();
+  const mediaSm = useMediaQuery(theme.breakpoints.up("sm"));
   const [filterType, setFilterType] = React.useState("Tất cả");
   const dispatch = useAppDispatch();
   const jobFilterState = useAppSelector((state) => state.jobFilterState);
@@ -35,55 +40,77 @@ export default function JobFilterPage() {
       {/* Header Section */}
       <HeaderCard elevation={6}>
         <Stack
-          direction="row"
           justifyContent="space-between"
           alignItems="center"
+          sx={{
+            flexDirection: {
+              xs: "column",
+              sm: "row",
+            },
+            gap: 2,
+            alignItems: "flex-start",
+          }}
         >
           <Box sx={{ zIndex: 1 }}>
-            <Stack direction="row" alignItems="center" spacing={2} mb={1}>
-              <TuneRounded sx={{ fontSize: 32 }} />
-              <Typography variant="h4" fontWeight={700}>
-                Bộ Lọc Công Việc
-              </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
+                },
+                alignItems: {
+                  sx: "flex-start",
+                  md: "center",
+                },
+                gap: 1,
+              }}
+            >
+              <Stack direction="row" alignItems="center" gap={1}>
+                {mediaSm && <TuneRounded sx={{ fontSize: 32 }} />}
+                <Typography variant="h4" fontWeight={700}>
+                  Bộ Lọc Công Việc
+                </Typography>
+              </Stack>
               <Chip
                 label={`${jobFilterState.filterTotal} bộ lọc`}
                 size="small"
                 sx={{
-                  bgcolor: "rgba(255,255,255,0.2)",
+                  bgcolor: alpha(theme.palette.common.white, 0.2),
                   color: "white",
                   fontWeight: 600,
+                  width: "fit-content",
                 }}
               />
-            </Stack>
-            <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 600 }}>
+            </Box>
+            <Typography
+              variant="body1"
+              sx={{ opacity: 0.9, maxWidth: 600, mt: 2 }}
+            >
               Tại đây, bạn có thể quản lý các bộ lọc công việc của mình. Bộ lọc
               này sẽ giúp bạn tìm kiếm công việc phù hợp với sở thích và kỹ năng
               của bạn.
             </Typography>
           </Box>
 
-          <Stack
-            direction="row"
-            alignItems="center"
-            spacing={2}
-            sx={{ zIndex: 1 }}
+          <AddButton
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              bgcolor: "rgba(255,255,255,0.2)",
+              color: "white",
+              "&:hover": {
+                bgcolor: "rgba(255,255,255,0.3)",
+              },
+              width: {
+                xs: "100%",
+                sm: "max-content",
+              },
+              flexShrink: 0
+            }}
           >
-            <Link to="/job-filters/new">
-              <AddButton
-                variant="contained"
-                startIcon={<Add />}
-                sx={{
-                  bgcolor: "rgba(255,255,255,0.2)",
-                  color: "white",
-                  "&:hover": {
-                    bgcolor: "rgba(255,255,255,0.3)",
-                  },
-                }}
-              >
-                Thêm Bộ Lọc
-              </AddButton>
-            </Link>
-          </Stack>
+            <Link to="/job-filters/new" className="w-max">Thêm Bộ Lọc</Link>
+          </AddButton>
         </Stack>
       </HeaderCard>
 
