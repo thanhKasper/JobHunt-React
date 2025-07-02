@@ -20,7 +20,6 @@ export default class JopApi extends BaseApi {
   ): Promise<Array<JobDetailDTO>> {
     try {
       const jobList = await this.get(`jobview/${jobFilterId}`);
-      console.log(jobList);
       return jobList as JobDetailDTO[];
     } catch (err) {
       throw err;

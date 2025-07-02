@@ -22,7 +22,6 @@ export class ProfileApi extends BaseApi {
   public static async getProfile(): Promise<ProfileDTO> {
     try {
       const profile = (await BaseApi.get("profile")) as any;
-      console.log(profile);
       return {
         ...profile,
         degree: profile.education || "none",

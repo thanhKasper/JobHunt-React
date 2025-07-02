@@ -38,7 +38,6 @@ const initialState: JobFilterDetailState = {
 const getJobFilter = createAsyncThunk(
   "jobFilterDetail/getJobFilter",
   async (jobFilterId: string, thunkApi) => {
-    console.log("Calling jobfilter detail create thunk")
     try {
       const response = await JobFilterApi.getJobFilter(jobFilterId);
       return thunkApi.fulfillWithValue(response);

@@ -41,9 +41,7 @@ const createNewProject = createAsyncThunk(
     if (validationResult.success) {
       return await ProjectApi.createProject(project);
     } else {
-      console.log(validationResult.error.issues);
       for (const err of validationResult.error.issues) {
-        console.log(err);
         thunkApi.dispatch(
           setProjectError({
             field: err.path[0] as keyof ProjectDTO,
@@ -102,9 +100,8 @@ export const projectNewSlice = createSlice({
       .addCase(createNewProject.fulfilled, (state) => {
         state.createState = "succeeded";
       })
-      .addCase(createNewProject.rejected, (state, action) => {
+      .addCase(createNewProject.rejected, (state) => {
         state.createState = "failed";
-        console.log("Error creating project:", action.error.message);
       });
   },
 });

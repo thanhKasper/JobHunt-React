@@ -48,7 +48,6 @@ export default function TagInput({
         freeSolo
         renderValue={() => null}
         onChange={(_, value) => {
-          console.log("onChange is called");
           const latestValue = value.pop();
           if (latestValue === undefined) setTags([]);
           else {

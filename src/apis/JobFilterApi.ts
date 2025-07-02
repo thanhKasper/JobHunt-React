@@ -32,7 +32,6 @@ export default class JobFilterApi {
       await BaseApi.post("/jobfilter", matchingBodyRequest);
       return true;
     } catch (error) {
-      console.log("Catching error while creating new job filter");
       throw error;
     }
   }
@@ -40,7 +39,6 @@ export default class JobFilterApi {
   public static async getJobFilter(jobFilterId: string): Promise<JobFilterDTO> {
     try {
       const res = (await BaseApi.get(`/jobfilter/${jobFilterId}`)) as any;
-      console.log(res);
       return {
         level: res.level ?? "",
         yearsOfExperience: res.yearsOfExperience ?? 0,
