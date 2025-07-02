@@ -25,6 +25,7 @@ import { useParams } from "react-router";
 import JobFilter from "./components/JobFilter";
 import MatchJobList from "./components/MatchJobList";
 import JobFilterEditPage from "./JobFilterEditPage";
+import IntroducingSection from "@/components/IntroducingSection";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -104,42 +105,27 @@ export default function JobFilterPageDetail() {
     fetchingState == "succeeded" && (
       <Box paddingY={4}>
         {/* Header Section */}
-        <HeaderCard elevation={6}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box sx={{ zIndex: 1 }}>
-              <Stack direction="row" alignItems="center" spacing={2} mb={1}>
-                <TuneRounded sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight={700}>
-                  Chi Tiết Bộ Lọc
-                </Typography>
-                <Chip
-                  label={
-                    jobFilterDetailState.jobFilter.isActive
-                      ? "Đang hoạt động"
-                      : "Tạm dừng"
-                  }
-                  size="small"
-                  sx={{
-                    bgcolor: "rgba(76, 175, 80, 0.2)",
-                    color: "white",
-                    fontWeight: 600,
-                  }}
-                />
-              </Stack>
-              <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 600 }}>
-                Xem và chỉnh sửa thông tin chi tiết của bộ lọc công việc. Theo
-                dõi các công việc phù hợp với tiêu chí của bạn.
-              </Typography>
-            </Box>
-          </Stack>
-        </HeaderCard>
+        <IntroducingSection
+          headingText="Chi Tiết Bộ Lọc"
+          description="Xem và chỉnh sửa thông tin chi tiết của bộ lọc công việc. Theo
+                dõi các công việc phù hợp với tiêu chí của bạn."
+          icon={<TuneRounded sx={{ fontSize: 32 }} />}
+
+        />
+        
 
         {/* Stats Cards */}
-        <Stack direction="row" spacing={3} mb={3}>
+        <Stack
+          // spacing={2}
+          mb={3}
+          sx={{
+            flexDirection: {
+              sx: "column",
+              sm: "row",
+            },
+            gap: 2
+          }}
+        >
           <StatsCard sx={{ flex: 1 }}>
             <CardContent>
               <Stack direction="row" alignItems="center" spacing={2}>

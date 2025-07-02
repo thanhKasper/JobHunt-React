@@ -51,6 +51,9 @@ export default function ProjectCard({ project }: { project: ProjectDTO }) {
               "&:hover": {
                 textDecoration: "none",
               },
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
             }}
           >
             {project.projectName}
@@ -58,7 +61,7 @@ export default function ProjectCard({ project }: { project: ProjectDTO }) {
         </Link>
 
         {/* Project Duration */}
-        <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+        <Stack direction="row" alignItems="center" spacing={1} mb={0.5}>
           <DateRange sx={{ fontSize: 18, color: "primary.main" }} />
           <Typography
             variant="body2"
@@ -81,17 +84,17 @@ export default function ProjectCard({ project }: { project: ProjectDTO }) {
               ? dayjs(project.endDate).format("MM/YYYY")
               : "Hiện tại"}
           </Typography>
-          <Chip
-            label={project.endDate ? "Hoàn thành" : "Đang thực hiện"}
-            size="small"
-            color="success"
-            sx={{
-              height: 20,
-              fontSize: "0.7rem",
-              fontWeight: 600,
-            }}
-          />
         </Stack>
+        <Chip
+          label={project.endDate ? "Hoàn thành" : "Đang thực hiện"}
+          size="small"
+          color="success"
+          sx={{
+            height: 20,
+            fontSize: "0.7rem",
+            fontWeight: 600,
+          }}
+        />
 
         <Divider sx={{ mb: 2, opacity: 0.3 }} />
 

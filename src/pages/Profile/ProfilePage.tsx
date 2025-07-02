@@ -29,7 +29,7 @@ import {
   Select,
   Slide,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -50,12 +50,12 @@ export default function ProfilePage() {
         <IntroducingSection
           headingText="Hồ Sơ Ứng Viên"
           description="Điền thông tin chi tiết để tạo hồ sơ chuyên nghiệp"
-          icon={<Person sx={{fontSize: 32}}/>}
+          icon={<Person sx={{ fontSize: 32 }} />}
         />
 
         <Grid container spacing={3}>
           {/* Personal Information Section */}
-          <Grid size={12}>
+          <Grid size={{ xs: 12, lg: 7 }}>
             <Card elevation={2} sx={{ mb: 3 }}>
               <CardContent>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
@@ -164,7 +164,7 @@ export default function ProfilePage() {
           </Grid>
 
           {/* Education Section */}
-          <Grid size={12}>
+          <Grid size={{ xs: 12, lg: 5 }}>
             <Card elevation={2} sx={{ mb: 3 }}>
               <CardContent>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
@@ -176,7 +176,7 @@ export default function ProfilePage() {
                 <Divider sx={{ mb: 3 }} />
 
                 <Grid container spacing={3}>
-                  <Grid size={{ xs: 12, md: 6 }}>
+                  <Grid size={{ xs: 12 }}>
                     <TextField
                       fullWidth
                       label="Trường Đại Học"
@@ -249,7 +249,7 @@ export default function ProfilePage() {
           </Grid>
 
           {/* About Me Section */}
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card elevation={2} sx={{ mb: 3 }}>
               <CardContent>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
@@ -283,7 +283,7 @@ export default function ProfilePage() {
           </Grid>
 
           {/* Awards Section */}
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card elevation={2}>
               <CardContent>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>

@@ -68,7 +68,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
               direction="row"
               alignItems="center"
               spacing={1}
-              sx={{ flex: 1 }}
+              sx={{ minWidth: 0 }}
             >
               <MuiLink
                 component={Link}
@@ -84,6 +84,9 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                       ? "primary.main"
                       : "text.secondary",
                   },
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {jobFilter.title}
@@ -117,6 +120,7 @@ const JobFilterCard = ({ jobFilter }: JobFilterCardProps) => {
                     transform: "scale(1.1)",
                     backgroundColor: alpha(theme.palette.warning.main, 0.1),
                   },
+                  flexShrink: 0,
                 }}
               >
                 {jobFilter.isStarred ? (

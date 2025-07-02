@@ -45,6 +45,7 @@ export default function PortfolioPage() {
               bgcolor: "rgba(255,255,255,0.2)",
               color: "white",
               fontWeight: 600,
+              width: "fit-content",
             }}
           />
         }
@@ -59,61 +60,67 @@ export default function PortfolioPage() {
               },
             }}
           >
-            Thêm Dự Án
+            <Link to={`/portfolio/new`}>Thêm Dự Án</Link>
           </AddButton>
         }
       />
 
       {/* Project Summary */}
-      <Stack direction="row" spacing={3} mb={3}>
-        <StatsCard sx={{ flex: 1 }}>
-          <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <CodeRounded sx={{ color: "primary.main", fontSize: 28 }} />
-              <Box>
-                <Typography variant="h6" fontWeight={600}>
-                  {projectState.totalCompletedProjects} Dự Án
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Đã hoàn thành
-                </Typography>
-              </Box>
-            </Stack>
-          </CardContent>
-        </StatsCard>
-
-        <StatsCard>
-          <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <CalendarTodayRounded sx={{ color: "info.main", fontSize: 28 }} />
-              <Box>
-                <Typography variant="h6" fontWeight={600}>
-                  {projectState.toolsCount} Công Nghệ
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Số công nghệ đã sử dụng
-                </Typography>
-              </Box>
-            </Stack>
-          </CardContent>
-        </StatsCard>
-
-        <StatsCard>
-          <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <CategoryRounded sx={{ color: "success.main", fontSize: 28 }} />
-              <Box>
-                <Typography variant="h6" fontWeight={600}>
-                  {projectState.rolesCount} Vai Trò
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Đã Từng Tham Gia
-                </Typography>
-              </Box>
-            </Stack>
-          </CardContent>
-        </StatsCard>
-      </Stack>
+      <Grid container spacing={2} mb={3}>
+        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+          <StatsCard sx={{ flex: 1 }}>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <CodeRounded sx={{ color: "primary.main", fontSize: 28 }} />
+                <Box>
+                  <Typography variant="h6" fontWeight={600}>
+                    {projectState.totalCompletedProjects} Dự Án
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Đã hoàn thành
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </StatsCard>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <StatsCard>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <CalendarTodayRounded
+                  sx={{ color: "info.main", fontSize: 28 }}
+                />
+                <Box>
+                  <Typography variant="h6" fontWeight={600}>
+                    {projectState.toolsCount} Công Nghệ
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Đã sử dụng
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </StatsCard>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <StatsCard>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <CategoryRounded sx={{ color: "success.main", fontSize: 28 }} />
+                <Box>
+                  <Typography variant="h6" fontWeight={600}>
+                    {projectState.rolesCount} Vai Trò
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Đã Từng Tham Gia
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </StatsCard>
+        </Grid>
+      </Grid>
 
       {/* Technology Stack */}
       <Paper
@@ -126,11 +133,13 @@ export default function PortfolioPage() {
           border: "1px solid rgba(255,255,255,0.2)",
         }}
       >
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <CodeRounded sx={{ color: "text.secondary" }} />
-          <Typography variant="body2" color="text.secondary" fontWeight={500}>
-            Công nghệ chính:
-          </Typography>
+        <Box display={"flex"} flexDirection={{xs: "column", md: "row"}} gap={2}>
+          <Stack direction="row" alignItems="center" gap={1}>
+            <CodeRounded sx={{ color: "text.secondary" }} />
+            <Typography variant="body2" color="text.secondary" fontWeight={500}>
+              Công nghệ chính:
+            </Typography>
+          </Stack>
           <Stack direction="row" spacing={1}>
             {projectState.mainTechnologies.map((tech) => (
               <Chip
@@ -150,7 +159,7 @@ export default function PortfolioPage() {
               />
             ))}
           </Stack>
-        </Stack>
+        </Box>
       </Paper>
 
       {/* Projects Grid */}

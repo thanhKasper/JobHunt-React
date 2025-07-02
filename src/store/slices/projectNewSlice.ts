@@ -91,6 +91,10 @@ export const projectNewSlice = createSlice({
     ) => {
       state.errors[action.payload.field] = action.payload.value;
     },
+
+    setProjectFormToNormal: (state) => {
+      state.createState = "idle";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,7 +102,19 @@ export const projectNewSlice = createSlice({
         state.createState = "loading";
       })
       .addCase(createNewProject.fulfilled, (state) => {
-        state.createState = "succeeded";
+        state.createState = "idle";
+        state.newProject = {
+          features: [],
+          projectDescription: "",
+          projectId: "",
+          projectName: "",
+          roles: [],
+          startDate: "",
+          techOrSkills: [],
+          endDate: "",
+          liveDemoLink: "",
+          projectLink: "",
+        };
       })
       .addCase(createNewProject.rejected, (state) => {
         state.createState = "failed";
@@ -107,5 +123,6 @@ export const projectNewSlice = createSlice({
 });
 
 export default projectNewSlice.reducer;
-export const { updateField, setProjectError } = projectNewSlice.actions;
+export const { updateField, setProjectError, setProjectFormToNormal } =
+  projectNewSlice.actions;
 export { createNewProject };

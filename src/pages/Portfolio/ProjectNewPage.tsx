@@ -2,7 +2,11 @@ import HeaderCard from "@/components/cards/HeaderCard";
 import LongTextInput from "@/components/input/LongTextInput";
 import TagInput from "@/components/input/TagInput";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { createNewProject, updateField } from "@/store/slices/projectNewSlice";
+import {
+  createNewProject,
+  setProjectFormToNormal,
+  updateField,
+} from "@/store/slices/projectNewSlice";
 import {
   Add as AddIcon,
   CalendarToday as CalendarIcon,
@@ -35,6 +39,18 @@ const ProjectNewPage = () => {
   const newProjectState = useAppSelector((state) => state.projectCreationState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  console.log(newProjectState);
+  const handleSubmit = () => {
+    dispatch(createNewProject(newProjectState.newProject)).then((arg) => {
+      if (arg.meta.requestStatus == "fulfilled") {
+        navigate("/portfolio");
+      }
+    });
+  };
+
+  const handleCancel = () => {
+    dispatch(setProjectFormToNormal());
+  };
 
   return (
     <Box paddingY={4}>
@@ -54,7 +70,11 @@ const ProjectNewPage = () => {
 
       {/* Form Sections */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <Stack direction="row" gap={3} justifyContent={"space-between"}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          gap={3}
+          justifyContent={"space-between"}
+        >
           {/* Basic Information */}
           <Card sx={{ flexShrink: 0, flexBasis: "65%" }}>
             <CardContent sx={{ p: 4 }}>
@@ -125,7 +145,7 @@ const ProjectNewPage = () => {
               <Grid container spacing={3}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Grid size={12}>
-                    <FormControl>
+                    <FormControl fullWidth>
                       <DatePicker
                         label="Ngày Bắt Đầu"
                         sx={{ width: "100%" }}
@@ -135,11 +155,12 @@ const ProjectNewPage = () => {
                             ? null
                             : dayjs(newProjectState.newProject.startDate)
                         }
+                        maxDate={dayjs(Date.now())}
                         onChange={(date) =>
                           dispatch(
                             updateField({
                               field: "startDate",
-                              value: date ? date.toISOString() : "",
+                              value: date ? date.set("day", 15).toString() : "", // set day to avoid error for date conversion
                             })
                           )
                         }
@@ -162,11 +183,14 @@ const ProjectNewPage = () => {
                             ? dayjs(newProjectState.newProject.endDate)
                             : null
                         }
+                        maxDate={dayjs(Date.now())}
                         onChange={(date) =>
                           dispatch(
                             updateField({
                               field: "endDate",
-                              value: date ? date.toISOString() : undefined,
+                              value: date
+                                ? date.set("day", 15).toString()
+                                : undefined,
                             })
                           )
                         }
@@ -183,7 +207,11 @@ const ProjectNewPage = () => {
           </Card>
         </Stack>
 
-        <Stack direction="row" gap={3} justifyContent={"space-between"}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          gap={3}
+          justifyContent={"space-between"}
+        >
           {/* Roles */}
           <Card sx={{ width: "100%" }}>
             <CardContent sx={{ p: 4 }}>
@@ -195,6 +223,7 @@ const ProjectNewPage = () => {
               </Box>
               <TagInput
                 label="Vai Trò"
+                placeholder="Gõ một vai trò rồi nhấn enter"
                 value={newProjectState.newProject.roles}
                 onTagChange={(tags) =>
                   dispatch(
@@ -332,20 +361,19 @@ const ProjectNewPage = () => {
         {/* Submit Buttons */}
         <Box sx={{ display: "flex", gap: 2, justifyContent: "center", pt: 4 }}>
           <Link to={"/portfolio"}>
-            <Button variant="outlined" size="large" sx={{ px: 4, py: 1.5 }}>
+            <Button
+              onClick={handleCancel}
+              variant="outlined"
+              size="large"
+              sx={{ px: 4, py: 1.5 }}
+            >
               Trở Lại
             </Button>
           </Link>
           <Button
             variant="contained"
             size="large"
-            onClick={() => {
-              dispatch(createNewProject(newProjectState.newProject)).then(
-                () => {
-                  navigate("/portfolio");
-                }
-              );
-            }}
+            onClick={handleSubmit}
             sx={{
               px: 4,
               py: 1.5,

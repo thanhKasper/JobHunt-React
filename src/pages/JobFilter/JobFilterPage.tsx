@@ -73,39 +73,42 @@ export default function JobFilterPage() {
       />
 
       {/* Stats and Controls */}
-      <Stack direction="row" spacing={3} mb={3}>
-        <StatsCard sx={{ flex: 1 }}>
-          <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <SearchRounded sx={{ color: "primary.main", fontSize: 28 }} />
-              <Box>
-                <Typography variant="h6" fontWeight={600}>
-                  {jobFilterState.activeFilterTotal} Bộ Lọc Đang Hoạt Động
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Tìm kiếm công việc phù hợp
-                </Typography>
-              </Box>
-            </Stack>
-          </CardContent>
-        </StatsCard>
-
-        <StatsCard>
-          <CardContent>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <AutoAwesome sx={{ color: "warning.main", fontSize: 28 }} />
-              <Box>
-                <Typography variant="h6" fontWeight={600}>
-                  {totalJobs} Kết Quả
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Công việc phù hợp
-                </Typography>
-              </Box>
-            </Stack>
-          </CardContent>
-        </StatsCard>
-      </Stack>
+      <Grid container spacing={2} mb={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 8 }}>
+          <StatsCard sx={{ flex: 1 }}>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <SearchRounded sx={{ color: "primary.main", fontSize: 28 }} />
+                <Box>
+                  <Typography variant="h6" fontWeight={600}>
+                    {jobFilterState.activeFilterTotal} Bộ Lọc Đang Hoạt Động
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Tìm kiếm công việc phù hợp
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </StatsCard>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <StatsCard>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <AutoAwesome sx={{ color: "warning.main", fontSize: 28 }} />
+                <Box>
+                  <Typography variant="h6" fontWeight={600}>
+                    {totalJobs} Kết Quả
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Công việc phù hợp
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </StatsCard>
+        </Grid>
+      </Grid>
 
       {/* Quick Actions */}
       <Paper
@@ -118,12 +121,14 @@ export default function JobFilterPage() {
           border: "1px solid rgba(255,255,255,0.2)",
         }}
       >
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <FilterList sx={{ color: "text.secondary" }} />
-          <Typography variant="body2" color="text.secondary" fontWeight={500}>
-            Lọc nhanh:
-          </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
+        <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={2}>
+          <Stack direction="row">
+            <FilterList sx={{ color: "text.secondary" }} />
+            <Typography variant="body2" color="text.secondary" fontWeight={500}>
+              Lọc nhanh:
+            </Typography>
+          </Stack>
+          <Stack direction="row" gap={1} flexWrap="wrap">
             {["Tất cả", "Đang hoạt động", "Tạm dừng", "Yêu thích"].map(
               (filter) => (
                 <Chip
@@ -150,7 +155,7 @@ export default function JobFilterPage() {
               )
             )}
           </Stack>
-        </Stack>
+        </Box>
       </Paper>
 
       {/* Filter Cards Grid */}

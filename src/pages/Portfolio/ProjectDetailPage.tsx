@@ -36,13 +36,14 @@ const ProjectDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useFetch(() => getProjectDetail(projectId));
+  const fetchingState = useFetch(() => getProjectDetail(projectId));
 
   const handleDeleteProject = () => {
     dispatch(deleteProject(projectId)).then(() => navigate("/portfolio"));
   };
 
   return (
+    fetchingState == "succeeded" &&
     projectState.projectsLoadingState == "succeeded" && (
       <Box paddingY={4}>
         <HeaderCard sx={{ p: 6 }}>
@@ -51,6 +52,14 @@ const ProjectDetailPage = () => {
             justifyContent="space-between"
             alignItems="flex-start"
             mb={3}
+            sx={{
+              gap: 2,
+              display: "flex",
+              flexDirection: {
+                xs: "column-reverse",
+                md: "row",
+              },
+            }}
           >
             <Box>
               <Typography variant="h3" fontWeight="700" gutterBottom>
@@ -67,7 +76,16 @@ const ProjectDetailPage = () => {
               </Stack>
             </Box>
 
-            <Stack direction="row" spacing={1}>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                justifyContent: {
+                  sx: "space-between",
+                  md: "left",
+                },
+              }}
+            >
               <Link to={`/portfolio/${project.projectId}/edit`}>
                 <IconButton
                   sx={{
@@ -94,14 +112,21 @@ const ProjectDetailPage = () => {
 
           <Typography
             variant="h6"
-            sx={{ opacity: 0.95, maxWidth: "70%", lineHeight: 1.6 }}
+            sx={{
+              opacity: 0.95,
+              maxWidth: {
+                sx: "100%",
+                lg: "70%",
+              },
+              lineHeight: 1.6,
+            }}
           >
             {project.projectDescription}
           </Typography>
         </HeaderCard>
 
-        <Box display="flex" gap={3} flexDirection={{ xs: "column", md: "row" }}>
-          <Box flex={2}>
+        <Box display="flex" gap={2} flexDirection={{ xs: "column", md: "row" }}>
+          <Box width="100%">
             {/* Roles Section */}
             <Card elevation={2} sx={{ mb: 3, borderRadius: 3 }}>
               <CardContent sx={{ p: 4 }}>
@@ -111,7 +136,7 @@ const ProjectDetailPage = () => {
                     Vai Trò Của Tôi
                   </Typography>
                 </Stack>
-                <Stack direction="row" spacing={2} flexWrap="wrap">
+                <Stack direction="row" gap={2} flexWrap="wrap">
                   {project.roles.map((role, index) => (
                     <Chip
                       key={index}
@@ -144,7 +169,7 @@ const ProjectDetailPage = () => {
                     Công Nghệ / Kỹ Thuật Sử Dụng
                   </Typography>
                 </Stack>
-                <Stack direction="row" spacing={2} flexWrap="wrap">
+                <Stack direction="row" gap={2} flexWrap="wrap">
                   {project.techOrSkills.map((tech, index) => (
                     <Chip
                       key={index}
@@ -173,7 +198,7 @@ const ProjectDetailPage = () => {
             </Card>
           </Box>
 
-          <Box flex={1}>
+          <Box width="100%">
             {/* Key Features */}
             <Card elevation={2} sx={{ borderRadius: 3 }}>
               <CardContent sx={{ p: 4 }}>
@@ -223,7 +248,18 @@ const ProjectDetailPage = () => {
         </Box>
 
         {/* Action Buttons */}
-        <Box display="flex" gap={2} mt={4} justifyContent="center">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              sm: "row",
+            },
+            justifyContent: "center",
+            mt: 4,
+            gap: 2,
+          }}
+        >
           <Button
             variant="contained"
             size="large"

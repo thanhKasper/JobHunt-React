@@ -54,61 +54,66 @@ const JobPage = () => {
                 bgcolor: "rgba(255,255,255,0.2)",
                 color: "white",
                 fontWeight: 600,
+                width: "fit-content",
               }}
             />
           }
         />
 
         {/* Stats and Quick Info */}
-        <Stack direction="row" spacing={3} mb={3}>
-          <StatsCard sx={{ flex: 1 }}>
-            <CardContent>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <SearchRounded sx={{ color: "primary.main", fontSize: 28 }} />
-                <Box>
-                  <Typography variant="h6" fontWeight={600}>
-                    {jobFilterState.activeFilterTotal} Bộ Lọc Đang Áp Dụng
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Tối ưu kết quả tìm kiếm
-                  </Typography>
-                </Box>
-              </Stack>
-            </CardContent>
-          </StatsCard>
-
-          <StatsCard>
-            <CardContent>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <TrendingUp sx={{ color: "success.main", fontSize: 28 }} />
-                <Box>
-                  <Typography variant="h6" fontWeight={600}>
-                    {jobState.todayNewJobs} Công Việc
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Đẵ Được Đăng Tuyển Hôm Nay
-                  </Typography>
-                </Box>
-              </Stack>
-            </CardContent>
-          </StatsCard>
-
-          <StatsCard>
-            <CardContent>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <AutoAwesome sx={{ color: "warning.main", fontSize: 28 }} />
-                <Box>
-                  <Typography variant="h6" fontWeight={600}>
-                    {jobState.todayCompatibilityPercentage}% Phù Hợp
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Độ tương thích với công việc
-                  </Typography>
-                </Box>
-              </Stack>
-            </CardContent>
-          </StatsCard>
-        </Stack>
+        <Grid container spacing={2} mb={3}>
+          <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+            <StatsCard>
+              <CardContent>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <SearchRounded sx={{ color: "primary.main", fontSize: 28 }} />
+                  <Box>
+                    <Typography variant="h6" fontWeight={600}>
+                      {jobFilterState.activeFilterTotal} Bộ Lọc Đang Áp Dụng
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Tối ưu kết quả tìm kiếm
+                    </Typography>
+                  </Box>
+                </Stack>
+              </CardContent>
+            </StatsCard>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+            <StatsCard>
+              <CardContent>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <TrendingUp sx={{ color: "success.main", fontSize: 28 }} />
+                  <Box>
+                    <Typography variant="h6" fontWeight={600}>
+                      {jobState.todayNewJobs} Công Việc
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Đẵ Được Đăng Tuyển Hôm Nay
+                    </Typography>
+                  </Box>
+                </Stack>
+              </CardContent>
+            </StatsCard>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+            <StatsCard>
+              <CardContent>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <AutoAwesome sx={{ color: "warning.main", fontSize: 28 }} />
+                  <Box>
+                    <Typography variant="h6" fontWeight={600}>
+                      {jobState.todayCompatibilityPercentage}% Phù Hợp
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Độ tương thích với công việc
+                    </Typography>
+                  </Box>
+                </Stack>
+              </CardContent>
+            </StatsCard>
+          </Grid>
+        </Grid>
 
         {/* Search & Filter Section */}
         <StatsCard sx={{ p: 2 }}>

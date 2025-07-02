@@ -55,7 +55,7 @@ export const projectUpdateSlice = createSlice({
       })
       .addCase(editProject.fulfilled, (state, action) => {
         state.updatedProject = action.payload as ProjectDTO;
-        state.projectsLoadingState = "succeeded";
+        state.projectsLoadingState = "idle";
       })
       .addCase(editProject.rejected, (state) => {
         state.projectsLoadingState = "failed";

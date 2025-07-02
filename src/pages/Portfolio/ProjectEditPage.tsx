@@ -1,6 +1,7 @@
 import HeaderCard from "@/components/cards/HeaderCard";
 import LongTextInput from "@/components/input/LongTextInput";
 import TagInput from "@/components/input/TagInput";
+import useFetch from "@/hooks/useFetch";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   editProject,
@@ -33,34 +34,25 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
 const ProjectEditPage = () => {
   const projectEditId = useParams().projectId;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const projectLoadingState = useAppSelector(
-    (state) => state.projectUpdateState.projectsLoadingState
+  const projectLoadingState = useFetch(() =>
+    getProjectDetail(projectEditId ?? "")
   );
   const project = useAppSelector(
     (state) => state.projectUpdateState.updatedProject
   );
 
-  useEffect(() => {
-    dispatch(getProjectDetail(projectEditId || ""));
-  }, []);
-
   const handleSubmit = async () => {
-    try {
-      await dispatch(editProject({ ...project })).then((value) => {
-        if (value.meta.requestStatus === "fulfilled") {
-          navigate(`/portfolio/${projectEditId}`);
-        }
-      });
-    } catch (error) {
-      console.error("Failed to update project:", error);
-    }
+    dispatch(editProject({ ...project })).then((value) => {
+      if (value.meta.requestStatus === "fulfilled") {
+        navigate(`/portfolio/${projectEditId}`);
+      }
+    });
   };
 
   return (

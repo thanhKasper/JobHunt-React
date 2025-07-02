@@ -41,6 +41,7 @@ import {
 } from "@/store/slices/jobFilterCreateSlice";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
+import IntroducingSection from "@/components/IntroducingSection";
 
 export default function CreateJobFilterPage() {
   const jobFilterCreationForm = useCreateJobFilter();
@@ -50,39 +51,30 @@ export default function CreateJobFilterPage() {
   );
   const navigate = useNavigate();
   const handleSubmit = () => {
-    dispatch(createNewJobFilter(jobFilterCreationForm.toJobFilterDTO()));
+    dispatch(createNewJobFilter(jobFilterCreationForm.toJobFilterDTO())).then(
+      (arg) => {
+        if (arg.meta.requestStatus == "fulfilled") {
+          jobfilterFormSwitchToNormal();
+          navigate("/job-filters");
+        }
+      }
+    );
   };
 
-  useEffect(() => {
-    if (jobFilterCreationResult.state == "succeeded") {
-      navigate("/job-filters");
-      jobfilterFormSwitchToNormal();
-    }
-  });
+  const handleCancel = () => {
+    dispatch(jobfilterFormSwitchToNormal());
+  };
+
+  console.log(jobFilterCreationResult);
 
   return (
     <Box paddingY={4}>
       {/* Sticky Header */}
-      <HeaderCard elevation={6}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Box>
-            {/* <FilterList sx={{ fontSize: 28 }} /> */}
-            <Box display="flex" gap={2} alignItems={"center"} mb={1}>
-              <ListFilterPlus size={32} />
-              <Typography variant="h4" fontWeight={700}>
-                Tạo Bộ Lọc Công Việc
-              </Typography>
-            </Box>
-            <Typography variant="body1" sx={{ opacity: 0.9 }}>
-              Lọc công việc dựa trên những gì bạn mong muốn
-            </Typography>
-          </Box>
-        </Stack>
-      </HeaderCard>
+      <IntroducingSection
+        icon={<ListFilterPlus size={32} />}
+        headingText="Tạo Bộ Lọc Công Việc"
+        description="Lọc công việc dựa trên những gì bạn mong muốn"
+      />
 
       <Stack spacing={3} paddingY={4}>
         <Card>
@@ -360,12 +352,14 @@ export default function CreateJobFilterPage() {
 
       {/* Sticky Footer */}
 
-      <Stack direction="row" spacing={2} justifyContent="flex-end">
+      <Stack direction={{xs: "column-reverse", sm: "row"}} gap={2} justifyContent="flex-end">
         <Link to="/job-filters">
           <Button
+            fullWidth
             variant="outlined"
             size="large"
             startIcon={<Close />}
+            onClick={handleCancel}
             sx={{
               px: 4,
               py: 1.5,

@@ -68,7 +68,7 @@ export default function TagInput({
         renderInput={(params) => <TextField {...props} {...params} />}
       />
       {tags.length != 0 && (
-        <Stack direction="row" gap={1} marginTop={2}>
+        <Stack direction="row" gap={1} marginTop={2} flexWrap={"wrap"}>
           {tags.map((tag) => (
             <Chip key={tag} label={tag} onDelete={() => handleDelete(tag)} />
           ))}
