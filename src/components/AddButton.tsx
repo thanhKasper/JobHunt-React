@@ -1,6 +1,6 @@
-import { Button, styled } from "@mui/material";
+import { alpha, Button, styled } from "@mui/material";
 
-const AddButton = styled(Button)(() => ({
+const AddButton = styled(Button)(({ theme }) => ({
   borderRadius: 25,
   paddingX: 8,
   fontWeight: 600,
@@ -9,10 +9,13 @@ const AddButton = styled(Button)(() => ({
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   position: "relative",
   overflow: "hidden",
-
+  color: "white",
+  backgroundColor: alpha(theme.palette.common.white, 0.2),
+  flexShrink: 0,
   "&:hover": {
     transform: "translateY(-2px)",
     boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
+    backgroundColor: alpha(theme.palette.common.white, 0.3),
   },
 
   "&::before": {

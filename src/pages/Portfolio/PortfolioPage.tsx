@@ -1,6 +1,7 @@
-import HeaderCard from "@/components/cards/HeaderCard";
+import AddButton from "@/components/AddButton";
 import ProjectCard from "@/components/cards/ProjectCard";
 import StatsCard from "@/components/cards/StatCard";
+import IntroducingSection from "@/components/IntroducingSection";
 import useFetch from "@/hooks/useFetch";
 import { useAppSelector } from "@/store/hooks";
 import { getProjects } from "@/store/slices/projectSlice";
@@ -14,49 +15,15 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
-  Button,
   CardContent,
   Chip,
   Fade,
   Grid,
   Paper,
   Stack,
-  styled,
   Typography,
 } from "@mui/material";
 import { Link } from "react-router";
-
-const StyledButton = styled(Button)(() => ({
-  borderRadius: 25,
-  padding: "12px 24px",
-  fontWeight: 600,
-  textTransform: "none",
-  boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  position: "relative",
-  overflow: "hidden",
-
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(102, 126, 234, 0.4)",
-  },
-
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: "-100%",
-    width: "100%",
-    height: "100%",
-    background:
-      "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-    transition: "left 0.6s ease",
-  },
-
-  "&:hover::before": {
-    left: "100%",
-  },
-}));
 
 export default function PortfolioPage() {
   const projectState = useAppSelector((state) => state.projectState);
@@ -65,51 +32,37 @@ export default function PortfolioPage() {
   return (
     <Box paddingY={4}>
       {/* Header Section */}
-      <HeaderCard
-        elevation={6}
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Box sx={{ zIndex: 1 }}>
-          <Stack direction="row" alignItems="center" spacing={2} mb={1}>
-            <FolderRounded sx={{ fontSize: 32 }} />
-            <Typography variant="h4" fontWeight={700}>
-              Danh Sách Các Dự Án
-            </Typography>
-            <Chip
-              label={`${projectState.totalProjects} dự án`}
-              size="small"
-              sx={{
-                bgcolor: "rgba(255,255,255,0.2)",
-                color: "white",
-                fontWeight: 600,
-              }}
-            />
-          </Stack>
-          <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 800 }}>
-            Tổng hợp các dự án đã thực hiện, thể hiện kỹ năng và kinh nghiệm làm
-            việc của tôi.
-          </Typography>
-        </Box>
-        <Link to="/portfolio/new">
-          <StyledButton
-            variant="contained"
-            startIcon={<Add />}
+      <IntroducingSection
+        icon={<FolderRounded sx={{ fontSize: 32 }} />}
+        description="Tổng hợp các dự án đã thực hiện, thể hiện kỹ năng và kinh nghiệm làm
+            việc của tôi."
+        headingText="Danh Sách Các Dự Án"
+        additionalHeading={
+          <Chip
+            label={`${projectState.totalProjects} dự án`}
+            size="small"
             sx={{
               bgcolor: "rgba(255,255,255,0.2)",
               color: "white",
-              "&:hover": {
-                bgcolor: "rgba(255,255,255,0.3)",
+              fontWeight: 600,
+            }}
+          />
+        }
+        cta={
+          <AddButton
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "max-content",
               },
             }}
           >
             Thêm Dự Án
-          </StyledButton>
-        </Link>
-      </HeaderCard>
+          </AddButton>
+        }
+      />
 
       {/* Project Summary */}
       <Stack direction="row" spacing={3} mb={3}>
@@ -303,19 +256,18 @@ const EmptyProjectDisplay = () => (
 
       <Stack>
         <Link to="/portfolio/new">
-          <StyledButton
+          <AddButton
             variant="contained"
             startIcon={<Add />}
             sx={{
-              bgcolor: "primary.main",
-              color: "white",
-              "&:hover": {
-                bgcolor: "primary.dark",
+              width: {
+                xs: "100%",
+                sm: "max-content",
               },
             }}
           >
             Thêm Dự Án Đầu Tiên
-          </StyledButton>
+          </AddButton>
         </Link>
       </Stack>
 

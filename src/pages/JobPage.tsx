@@ -11,7 +11,6 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
-  Button,
   CardContent,
   Chip,
   Fade,
@@ -23,7 +22,7 @@ import {
 import { useEffect } from "react";
 import JobCard from "../components/cards/JobCard";
 import JobSearchAndFilter from "../components/JobSearchAndFilter";
-import { BaseApi } from "@/apis/BaseApi";
+import IntroducingSection from "@/components/IntroducingSection";
 
 const JobPage = () => {
   const dispatch = useAppDispatch();
@@ -42,35 +41,23 @@ const JobPage = () => {
     jobState && (
       <Box paddingY={4}>
         {/* Header Section */}
-        <HeaderCard elevation={6}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box sx={{ zIndex: 1 }}>
-              <Stack direction="row" alignItems="center" spacing={2} mb={1}>
-                <WorkRounded sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight={700}>
-                  Công Việc Phù Hợp
-                </Typography>
-                <Chip
-                  label={`${jobState.totalJobs} công việc`}
-                  size="small"
-                  sx={{
-                    bgcolor: "rgba(255,255,255,0.2)",
-                    color: "white",
-                    fontWeight: 600,
-                  }}
-                />
-              </Stack>
-              <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 600 }}>
-                Danh sách các công việc phù hợp với kỹ năng và sở thích của bạn.
-                Tìm kiếm và ứng tuyển ngay hôm nay!
-              </Typography>
-            </Box>
-          </Stack>
-        </HeaderCard>
+        <IntroducingSection
+          headingText="Công Việc Phù Hợp"
+          description="Danh sách các công việc phù hợp với kỹ năng và sở thích của bạn.
+                Tìm kiếm và ứng tuyển ngay hôm nay!"
+          icon={<WorkRounded sx={{ fontSize: 32 }} />}
+          additionalHeading={
+            <Chip
+              label={`${jobState.totalJobs} công việc`}
+              size="small"
+              sx={{
+                bgcolor: "rgba(255,255,255,0.2)",
+                color: "white",
+                fontWeight: 600,
+              }}
+            />
+          }
+        />
 
         {/* Stats and Quick Info */}
         <Stack direction="row" spacing={3} mb={3}>

@@ -1,7 +1,7 @@
 import educationLevels from "@/apis/BusinessData/EducationLevel";
 import majors from "@/apis/BusinessData/Major";
-import HeaderCard from "@/components/cards/HeaderCard";
 import LongTextInput from "@/components/input/LongTextInput";
+import IntroducingSection from "@/components/IntroducingSection";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   getProfile,
@@ -9,14 +9,12 @@ import {
   saveChangeProfile,
   updateProfileField,
 } from "@/store/slices/profileSlice";
-import { Save } from "@mui/icons-material";
-import EditIcon from "@mui/icons-material/Edit";
+import { Person, Save } from "@mui/icons-material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -25,14 +23,13 @@ import {
   Divider,
   FormControl,
   Grid,
-  IconButton,
   InputLabel,
   MenuItem,
   Paper,
   Select,
   Slide,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -50,42 +47,11 @@ export default function ProfilePage() {
   return (
     state == "succeeded" && (
       <Box paddingY={4}>
-        {/* <Title title="Thông Tin Ứng Viên" /> */}
-
-        {/* Header Section with Avatar */}
-        <HeaderCard elevation={6}>
-          <CardContent sx={{ p: 4 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-              <Avatar
-                sx={{
-                  width: 80,
-                  height: 80,
-                  bgcolor: "rgba(255,255,255,0.2)",
-                  fontSize: "2rem",
-                }}
-              >
-                <PersonIcon fontSize="large" />
-              </Avatar>
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="h4" fontWeight={600} gutterBottom>
-                  Hồ Sơ Ứng Viên
-                </Typography>
-                <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                  Điền thông tin chi tiết để tạo hồ sơ chuyên nghiệp
-                </Typography>
-              </Box>
-              <IconButton
-                sx={{
-                  color: "white",
-                  bgcolor: "rgba(255,255,255,0.2)",
-                  "&:hover": { bgcolor: "rgba(255,255,255,0.3)" },
-                }}
-              >
-                <EditIcon />
-              </IconButton>
-            </Box>
-          </CardContent>
-        </HeaderCard>
+        <IntroducingSection
+          headingText="Hồ Sơ Ứng Viên"
+          description="Điền thông tin chi tiết để tạo hồ sơ chuyên nghiệp"
+          icon={<Person sx={{fontSize: 32}}/>}
+        />
 
         <Grid container spacing={3}>
           {/* Personal Information Section */}
