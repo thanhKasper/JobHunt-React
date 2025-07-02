@@ -55,20 +55,20 @@ export default function JobFilterPage() {
               này sẽ giúp bạn tìm kiếm công việc phù hợp với sở thích và kỹ năng
               của bạn."
         cta={
-          <AddButton
-            variant="contained"
-            startIcon={<Add />}
-            sx={{
-              width: {
-                xs: "100%",
-                sm: "max-content",
-              },
-            }}
-          >
-            <Link to="/job-filters/new" className="w-max">
+          <Link to="/job-filters/new" className="w-max">
+            <AddButton
+              variant="contained"
+              startIcon={<Add />}
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "max-content",
+                },
+              }}
+            >
               Thêm Bộ Lọc
-            </Link>
-          </AddButton>
+            </AddButton>
+          </Link>
         }
       />
 

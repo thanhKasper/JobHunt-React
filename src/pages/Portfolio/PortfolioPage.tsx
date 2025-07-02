@@ -27,9 +27,10 @@ import { Link } from "react-router";
 
 export default function PortfolioPage() {
   const projectState = useAppSelector((state) => state.projectState);
-  useFetch(() => getProjects());
+  const projectsLoadingState = useFetch(() => getProjects());
+  
 
-  return (
+  return projectsLoadingState == "succeeded" && (
     <Box paddingY={4}>
       {/* Header Section */}
       <IntroducingSection
@@ -50,18 +51,20 @@ export default function PortfolioPage() {
           />
         }
         cta={
-          <AddButton
-            variant="contained"
-            startIcon={<Add />}
-            sx={{
-              width: {
-                xs: "100%",
-                sm: "max-content",
-              },
-            }}
-          >
-            <Link to={`/portfolio/new`}>Thêm Dự Án</Link>
-          </AddButton>
+          <Link to={`/portfolio/new`}>
+            <AddButton
+              variant="contained"
+              startIcon={<Add />}
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "max-content",
+                },
+              }}
+            >
+              Thêm Dự Án
+            </AddButton>
+          </Link>
         }
       />
 
@@ -133,7 +136,11 @@ export default function PortfolioPage() {
           border: "1px solid rgba(255,255,255,0.2)",
         }}
       >
-        <Box display={"flex"} flexDirection={{xs: "column", md: "row"}} gap={2}>
+        <Box
+          display={"flex"}
+          flexDirection={{ xs: "column", md: "row" }}
+          gap={2}
+        >
           <Stack direction="row" alignItems="center" gap={1}>
             <CodeRounded sx={{ color: "text.secondary" }} />
             <Typography variant="body2" color="text.secondary" fontWeight={500}>

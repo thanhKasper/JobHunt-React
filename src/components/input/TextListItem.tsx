@@ -25,7 +25,6 @@ const TextListItem = ({
         paddingY: 0.5,
         borderLeft: 6,
         borderLeftColor: "secondary.main",
-        marginLeft: 4,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -43,6 +42,7 @@ const TextListItem = ({
           <Input
             value={editingText ?? ""}
             onChange={(e) => setEditingText(e.target.value)}
+            fullWidth
           />
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton

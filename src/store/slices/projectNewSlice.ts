@@ -8,6 +8,8 @@ import {
 import type { FetchingState } from "./type";
 import { z } from "zod/v4";
 import dayjs from "dayjs";
+import type { AxiosError } from "axios";
+import { logout } from "./authenticationSlice";
 
 interface ProjectNewState {
   createState: FetchingState;
@@ -18,20 +20,22 @@ interface ProjectNewState {
 const projectSchema = z
   .object<ProjectDTO>()
   .extend({
-    projectName: z.string().nonempty("Cannot be empty").nonoptional(),
+    projectName: z.string().nonempty("Không được để trống").nonoptional(),
     projectDescription: z
       .string()
       .nonempty("Không được để trống")
       .nonoptional(),
     roles: z.array(z.string()).min(1, "Atleast one role is required"),
-    startDate: z.string().nonempty("Không được để trống").nonoptional(),
+    startDate: z.date("Không thể để trống"),
+    endDate: z.date().nullable(),
   })
   .refine(
     (check) =>
-      check.endDate
-        ? dayjs(check.startDate) < dayjs(check.endDate as string)
-        : true,
-    { error: "Ngày kết thúc không thể trước ngày bắt đầu", path: ["endDate"] }
+      check.endDate ? dayjs(check.startDate) < dayjs(check.endDate) : true,
+    {
+      error: "Thời gian kết thúc không thể xảy ra trước thời gian bắt đầu",
+      path: ["endDate"],
+    }
   );
 
 const createNewProject = createAsyncThunk(
@@ -39,16 +43,18 @@ const createNewProject = createAsyncThunk(
   async (project: ProjectDTO, thunkApi) => {
     const validationResult = projectSchema.safeParse(project);
     if (validationResult.success) {
-      return await ProjectApi.createProject(project);
-    } else {
-      for (const err of validationResult.error.issues) {
-        thunkApi.dispatch(
-          setProjectError({
-            field: err.path[0] as keyof ProjectDTO,
-            value: err.message,
-          })
-        );
+      try {
+        return await ProjectApi.createProject(project);
+      } catch (err) {
+        if ((err as AxiosError).status == 452)
+          return thunkApi.dispatch(logout());
       }
+    } else {
+      const error = {} as Record<keyof ProjectDTO, string>;
+      for (const err of validationResult.error.issues) {
+        error[err.path[0] as keyof ProjectDTO] = err.message;
+      }
+      return thunkApi.rejectWithValue(error);
     }
   }
 );
@@ -63,8 +69,8 @@ export const projectNewSlice = createSlice({
       projectName: "",
       projectDescription: "",
       roles: [],
-      startDate: "",
-      endDate: undefined,
+      startDate: null,
+      endDate: null,
       techOrSkills: [],
       projectLink: undefined,
       features: [],
@@ -82,18 +88,20 @@ export const projectNewSlice = createSlice({
       (state.newProject as any)[action.payload.field] = action.payload.value;
     },
 
-    setProjectError: (
-      state,
-      action: PayloadAction<{
-        field: keyof ProjectDTO;
-        value: string;
-      }>
-    ) => {
-      state.errors[action.payload.field] = action.payload.value;
-    },
-
     setProjectFormToNormal: (state) => {
       state.createState = "idle";
+      state.newProject = {
+        endDate: null,
+        startDate: null,
+        features: [],
+        projectDescription: "",
+        projectId: "",
+        projectName: "",
+        roles: [],
+        techOrSkills: [],
+        liveDemoLink: "",
+        projectLink: "",
+      };
     },
   },
   extraReducers: (builder) => {
@@ -109,20 +117,20 @@ export const projectNewSlice = createSlice({
           projectId: "",
           projectName: "",
           roles: [],
-          startDate: "",
+          startDate: null,
           techOrSkills: [],
-          endDate: "",
+          endDate: null,
           liveDemoLink: "",
           projectLink: "",
         };
       })
-      .addCase(createNewProject.rejected, (state) => {
+      .addCase(createNewProject.rejected, (state, action) => {
         state.createState = "failed";
+        state.errors = action.payload as Record<keyof ProjectDTO, string>;
       });
   },
 });
 
 export default projectNewSlice.reducer;
-export const { updateField, setProjectError, setProjectFormToNormal } =
-  projectNewSlice.actions;
+export const { updateField, setProjectFormToNormal } = projectNewSlice.actions;
 export { createNewProject };

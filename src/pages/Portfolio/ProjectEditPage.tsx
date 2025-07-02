@@ -1,6 +1,6 @@
-import HeaderCard from "@/components/cards/HeaderCard";
 import LongTextInput from "@/components/input/LongTextInput";
 import TagInput from "@/components/input/TagInput";
+import IntroducingSection from "@/components/IntroducingSection";
 import useFetch from "@/hooks/useFetch";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -46,6 +46,9 @@ const ProjectEditPage = () => {
   const project = useAppSelector(
     (state) => state.projectUpdateState.updatedProject
   );
+  const projectError = useAppSelector(
+    (state) => state.projectUpdateState.errors
+  );
 
   const handleSubmit = async () => {
     dispatch(editProject({ ...project })).then((value) => {
@@ -60,22 +63,20 @@ const ProjectEditPage = () => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box paddingY={4}>
           {/* Hero Section */}
-          <HeaderCard elevation={6}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <EditIcon sx={{ fontSize: 32, mr: 2 }} />
-              <Typography variant="h4" component="h1" fontWeight={700}>
-                Chỉnh Sửa Dự Án
-              </Typography>
-            </Box>
-            <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 800 }}>
-              Cập nhật thông tin dự án của bạn, điều chỉnh các chi tiết và nội
-              dung để phản ánh chính xác nhất về dự án.
-            </Typography>
-          </HeaderCard>
+          <IntroducingSection
+            headingText="Chỉnh Sửa Dự Án"
+            description="Cập nhật thông tin dự án của bạn, điều chỉnh các chi tiết và nội
+              dung để phản ánh chính xác nhất về dự án."
+            icon={<EditIcon sx={{ fontSize: 32 }} />}
+          />
 
           {/* Form Sections */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <Stack direction="row" gap={3} justifyContent={"space-between"}>
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              gap={3}
+              justifyContent={"space-between"}
+            >
               {/* Basic Information */}
               <Card sx={{ flexShrink: 0, flexBasis: "65%" }}>
                 <CardContent sx={{ p: 4 }}>
@@ -95,6 +96,8 @@ const ProjectEditPage = () => {
                         placeholder="Nhập tên dự án..."
                         variant="outlined"
                         value={project.projectName}
+                        error={!!projectError.projectName}
+                        helperText={projectError.projectName}
                         onChange={(e) =>
                           dispatch(
                             updateProjectField({
@@ -115,6 +118,8 @@ const ProjectEditPage = () => {
                         placeholder="Mô tả chi tiết về dự án của bạn..."
                         variant="outlined"
                         value={project.projectDescription}
+                        error={!!projectError.projectDescription}
+                        helperText={projectError.projectDescription}
                         onChange={(e) =>
                           dispatch(
                             updateProjectField({
@@ -141,22 +146,29 @@ const ProjectEditPage = () => {
 
                   <Grid container spacing={3}>
                     <Grid size={12}>
-                      <DatePicker
-                        label="Ngày Bắt Đầu"
-                        views={["month", "year"]}
-                        sx={{ width: "100%" }}
-                        value={
-                          project.startDate ? dayjs(project.startDate) : null
-                        }
-                        onChange={(newValue) =>
-                          dispatch(
-                            updateProjectField({
-                              ...project,
-                              startDate: newValue?.toString() ?? "",
-                            })
-                          )
-                        }
-                      />
+                      <FormControl>
+                        <DatePicker
+                          label="Ngày Bắt Đầu"
+                          views={["month", "year"]}
+                          sx={{ width: "100%" }}
+                          value={
+                            project.startDate ? dayjs(project.startDate) : null
+                          }
+                          format="MM/YYYY"
+                          maxDate={dayjs(Date.now())}
+                          onChange={(newValue) =>
+                            dispatch(
+                              updateProjectField({
+                                ...project,
+                                startDate: newValue?.date(15).toDate() ?? null,
+                              })
+                            )
+                          }
+                        />
+                        <FormHelperText error={!!projectError.startDate}>
+                          {projectError.startDate}
+                        </FormHelperText>
+                      </FormControl>
                     </Grid>
                     <Grid size={12}>
                       <FormControl fullWidth>
@@ -167,17 +179,20 @@ const ProjectEditPage = () => {
                           value={
                             project.endDate ? dayjs(project.endDate) : null
                           }
+                          format="MM/YYYY"
+                          maxDate={dayjs()}
                           onChange={(newValue) =>
                             dispatch(
                               updateProjectField({
                                 ...project,
-                                endDate: newValue?.toString() ?? "",
+                                endDate: newValue?.toDate() ?? null,
                               })
                             )
                           }
                         />
-                        <FormHelperText>
-                          Để trống nếu dự án chưa hoàn thành
+                        <FormHelperText error={!!projectError.endDate}>
+                          {projectError.endDate ??
+                            "Để trống nếu dự án vẫn đang diễn ra"}
                         </FormHelperText>
                       </FormControl>
                     </Grid>
@@ -186,7 +201,11 @@ const ProjectEditPage = () => {
               </Card>
             </Stack>
 
-            <Stack direction="row" gap={3} justifyContent={"space-between"}>
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              gap={3}
+              justifyContent={"space-between"}
+            >
               {/* Roles */}
               <Card sx={{ width: "100%" }}>
                 <CardContent sx={{ p: 4 }}>
@@ -207,6 +226,8 @@ const ProjectEditPage = () => {
                         })
                       )
                     }
+                    error={!!projectError.roles}
+                    helperText={projectError.roles}
                   />
                 </CardContent>
               </Card>

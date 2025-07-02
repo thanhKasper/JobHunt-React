@@ -3,8 +3,8 @@ export default interface ProjectDTO {
   projectName: string;
   projectDescription: string;
   roles: string[];
-  startDate: string;
-  endDate?: string;
+  startDate: Date | null;
+  endDate: Date | null;
   techOrSkills: string[];
   projectLink?: string;
   features: string[];

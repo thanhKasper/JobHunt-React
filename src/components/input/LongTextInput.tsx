@@ -70,6 +70,7 @@ const LongTextInput = ({
               const newAwards = [...texts];
               newAwards[pos] = updatedText;
               setTexts(newAwards);
+              onListChange?.([...newAwards]);
             }}
             removeText={(pos) => {
               setTexts(texts.filter((_, i) => i !== pos));

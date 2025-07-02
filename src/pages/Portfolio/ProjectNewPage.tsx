@@ -44,6 +44,7 @@ const ProjectNewPage = () => {
     dispatch(createNewProject(newProjectState.newProject)).then((arg) => {
       if (arg.meta.requestStatus == "fulfilled") {
         navigate("/portfolio");
+        // console.log("Thong tin hop le, tao form");
       }
     });
   };
@@ -93,7 +94,7 @@ const ProjectNewPage = () => {
                     required
                     placeholder="Nhập tên dự án..."
                     variant="outlined"
-                    value={newProjectState.newProject.projectName}
+                    value={newProjectState.newProject.projectName ?? ""}
                     onChange={(e) =>
                       dispatch(
                         updateField({
@@ -150,20 +151,21 @@ const ProjectNewPage = () => {
                         label="Ngày Bắt Đầu"
                         sx={{ width: "100%" }}
                         views={["month", "year"]}
+                        format="MM / YYYY"
                         value={
-                          newProjectState.newProject.startDate.length == 0
-                            ? null
-                            : dayjs(newProjectState.newProject.startDate)
+                          dayjs(newProjectState.newProject.startDate).isValid()
+                            ? dayjs(newProjectState.newProject.startDate)
+                            : null
                         }
                         maxDate={dayjs(Date.now())}
-                        onChange={(date) =>
+                        onChange={(date) => {
                           dispatch(
                             updateField({
                               field: "startDate",
-                              value: date ? date.set("day", 15).toString() : "", // set day to avoid error for date conversion
+                              value: date ? date.date(15).toDate() : null,
                             })
-                          )
-                        }
+                          );
+                        }}
                       />
                       <FormHelperText
                         error={!!newProjectState.errors.startDate}
@@ -178,8 +180,9 @@ const ProjectNewPage = () => {
                         label="Ngày Kết Thúc"
                         views={["month", "year"]}
                         sx={{ width: "100%" }}
+                        format="MM / YYYY"
                         value={
-                          newProjectState.newProject.endDate
+                          dayjs(newProjectState.newProject.endDate).isValid()
                             ? dayjs(newProjectState.newProject.endDate)
                             : null
                         }
@@ -188,9 +191,7 @@ const ProjectNewPage = () => {
                           dispatch(
                             updateField({
                               field: "endDate",
-                              value: date
-                                ? date.set("day", 15).toString()
-                                : undefined,
+                              value: date ? date.date(15).toDate() : null,
                             })
                           )
                         }
@@ -234,7 +235,10 @@ const ProjectNewPage = () => {
                   )
                 }
                 error={!!newProjectState.errors.roles}
-                helperText={newProjectState.errors.roles}
+                helperText={
+                  newProjectState.errors.roles ??
+                  "Nếu đảm nhận nhiều vai trò, gõ một vai trò rồi ấn 'Enter'"
+                }
               />
             </CardContent>
           </Card>
@@ -251,6 +255,7 @@ const ProjectNewPage = () => {
               <TagInput
                 label="Công Nghệ/Kỹ Thuật"
                 value={newProjectState.newProject.techOrSkills}
+                helperText="Nếu sử dụng nhiều công nghệ, gõ từ khóa và ấn 'Enter'"
                 onTagChange={(tags) =>
                   dispatch(
                     updateField({
