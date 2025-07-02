@@ -1,5 +1,10 @@
-import HeaderCard from "@/components/cards/HeaderCard";
 import TagInput from "@/components/input/TagInput";
+import IntroducingSection from "@/components/IntroducingSection";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  createNewJobFilter,
+  jobfilterFormSwitchToNormal,
+} from "@/store/slices/jobFilterCreateSlice";
 import jobLevelList from "@apis/BusinessData/JobLevel";
 import occupationList from "@apis/BusinessData/OccupationList";
 import {
@@ -33,15 +38,8 @@ import {
   Typography,
 } from "@mui/material";
 import { ListFilterPlus } from "lucide-react";
-import useCreateJobFilter from "./CreateJobFilterPage.Hook";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  createNewJobFilter,
-  jobfilterFormSwitchToNormal,
-} from "@/store/slices/jobFilterCreateSlice";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
-import IntroducingSection from "@/components/IntroducingSection";
+import useCreateJobFilter from "./CreateJobFilterPage.Hook";
 
 export default function CreateJobFilterPage() {
   const jobFilterCreationForm = useCreateJobFilter();
@@ -352,7 +350,11 @@ export default function CreateJobFilterPage() {
 
       {/* Sticky Footer */}
 
-      <Stack direction={{xs: "column-reverse", sm: "row"}} gap={2} justifyContent="flex-end">
+      <Stack
+        direction={{ xs: "column-reverse", sm: "row" }}
+        gap={2}
+        justifyContent="flex-end"
+      >
         <Link to="/job-filters">
           <Button
             fullWidth
